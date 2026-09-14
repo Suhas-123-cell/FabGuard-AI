@@ -1,0 +1,14 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: fabguard
+      POSTGRES_PASSWORD: fabguard
+      POSTGRES_DB: fabguard
+    ports:
+      - "5432:5432"
+    volumes:
+      - fabguard-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  fabguard-postgres-data:
