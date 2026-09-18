@@ -2,26 +2,49 @@
 name = "fabguard"
 version = "0.1.0"
 description = "FabGuard AI: bearing fault detection replay and investigation graph"
-requires-python = ">=3.11"
+requires-python = ">=3.12,<3.14"
 dependencies = [
-    "numpy",
-    "scipy",
-    "pandas",
-    "scikit-learn",
-    "fastapi",
-    "uvicorn",
-    "streamlit",
-    "sqlalchemy",
-    "psycopg[binary]",
-    "pgvector",
-    "langgraph",
-    "langgraph-checkpoint-postgres",
-    "soundfile",
-    "librosa",
+    "fastapi>=0.116,<1",
+    "httpx>=0.28,<1",
+    "joblib>=1.4,<2",
+    "langgraph>=0.6,<2",
+    "langgraph-checkpoint-postgres>=2,<4",
+    "matplotlib>=3.9,<4",
+    "numpy>=2.1,<3",
+    "openai>=1.100,<3",
+    "openpyxl>=3.1,<4",
+    "pandas>=2.2,<4",
+    "pgvector>=0.4,<1",
+    "psutil>=6,<8",
+    "psycopg[binary,pool]>=3.2,<4",
+    "pydantic>=2.10,<3",
+    "pydantic-settings>=2.7,<3",
+    "pyarrow>=18,<23",
+    "scikit-learn>=1.6,<2",
+    "scipy>=1.15,<2",
+    "soundfile>=0.13,<1",
+    "sqlalchemy>=2.0,<3",
+    "streamlit>=1.42,<2",
+    "uvicorn>=0.34,<1",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest", "ruff"]
+dev = [
+    "pytest>=8.3,<10",
+    "pytest-cov>=6,<8",
+    "pytest-timeout>=2.3,<3",
+    "ruff>=0.9,<1",
+]
+
+[project.scripts]
+fabguard-audit = "fabguard.audit:main"
+fabguard-api = "fabguard.api:main"
+fabguard-download = "fabguard.download:main"
+fabguard-train = "fabguard.train:main"
+fabguard-replay = "fabguard.replay:main"
+fabguard-worker = "fabguard.worker:main"
+fabguard-evaluate = "fabguard.evaluate:main"
+fabguard-index-references = "fabguard.retrieval:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -29,3 +52,15 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/fabguard"]
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-markers"
+testpaths = ["tests"]
+timeout = 120
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
