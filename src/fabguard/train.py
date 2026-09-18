@@ -29,7 +29,12 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import RobustScaler
 
 from fabguard.config import ExperimentConfig
-from fabguard.data import CHANNEL_MAPPING, RecordingManifestEntry, read_numeric_table
+from fabguard.data import (
+    CHANNEL_MAPPING,
+    RecordingManifestEntry,
+    bearing_manufacturer,
+    read_numeric_table,
+)
 from fabguard.signals import FEATURE_COLUMNS, extract_features, extract_recording_features
 
 IDENTITY_COLUMNS = (
@@ -414,6 +419,56 @@ def summarize_folds(folds: Sequence[dict[str, Any]]) -> list[dict[str, Any]]:
     return summaries
 
 
+def summarize_manufacturer_subgroups(
+    folds: Sequence[dict[str, Any]],
+    *,
+    feature_policy: str,
+    model_family: str,
+) -> list[dict[str, Any]]:
+    """Describe selected held-out-bearing metrics by published manufacturer.
+
+    This is intentionally descriptive: bearing number, manufacturer, and fault
+    family are confounded in UORED, so these rows are not a manufacturer
+    generalization experiment.
+    """
+
+    rows = [
+        {
+            "manufacturer": str(bearing_manufacturer(int(fold["test_bearing_id"]))),
+            "test_bearing_id": int(fold["test_bearing_id"]),
+            **fold["metrics"],
+        }
+        for fold in folds
+        if fold["feature_policy"] == feature_policy
+        and fold["selected_candidate"]["family"] == model_family
+    ]
+    frame = pd.DataFrame(rows)
+    if frame.empty:
+        raise ValueError("selected deployment policy/family has no held-out folds")
+    metrics = (
+        "auroc",
+        "average_precision",
+        "balanced_accuracy",
+        "healthy_false_positive_rate",
+        "developing_recall",
+        "faulty_recall",
+    )
+    summaries = []
+    for manufacturer, group in frame.groupby("manufacturer", sort=True):
+        result: dict[str, Any] = {
+            "manufacturer": manufacturer,
+            "bearing_folds": int(len(group)),
+            "held_out_bearings": ",".join(
+                str(value) for value in sorted(group["test_bearing_id"].tolist())
+            ),
+        }
+        for metric in metrics:
+            result[f"{metric}_mean"] = float(group[metric].mean())
+            result[f"{metric}_std"] = float(group[metric].std(ddof=1))
+        summaries.append(result)
+    return summaries
+
+
 def benchmark_estimator(
     estimator: BaseEstimator,
     family: str,
@@ -606,6 +661,13 @@ def write_evaluation_report(
     ]
     pd.DataFrame(fold_rows).to_csv(output / "per_bearing_results.csv", index=False)
 
+    manufacturer_summary = summarize_manufacturer_subgroups(
+        folds,
+        feature_policy=bundle["feature_policy"],
+        model_family=bundle["model_family"],
+    )
+    pd.DataFrame(manufacturer_summary).to_csv(output / "manufacturer_subgroups.csv", index=False)
+
     labels = [f"{row.feature_policy}\n{row.model_family}" for row in summary_frame.itertuples()]
     figure, axis = plt.subplots(figsize=(12, 6), constrained_layout=True)
     axis.bar(
@@ -630,6 +692,9 @@ def write_evaluation_report(
         and row["model_family"] == bundle["model_family"]
     )
     native = benchmark["native_pipeline"]
+    manufacturer_detail = ", ".join(
+        f"{row['manufacturer']} ({row['bearing_folds']} bearings)" for row in manufacturer_summary
+    )
     report = f"""# FabGuard model card
 
 ## Delivered detector
@@ -653,6 +718,13 @@ deviations describe bearing-fold variability; they are not confidence intervals.
 
 All audio channels passed the frozen technical audit, and paired audio features contribute to the
 selected fusion model. Vibration-only and audio-only results remain in `primary_results.csv`.
+
+## Descriptive manufacturer subgroup
+
+`manufacturer_subgroups.csv` reports the delivered detector's held-out-bearing metrics by the
+published bearing manufacturer: {manufacturer_detail}.
+These rows are descriptive only. Manufacturer, bearing number, and fault family do not have the
+overlap required to claim manufacturer-independent performance.
 
 ## Confound audit
 

@@ -22,6 +22,13 @@ deviations describe bearing-fold variability; they are not confidence intervals.
 All audio channels passed the frozen technical audit, and paired audio features contribute to the
 selected fusion model. Vibration-only and audio-only results remain in `primary_results.csv`.
 
+## Descriptive manufacturer subgroup
+
+`manufacturer_subgroups.csv` reports the delivered detector's held-out-bearing metrics by the
+published bearing manufacturer: FAFNIR 203KD (10 bearings), NSK 6203ZZ (5 bearings).
+These rows are descriptive only. Manufacturer, bearing number, and fault family do not have the
+overlap required to claim manufacturer-independent performance.
+
 ## Confound audit
 
 The separately labeled 20-bearing load-only Random Forest reached mean balanced accuracy

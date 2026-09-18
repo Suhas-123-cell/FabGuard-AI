@@ -1,0 +1,3 @@
+manufacturer,bearing_folds,held_out_bearings,auroc_mean,auroc_std,average_precision_mean,average_precision_std,balanced_accuracy_mean,balanced_accuracy_std,healthy_false_positive_rate_mean,healthy_false_positive_rate_std,developing_recall_mean,developing_recall_std,faulty_recall_mean,faulty_recall_std
+FAFNIR 203KD,10,"6,7,8,9,10,16,17,18,19,20",1.0,0.0,1.0,9.791246743253677e-17,0.9328947368421053,0.08998178742572698,0.08421052631578947,0.15533995523634142,0.9842105263157894,0.04993069989739548,0.9157894736842105,0.2662970661194424
+NSK 6203ZZ,5,"1,2,3,4,5",1.0,0.0,1.0,9.614813431917819e-17,1.0,0.0,0.0,0.0,1.0,0.0,1.0,0.0
