@@ -7,6 +7,11 @@ services:
       POSTGRES_DB: fabguard
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fabguard -d fabguard"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
     volumes:
       - fabguard-postgres-data:/var/lib/postgresql/data
 
