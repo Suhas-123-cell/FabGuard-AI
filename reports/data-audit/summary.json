@@ -1,0 +1,19 @@
+{
+  "recordings": 60,
+  "bearings": 20,
+  "cohorts": {
+    "primary": 45,
+    "quarantined_load": 15
+  },
+  "vibration_usable": 60,
+  "audio_usable": 60,
+  "representative_recordings": [
+    "H_1_0",
+    "I_1_1",
+    "O_6_1",
+    "B_11_1",
+    "C_16_1"
+  ],
+  "selection_rule": "bearing 1 healthy plus the first developing recording per fault family",
+  "listening_note": "copies are DC-centered and peak-normalized to 0.8 for safe comparison"
+}

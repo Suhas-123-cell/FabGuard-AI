@@ -1,0 +1,13 @@
+fault_family,manufacturer,cohort,health_state,recordings,load_mean_n,load_min_n,load_max_n,rpm_mean
+ball,FAFNIR 203KD,quarantined_load,developing,5,0.0,0.0,0.0,1722.0
+ball,FAFNIR 203KD,quarantined_load,faulty,5,0.0,0.0,0.0,1722.4
+ball,FAFNIR 203KD,quarantined_load,healthy,5,400.0,400.0,400.0,1722.0
+cage,FAFNIR 203KD,primary,developing,5,400.0,400.0,400.0,1784.6
+cage,FAFNIR 203KD,primary,faulty,5,400.0,400.0,400.0,1752.4
+cage,FAFNIR 203KD,primary,healthy,5,400.0,400.0,400.0,1784.6
+inner_race,NSK 6203ZZ,primary,developing,5,400.0,400.0,400.0,1799.4
+inner_race,NSK 6203ZZ,primary,faulty,5,400.0,400.0,400.0,1797.2
+inner_race,NSK 6203ZZ,primary,healthy,5,400.0,400.0,400.0,1799.4
+outer_race,FAFNIR 203KD,primary,developing,5,400.0,400.0,400.0,1848.4
+outer_race,FAFNIR 203KD,primary,faulty,5,400.0,400.0,400.0,1909.8
+outer_race,FAFNIR 203KD,primary,healthy,5,400.0,400.0,400.0,1848.4
