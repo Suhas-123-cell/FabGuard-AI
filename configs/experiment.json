@@ -1,0 +1,21 @@
+{
+  "dataset_version": "UORED-VAFCLS-v5",
+  "evaluation": {
+    "inner_folds": 4,
+    "isolation_forest_contamination": [0.01, 0.025, 0.05],
+    "isolation_forest_estimators": [100, 250],
+    "primary_bearings": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 16, 17, 18, 19, 20],
+    "quarantined_bearings": [11, 12, 13, 14, 15],
+    "random_forest_estimators": [150, 300],
+    "random_forest_max_depth": [4, 8],
+    "seed": 17,
+    "threshold_quantiles": [0.95, 0.975, 0.99]
+  },
+  "feature": {
+    "band_edges_hz": [[0.0, 500.0], [500.0, 2000.0], [2000.0, 5000.0], [5000.0, 10000.0], [10000.0, 21000.0]],
+    "hop_seconds": 0.5,
+    "sample_rate_hz": 42000,
+    "window_seconds": 1.0
+  },
+  "task": "healthy_vs_abnormal"
+}
