@@ -10,21 +10,26 @@ import httpx
 import pandas as pd
 import streamlit as st
 
-from fabguard.replay import replay_recording
+from fabguard.replay import register_and_submit, replay_recording
 
 ROOT = Path(__file__).resolve().parent
 MANIFEST = Path(os.getenv("FABGUARD_MANIFEST", ROOT / "manifests/uored_vafcls_v5.json"))
 MODEL = Path(os.getenv("FABGUARD_MODEL", ROOT / "runs/uored-v5-seed17/model.joblib"))
 API_URL = os.getenv("FABGUARD_API_URL", "http://127.0.0.1:8000")
 API_TOKEN = os.getenv("FABGUARD_REVIEWER_TOKEN", "")
+PRODUCER_TOKEN = os.getenv("FABGUARD_PRODUCER_TOKEN", "")
+ANALYST_TOKEN = os.getenv("FABGUARD_ANALYST_TOKEN", "")
+DATABASE_URL = os.getenv(
+    "FABGUARD_DATABASE_URL", "postgresql+psycopg://fabguard:fabguard@localhost:5432/fabguard"
+)
 
 st.set_page_config(page_title="FabGuard AI", page_icon="⚙️", layout="wide")
 st.title("FabGuard AI")
 st.caption("Recorded laboratory-data replay — not live machine monitoring or a causal diagnosis")
 
 
-def api_headers() -> dict[str, str]:
-    return {"Authorization": f"Bearer {API_TOKEN}"} if API_TOKEN else {}
+def api_headers(token: str = API_TOKEN) -> dict[str, str]:
+    return {"Authorization": f"Bearer {token}"} if token else {}
 
 
 def load_json(path: Path) -> dict:
@@ -115,6 +120,23 @@ if view == "Replay":
                     ),
                     use_container_width=True,
                 )
+            if st.button(
+                "Submit replay for investigation",
+                disabled=not PRODUCER_TOKEN,
+                help="Requires FABGUARD_PRODUCER_TOKEN and a local runtime database.",
+            ):
+                try:
+                    submission = register_and_submit(
+                        replay,
+                        database_url=DATABASE_URL,
+                        api_url=API_URL,
+                        api_token=PRODUCER_TOKEN,
+                    )
+                    incident = submission["incident"]
+                    st.session_state["incident"] = incident
+                    st.success(f"Submitted incident {incident['id']} for the worker.")
+                except (httpx.HTTPError, ValueError) as error:
+                    st.error(f"Replay submission failed: {error}")
 
 elif view == "Incident":
     st.subheader("Incident")
@@ -140,6 +162,23 @@ elif view == "Incident":
         st.json(
             {"id": incident["id"], "state": incident["state"], "prediction": incident["prediction"]}
         )
+        if not incident.get("reports") and st.button(
+            "Request investigation revision", disabled=not ANALYST_TOKEN
+        ):
+            try:
+                response = httpx.post(
+                    f"{API_URL.rstrip('/')}/v1/incidents/{incident['id']}/investigations",
+                    headers={
+                        **api_headers(ANALYST_TOKEN),
+                        "Idempotency-Key": f"ui:investigation:{incident['id']}",
+                    },
+                    timeout=10,
+                )
+                response.raise_for_status()
+                st.success("Investigation request persisted for the worker.")
+                st.json(response.json())
+            except httpx.HTTPError as error:
+                st.error(f"Investigation request failed: {error}")
         for report in incident.get("reports", []):
             st.markdown(f"### Report revision {report['revision']}")
             content = report["content"]
@@ -174,9 +213,9 @@ elif view == "Incident":
 else:
     st.subheader("Results")
     st.write("Primary bearing-separated results are shown before architecture details.")
-    result_path = ROOT / "runs/uored-v5-seed17/results.csv"
-    confound_path = ROOT / "runs/uored-v5-seed17/confound_metrics.json"
-    ablation_path = ROOT / "runs/investigation-eval/results.json"
+    result_path = ROOT / "reports/model-evaluation/primary_results.csv"
+    confound_path = ROOT / "reports/model-evaluation/confound_results.csv"
+    ablation_path = ROOT / "reports/investigation-evaluation/results.json"
     if result_path.exists():
         results = pd.read_csv(result_path)
         st.markdown("### Primary 15-bearing LOBO")
@@ -185,7 +224,7 @@ else:
         st.info("Primary training results are not present yet.")
     if confound_path.exists():
         st.markdown("### Separate 20-bearing load-confound audit")
-        st.json(load_json(confound_path)["summary"])
+        st.dataframe(pd.read_csv(confound_path), use_container_width=True)
     if ablation_path.exists():
         st.markdown("### Fixed versus adaptive investigation")
         st.json(load_json(ablation_path)["summary"])

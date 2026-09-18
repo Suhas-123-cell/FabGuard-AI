@@ -6,10 +6,12 @@ import argparse
 import hashlib
 import json
 import platform
+import shutil
 import subprocess
 import time
 from collections.abc import Iterable, Sequence
 from dataclasses import asdict, dataclass
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -619,6 +621,8 @@ def fit_deployment_model(
         "hop_seconds": config.feature.hop_seconds,
         "frequency_bands_hz": config.feature.band_edges_hz,
         "training_bearings": sorted(int(value) for value in primary["bearing_id"].unique()),
+        "primary_recordings": int(primary["recording_id"].nunique()),
+        "primary_windows": int(len(primary)),
     }
 
 
@@ -706,7 +710,9 @@ cause. Model version: `{bundle["model_version"]}`.
 
 ## Primary bearing-separated result
 
-Across 15 outer leave-one-bearing-out folds, the matching policy/family achieved balanced
+The primary cohort contained {bundle["primary_recordings"]} recordings and
+{bundle["primary_windows"]} overlapping one-second windows from 15 independent bearings. Across
+15 outer leave-one-bearing-out folds, the matching policy/family achieved balanced
 accuracy {selected["balanced_accuracy_mean"]:.3f} ± {selected["balanced_accuracy_std"]:.3f},
 AUROC {selected["auroc_mean"]:.3f} ± {selected["auroc_std"]:.3f}, average precision
 {selected["average_precision_mean"]:.3f} ± {selected["average_precision_std"]:.3f}, healthy
@@ -715,6 +721,10 @@ false-positive rate {selected["healthy_false_positive_rate_mean"]:.3f} ±
 {selected["developing_recall_mean"]:.3f} ± {selected["developing_recall_std"]:.3f}, and faulty
 recall {selected["faulty_recall_mean"]:.3f} ± {selected["faulty_recall_std"]:.3f}. Standard
 deviations describe bearing-fold variability; they are not confidence intervals.
+
+Candidates used grouped inner-fold predictions. Each candidate threshold came from its inner
+held-out healthy-score quantile (0.95, 0.975, or 0.99); the selected candidate was then refit on
+the outer-training bearings. No outer held-out bearing set its own threshold.
 
 All audio channels passed the frozen technical audit, and paired audio features contribute to the
 selected fusion model. Vibration-only and audio-only results remain in `primary_results.csv`.
@@ -738,11 +748,12 @@ it demonstrates that operating condition contains label information for the ball
 On `{benchmark["processor"]}` with Python {benchmark["python"]}, one thread, batch size one,
 {benchmark["warmup"]} warm-up calls, and {benchmark["repetitions"]} measured calls, model-only
 latency was P50 {benchmark["p50_model_ms"]:.3f} ms and P95 {benchmark["p95_model_ms"]:.3f} ms.
+The measured model-only RSS delta was {benchmark["rss_delta_bytes"]:,} bytes.
 For a one-second in-memory window, preprocessing plus model latency was P50
 {native["p50_preprocessing_plus_model_ms"]:.3f} ms and P95
-{native["p95_preprocessing_plus_model_ms"]:.3f} ms over {native["repetitions"]} repetitions. The
-one-second acquisition window still dominates alert delay. These are laptop measurements, not
-physical edge-device benchmarks.
+{native["p95_preprocessing_plus_model_ms"]:.3f} ms over {native["repetitions"]} repetitions, with
+an RSS delta of {native["rss_delta_bytes"]:,} bytes. The one-second acquisition window still
+dominates alert delay. These are laptop measurements, not physical edge-device benchmarks.
 
 ## Limits
 
@@ -768,6 +779,8 @@ def run_training(
     config_path: str | Path = "configs/experiment.json",
     report_directory: str | Path | None = "reports/model-evaluation",
 ) -> dict[str, Any]:
+    started_at = datetime.now(UTC)
+    started_monotonic = time.monotonic()
     experiment = ExperimentConfig.from_json(config_path)
     run_dir = Path(run_directory)
     run_dir.mkdir(parents=True, exist_ok=True)
@@ -830,7 +843,19 @@ def run_training(
     (run_dir / "split.json").write_text(
         json.dumps(split, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
-    if report_directory is not None:
+    run_report_directory = run_dir / "report"
+    write_evaluation_report(
+        run_report_directory,
+        summaries=summaries,
+        folds=folds,
+        confound_summary=confound_summary,
+        bundle=bundle,
+        benchmark=benchmark,
+    )
+    if (
+        report_directory is not None
+        and Path(report_directory).resolve() != run_report_directory.resolve()
+    ):
         write_evaluation_report(
             report_directory,
             summaries=summaries,
@@ -840,7 +865,14 @@ def run_training(
             benchmark=benchmark,
         )
     experiment.write_json(run_dir / "config.json")
+    lockfile = Path(__file__).resolve().parents[2] / "uv.lock"
+    if lockfile.is_file():
+        shutil.copy2(lockfile, run_dir / "uv.lock")
+    finished_at = datetime.now(UTC)
     metadata = {
+        "started_at": started_at.isoformat(),
+        "finished_at": finished_at.isoformat(),
+        "duration_seconds": round(time.monotonic() - started_monotonic, 3),
         "git_revision": _git_revision(),
         "manifest": str(Path(manifest_path).resolve()),
         "manifest_sha256": _sha256(manifest_path),
