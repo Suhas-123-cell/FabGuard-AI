@@ -1,0 +1,38 @@
+[
+  {
+    "source_id": "uored-paper-2023",
+    "title": "University of Ottawa constant load and speed rolling-element bearing vibration and acoustic fault signature datasets",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10331275/",
+    "license": "CC BY 4.0",
+    "section": "Sections 2.1 and 3.1–3.4",
+    "applicability": ["uored"],
+    "text": "The released records are ten-second, 42 kHz laboratory samples containing accelerometer, acoustic, rotational-speed, load, and temperature channels. The filename encodes eventual fault family, bearing identity, and health stage. The experiments accelerate bearing degradation and the records should not be treated as field operating history or remaining-useful-life observations. Ball-fault recordings require separate scrutiny because their applied-load condition differs from the nominal-load cases."
+  },
+  {
+    "source_id": "timken-damage-guide-2023",
+    "title": "Timken Bearing Damage Analysis Reference Guide",
+    "url": "https://engineering.timken.com/wp-content/uploads/2023/08/Timken-Bearing-Damage-Analysis-Reference-Guide.pdf",
+    "license": "Publisher-provided reference; link only",
+    "section": "Types and causes of bearing damage; inspection guidance",
+    "applicability": ["general"],
+    "text": "Different damage mechanisms can produce overlapping symptoms, so signal changes alone do not establish a root cause. Inspection should preserve safety controls and follow the original equipment manufacturer's mounting, lubrication, fit, torque, and handling procedures. A report can recommend checking lubrication, alignment, contamination, fits, and visible damage, but should not direct disassembly or machine operation without an authorized procedure."
+  },
+  {
+    "source_id": "skf-bearing-damage-guide",
+    "title": "SKF Bearing Damage and Failure Analysis",
+    "url": "https://cdn.skfmediahub.skf.com/api/public/0901d1968064c148/pdf_preview_medium/0901d1968064c148_pdf_preview_medium.pdf",
+    "license": "Publisher-provided reference; link only",
+    "section": "Inspection; monitoring noise and vibration",
+    "applicability": ["general"],
+    "text": "Noise, vibration, temperature, lubrication condition, and leakage are complementary observations. Progressive surface damage may first appear in specialized acceleration measurements before it becomes prominent in overall vibration or audible noise. Disagreement between modalities is therefore evidence to investigate, not proof that one channel or a particular failure mechanism is correct."
+  },
+  {
+    "source_id": "skf-vibration-diagnostic-guide",
+    "title": "SKF Vibration Diagnostic Guide",
+    "url": "https://skftechnicalsupport.zendesk.com/hc/en-us/articles/360033182914-Vibration-Diagnostic-Guide",
+    "license": "Publisher-provided reference; link only",
+    "section": "Measurement and diagnostic workflow",
+    "applicability": ["general"],
+    "text": "Useful vibration interpretation depends on measurement location, sensor orientation, operating state, speed, load, and a comparable baseline. Spectral components may support a hypothesis only when the machine geometry and speed needed to calculate characteristic frequencies are known. Without those inputs, report the measured change and request the missing context rather than assigning a physical fault meaning to a peak."
+  }
+]
