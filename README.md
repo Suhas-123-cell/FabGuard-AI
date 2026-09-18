@@ -36,6 +36,8 @@ The deployed fusion Isolation Forest was selected from grouped inner predictions
 bearing. The separate all-20 load-only Random Forest reached 0.625 ± 0.222 balanced accuracy,
 which is evidence of the operating-condition shortcut and is not combined with the primary score.
 Full comparisons and every bearing fold are in [reports/model-evaluation](reports/model-evaluation).
+The selected detector's manufacturer rows are descriptive only: manufacturer, bearing number, and
+fault family are confounded in this release, so they do not establish manufacturer generalization.
 
 The offline deterministic workflow check passed 10/10 frozen cases for both fixed and adaptive
 paths over three repeats. Adaptive retrieval passed no additional case, so the predeclared rule

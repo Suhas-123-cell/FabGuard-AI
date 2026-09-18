@@ -2,7 +2,13 @@ import numpy as np
 import pandas as pd
 
 from fabguard.signals import FEATURE_COLUMNS
-from fabguard.train import Candidate, HealthyReferenceDetector, anomaly_scores, evaluate_lobo
+from fabguard.train import (
+    Candidate,
+    HealthyReferenceDetector,
+    anomaly_scores,
+    evaluate_lobo,
+    summarize_manufacturer_subgroups,
+)
 
 
 def test_healthy_reference_scores_far_samples_higher():
@@ -58,3 +64,45 @@ def test_anomaly_scores_invert_isolation_forest_decision():
 
     scores = anomaly_scores(Stub(), "isolation_forest", np.zeros((2, 1)))
     assert scores.tolist() == [-0.5, 0.5]
+
+
+def test_manufacturer_subgroups_only_describe_selected_held_out_folds():
+    metrics = {
+        "auroc": 1.0,
+        "average_precision": 1.0,
+        "balanced_accuracy": 0.8,
+        "healthy_false_positive_rate": 0.1,
+        "developing_recall": 0.9,
+        "faulty_recall": 0.7,
+    }
+    folds = [
+        {
+            "feature_policy": "fusion",
+            "test_bearing_id": 1,
+            "selected_candidate": {"family": "isolation_forest"},
+            "metrics": metrics,
+        },
+        {
+            "feature_policy": "fusion",
+            "test_bearing_id": 6,
+            "selected_candidate": {"family": "isolation_forest"},
+            "metrics": {**metrics, "balanced_accuracy": 0.6},
+        },
+        {
+            "feature_policy": "audio",
+            "test_bearing_id": 2,
+            "selected_candidate": {"family": "isolation_forest"},
+            "metrics": metrics,
+        },
+    ]
+
+    summary = summarize_manufacturer_subgroups(
+        folds, feature_policy="fusion", model_family="isolation_forest"
+    )
+
+    assert [row["manufacturer"] for row in summary] == ["FAFNIR 203KD", "NSK 6203ZZ"]
+    assert summary[0]["held_out_bearings"] == "6"
+    assert summary[0]["balanced_accuracy_mean"] == 0.6
+    assert summary[1]["held_out_bearings"] == "1"
+    assert summary[1]["balanced_accuracy_mean"] == 0.8
+    assert all(np.isnan(row["auroc_std"]) for row in summary)
