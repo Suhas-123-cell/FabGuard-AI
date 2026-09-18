@@ -1,0 +1,6 @@
+{
+  "development": ["supported-01", "invalid-01", "disagreement-01", "retrieval-01", "malicious-01"],
+  "evaluation": ["supported-02", "supported-03", "invalid-02", "invalid-03", "disagreement-02", "retrieval-02", "malicious-02", "causal-01", "ambiguous-01", "normal-01"],
+  "frozen": true,
+  "note": "Workflow fixtures, not industrial maintenance ground truth."
+}
