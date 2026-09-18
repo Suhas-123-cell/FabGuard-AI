@@ -1,0 +1,2 @@
+feature_policy,model_family,bearing_folds,auroc_mean,auroc_std,average_precision_mean,average_precision_std,balanced_accuracy_mean,balanced_accuracy_std,healthy_false_positive_rate_mean,healthy_false_positive_rate_std,developing_recall_mean,developing_recall_std,faulty_recall_mean,faulty_recall_std
+load_only,random_forest,20,0.625,0.22213082915965965,0.7499999999999998,0.14808721943977313,0.625,0.22213082915965965,0.0,0.0,0.25,0.4442616583193193,0.25,0.4442616583193193
