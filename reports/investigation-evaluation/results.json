@@ -9,12 +9,16 @@
     "additional_adaptive_passes": 0,
     "fixed_unsafe_failures": 0,
     "adaptive_unsafe_failures": 0,
+    "unsupported_claims": {
+      "fixed": 0,
+      "adaptive": 0
+    },
     "median_cost_ratio": 1.0,
     "adaptive_enabled_by_rule": false,
     "default_variant": "fixed",
     "median_latency_ms": {
-      "fixed": 0.05008299558539875,
-      "adaptive": 0.05064599827164784
+      "fixed": 0.05293749563861638,
+      "adaptive": 0.05306200182531029
     },
     "note": "Authored workflow fixtures are not industrial maintenance ground truth."
   },

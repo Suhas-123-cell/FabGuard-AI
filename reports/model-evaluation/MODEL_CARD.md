@@ -9,7 +9,9 @@ cause. Model version: `fabguard-ac565a24957e5bb0`.
 
 ## Primary bearing-separated result
 
-Across 15 outer leave-one-bearing-out folds, the matching policy/family achieved balanced
+The primary cohort contained 45 recordings and
+855 overlapping one-second windows from 15 independent bearings. Across
+15 outer leave-one-bearing-out folds, the matching policy/family achieved balanced
 accuracy 0.955 ± 0.079,
 AUROC 1.000 ± 0.000, average precision
 1.000 ± 0.000, healthy
@@ -18,6 +20,10 @@ false-positive rate 0.056 ±
 0.989 ± 0.041, and faulty
 recall 0.944 ± 0.217. Standard
 deviations describe bearing-fold variability; they are not confidence intervals.
+
+Candidates used grouped inner-fold predictions. Each candidate threshold came from its inner
+held-out healthy-score quantile (0.95, 0.975, or 0.99); the selected candidate was then refit on
+the outer-training bearings. No outer held-out bearing set its own threshold.
 
 All audio channels passed the frozen technical audit, and paired audio features contribute to the
 selected fusion model. Vibration-only and audio-only results remain in `primary_results.csv`.
@@ -40,12 +46,13 @@ it demonstrates that operating condition contains label information for the ball
 
 On `arm` with Python 3.12.13, one thread, batch size one,
 20 warm-up calls, and 200 measured calls, model-only
-latency was P50 3.828 ms and P95 3.948 ms.
+latency was P50 3.862 ms and P95 3.990 ms.
+The measured model-only RSS delta was 278,528 bytes.
 For a one-second in-memory window, preprocessing plus model latency was P50
-8.493 ms and P95
-8.631 ms over 100 repetitions. The
-one-second acquisition window still dominates alert delay. These are laptop measurements, not
-physical edge-device benchmarks.
+8.618 ms and P95
+9.052 ms over 100 repetitions, with
+an RSS delta of 0 bytes. The one-second acquisition window still
+dominates alert delay. These are laptop measurements, not physical edge-device benchmarks.
 
 ## Limits
 
