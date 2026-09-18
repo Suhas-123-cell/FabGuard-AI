@@ -726,6 +726,7 @@ def build_langgraph(
     investigation: InvestigationGraph,
     *,
     checkpointer: object | None = None,
+    interrupt_after: Sequence[str] | None = None,
 ) -> object:
     """Compile the nodes behind an optional LangGraph checkpointer.
 
@@ -1000,7 +1001,10 @@ def build_langgraph(
     )
     builder.add_edge("verifier", END)
     builder.add_edge("insufficient_evidence", END)
-    return builder.compile(checkpointer=checkpointer)
+    return builder.compile(
+        checkpointer=checkpointer,
+        interrupt_after=list(interrupt_after) if interrupt_after else None,
+    )
 
 
 def postgres_saver_factory(connection_string: str) -> object:
