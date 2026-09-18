@@ -92,6 +92,29 @@ def test_auth_and_event_idempotency(api):
     )
 
 
+def test_event_rejects_prediction_with_inconsistent_decision(api):
+    client, _, artifact_id = api
+    response = client.post(
+        "/v1/events",
+        json={
+            "evidence_artifact_id": artifact_id,
+            "prediction": {
+                "score": 0.9,
+                "threshold": 0.5,
+                "decision": "healthy",
+                "evaluation_scope": "held-out bearing",
+            },
+            "evidence_version": "ev1",
+            "model_version": "m1",
+            "graph_version": "g1",
+            "prompt_version": "p1",
+        },
+        headers={**auth("producer-token"), "Idempotency-Key": "event:inconsistent"},
+    )
+
+    assert response.status_code == 422
+
+
 def test_unknown_artifact_and_reviewer_impersonation_are_rejected(api):
     client, db, artifact_id = api
     body = {

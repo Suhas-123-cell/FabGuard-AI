@@ -7,7 +7,7 @@ from typing import Annotated, Literal
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Request, Response, status
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from .storage import Conflict, Database, NotFound, StaleRevision, validate_artifact_id, validate_key
 
@@ -24,6 +24,13 @@ class PredictionInput(BaseModel):
     threshold: float = Field(allow_inf_nan=False)
     decision: Literal["healthy", "abnormal"]
     evaluation_scope: str = Field(min_length=1, max_length=200)
+
+    @model_validator(mode="after")
+    def consistent_decision(self) -> "PredictionInput":
+        expected = "abnormal" if self.score >= self.threshold else "healthy"
+        if self.decision != expected:
+            raise ValueError("decision must match score >= threshold")
+        return self
 
 
 class EventInput(BaseModel):

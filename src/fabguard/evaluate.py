@@ -52,6 +52,7 @@ class EvaluationRow:
     completion_tokens: int
     estimated_cost_usd: float
     latency_ms: float
+    unsupported_claims: int
     errors: tuple[str, ...]
 
 
@@ -320,6 +321,9 @@ def run_evaluation(
                     completion_tokens=usage.completion_tokens,
                     estimated_cost_usd=cost,
                     latency_ms=latency_ms,
+                    unsupported_claims=sum(
+                        "unsupported" in error.casefold() for error in result.verification.errors
+                    ),
                     errors=result.verification.errors,
                 )
                 rows.append(row)
@@ -366,6 +370,10 @@ def run_evaluation(
         "additional_adaptive_passes": adaptive_passes - fixed_passes,
         "fixed_unsafe_failures": int(unsafe.get("fixed", 0)),
         "adaptive_unsafe_failures": int(unsafe.get("adaptive", 0)),
+        "unsupported_claims": {
+            variant: int(frame.loc[frame.variant == variant, "unsupported_claims"].sum())
+            for variant in ("fixed", "adaptive")
+        },
         "median_cost_ratio": cost_ratio,
         "adaptive_enabled_by_rule": adoption,
         "default_variant": "adaptive" if adoption else "fixed",
