@@ -38,7 +38,7 @@ which is evidence of the operating-condition shortcut and is not combined with t
 Full comparisons and every bearing fold are in [reports/model-evaluation](reports/model-evaluation).
 The selected detector's manufacturer rows are descriptive only: manufacturer, bearing number, and
 fault family are confounded in this release, so they do not establish manufacturer generalization.
-The recorded end-to-end local training run took 3 minutes 8 seconds; its exact scope and timing are
+The recorded end-to-end local training run took 3 minutes 30 seconds; its exact scope and timing are
 in [TRAINING_RUN.md](reports/model-evaluation/TRAINING_RUN.md).
 
 The offline deterministic workflow check passed 10/10 frozen cases for both fixed and adaptive
