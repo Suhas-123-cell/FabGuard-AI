@@ -61,7 +61,9 @@ def test_postgres_checkpoint_resumes_after_saved_retrieval():
         paused = graph.invoke(
             {"request": evidence.model_dump(mode="json")}, config=configuration, durability="sync"
         )
-        assert paused["trace"] == ["quality", "telemetry", "audio", "initial_retrieval"]
+        # This recovery fixture contains no usable audio evidence, so the optional
+        # audio node must be skipped before the durable retrieval checkpoint.
+        assert paused["trace"] == ["quality", "telemetry", "initial_retrieval"]
 
         completed = graph.invoke(None, config=configuration, durability="sync")
 
