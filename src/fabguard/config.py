@@ -76,7 +76,7 @@ class RuntimeSettings(BaseSettings):
     database_url: str = "postgresql+psycopg://fabguard:fabguard@localhost:5432/fabguard"
     checkpoint_database_url: str = "postgresql://fabguard:fabguard@localhost:5432/fabguard"
     artifact_root: Path = Path("runs/replays")
-    llm_provider: Literal["offline", "groq", "openai_compatible"] = "offline"
+    llm_provider: Literal["offline", "groq", "openai_compatible"] = "groq"
     llm_model: str = "openai/gpt-oss-20b"
     llm_base_url: str = "https://api.groq.com/openai/v1"
     llm_api_key: str | None = None
