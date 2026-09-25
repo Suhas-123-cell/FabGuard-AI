@@ -71,11 +71,12 @@ uv run fabguard-evaluate --provider offline --output-dir runs/investigation-eval
 uv run pytest -q
 ```
 
-For the free Groq path, set `FABGUARD_LLM_API_KEY`, keep
-`FABGUARD_LLM_MODEL=openai/gpt-oss-20b`, then run `fabguard-evaluate --provider groq`. The adapter
-uses strict JSON Schema output, a per-call timeout, and one transient retry. `offline` uses a named
-deterministic template so the local demo still works without a secret; it is never presented as a
-trained language model.
+The investigation worker defaults to Groq. Set `FABGUARD_LLM_API_KEY` in `.env` and keep
+`FABGUARD_LLM_MODEL=openai/gpt-oss-20b`; the worker then uses Groq for planner and report calls.
+The adapter uses strict JSON Schema output, a per-call timeout, and one transient retry. Run
+`fabguard-evaluate --provider groq` only when intentionally spending provider quota. The explicit
+`offline` provider remains available for deterministic tests and local recovery checks; it is never
+presented as a trained language model.
 
 Runtime setup:
 
