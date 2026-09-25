@@ -20,8 +20,8 @@ must not be inferred from the offline fixture.
 ## Automated checks
 
 - Ruff: passed for `src` and `tests`.
-- Unit and integration suite: 67 passed; the PostgreSQL recovery case is skipped only when its
-  explicit database URL is absent.
+- Fully enabled unit and integration suite: 68 passed with the PostgreSQL recovery case active.
+  Without its explicit database URL, the same optional case is skipped rather than silently mocked.
 - Live PostgreSQL checkpoint recovery: passed. The graph paused after durable initial retrieval,
   resumed with the same thread, ran initial retrieval exactly once, and reached review.
 - Offline workflow evaluation: all 10 frozen held-out authored cases passed for fixed and adaptive
