@@ -74,20 +74,30 @@ class RuntimeSettings(BaseSettings):
     )
 
     database_url: str = "postgresql+psycopg://fabguard:fabguard@localhost:5432/fabguard"
-    checkpoint_database_url: str = "postgresql://fabguard:fabguard@localhost:5432/fabguard"
+    checkpoint_database_url: str | None = None
     artifact_root: Path = Path("runs/replays")
+    api_url: str = "http://127.0.0.1:8000"
+    manifest: Path = Path("manifests/uored_vafcls_v5.json")
+    model: Path = Path("runs/uored-v5-seed17/model.joblib")
     llm_provider: Literal["offline", "groq", "openai_compatible"] = "groq"
     llm_model: str = "openai/gpt-oss-20b"
     llm_base_url: str = "https://api.groq.com/openai/v1"
     llm_api_key: str | None = None
-    run_deadline_seconds: int = 120
-    llm_timeout_seconds: int = 25
+    run_deadline_seconds: int = Field(default=120, ge=1)
+    llm_timeout_seconds: int = Field(default=25, ge=1)
     audio_enabled: bool = True
     graph_version: str = "fabguard-graph-v1"
     prompt_version: str = "fabguard-report-v1"
     producer_token: str | None = None
     analyst_token: str | None = None
     reviewer_token: str | None = None
+    reviewer_subject: str = Field(default="local-reviewer", min_length=1, max_length=100)
+
+    @property
+    def checkpoint_url(self) -> str:
+        return (self.checkpoint_database_url or self.database_url).replace(
+            "postgresql+psycopg://", "postgresql://", 1
+        )
 
 
 DEFAULT_EXPERIMENT_CONFIG = ExperimentConfig()
