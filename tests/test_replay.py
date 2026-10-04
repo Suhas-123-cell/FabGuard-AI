@@ -74,6 +74,17 @@ def test_replay_scores_opaque_recording_without_label_leakage(tmp_path):
     assert "health_state" not in result
     assert result["artifact_id"].startswith("art_")
 
+    original = source.read_bytes()
+    source.write_bytes(original + b"\n")
+    with pytest.raises(ValueError, match="recording failed integrity"):
+        replay_recording(
+            manifest_path=manifest,
+            model_path=bundle,
+            recording_id="opaque-recording-1",
+            output_directory=tmp_path / "changed-recording",
+        )
+    source.write_bytes(original)
+
     with bundle.open("ab") as sink:
         sink.write(b"tampered")
     with pytest.raises(ValueError, match="integrity verification"):

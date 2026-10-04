@@ -1,15 +1,25 @@
 """Narrow FastAPI surface for ingestion, review, and human approval."""
 
 import hmac
-import os
 from dataclasses import dataclass
 from typing import Annotated, Literal
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Request, Response, status
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field, model_validator
+from sqlalchemy import select
+from sqlalchemy.exc import SQLAlchemyError
 
-from .storage import Conflict, Database, NotFound, StaleRevision, validate_artifact_id, validate_key
+from .config import RuntimeSettings
+from .storage import (
+    Conflict,
+    Database,
+    NotFound,
+    StaleRevision,
+    event_deliveries,
+    validate_artifact_id,
+    validate_key,
+)
 
 
 @dataclass(frozen=True)
@@ -59,6 +69,7 @@ def create_app(
 ) -> FastAPI:
     """Build an app with explicit dependencies; secrets never have defaults."""
     app = FastAPI(title="FabGuard API", version="1.0")
+    app.state.database = database
 
     def get_principal(authorization: Annotated[str | None, Header()] = None) -> Principal:
         if not authorization or not authorization.startswith("Bearer "):
@@ -68,7 +79,7 @@ def create_app(
             (
                 principal
                 for token, principal in api_keys.items()
-                if hmac.compare_digest(token, supplied)
+                if hmac.compare_digest(token.encode(), supplied.encode())
             ),
             None,
         )
@@ -95,6 +106,16 @@ def create_app(
     @app.exception_handler(Conflict)
     async def conflict(_: Request, exc: Conflict):
         return JSONResponse(status_code=409, content={"detail": str(exc)})
+
+    @app.exception_handler(SQLAlchemyError)
+    async def database_unavailable(_: Request, exc: SQLAlchemyError):
+        return JSONResponse(status_code=503, content={"detail": "runtime database unavailable"})
+
+    @app.get("/health")
+    def health():
+        with database.engine.connect() as connection:
+            connection.execute(select(event_deliveries.c.id).limit(1))
+        return {"status": "ready"}
 
     @app.post("/v1/events", status_code=201)
     def ingest_event(
@@ -183,36 +204,33 @@ def create_app(
 def create_runtime_app() -> FastAPI:
     """Uvicorn factory using environment-only credentials."""
 
-    database_url = os.environ.get(
-        "FABGUARD_DATABASE_URL",
-        "postgresql+psycopg://fabguard:fabguard@localhost:5432/fabguard",
-    )
+    settings = RuntimeSettings()
     tokens = {
-        "producer": os.environ.get("FABGUARD_PRODUCER_TOKEN"),
-        "analyst": os.environ.get("FABGUARD_ANALYST_TOKEN"),
-        "reviewer": os.environ.get("FABGUARD_REVIEWER_TOKEN"),
+        "producer": settings.producer_token,
+        "analyst": settings.analyst_token,
+        "reviewer": settings.reviewer_token,
     }
     if any(not token or len(token) < 16 for token in tokens.values()):
         raise RuntimeError("distinct producer, analyst, and reviewer tokens are required")
     if len(set(tokens.values())) != 3:
         raise RuntimeError("runtime role tokens must be distinct")
     database = Database(
-        database_url,
-        artifact_root=os.environ.get("FABGUARD_ARTIFACT_ROOT", "runs/replays"),
+        settings.database_url,
+        artifact_root=settings.artifact_root,
     )
     principals = {
         tokens["producer"]: Principal("replay-producer", frozenset({"producer"})),
         tokens["analyst"]: Principal("local-analyst", frozenset({"analyst"})),
         tokens["reviewer"]: Principal(
-            os.environ.get("FABGUARD_REVIEWER_SUBJECT", "local-reviewer"),
+            settings.reviewer_subject,
             frozenset({"reviewer"}),
         ),
     }
     return create_app(
         database,
         api_keys=principals,
-        graph_version=os.environ.get("FABGUARD_GRAPH_VERSION", "fabguard-graph-v1"),
-        prompt_version=os.environ.get("FABGUARD_PROMPT_VERSION", "fabguard-report-v1"),
+        graph_version=settings.graph_version,
+        prompt_version=settings.prompt_version,
     )
 
 

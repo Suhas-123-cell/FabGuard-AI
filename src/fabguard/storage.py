@@ -44,7 +44,7 @@ from sqlalchemy import (
     update,
 )
 from sqlalchemy.engine import Connection, Engine
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 metadata = MetaData()
 
@@ -365,6 +365,14 @@ class Database:
                     .order_by(investigation_revisions.c.revision)
                 )
             ]
+            incident["tickets"] = [
+                _row(r)
+                for r in conn.execute(
+                    select(tickets)
+                    .where(tickets.c.incident_id == incident_id)
+                    .order_by(tickets.c.created_at)
+                )
+            ]
         return incident
 
     def request_investigation(
@@ -498,11 +506,31 @@ class Database:
 
     def mark_investigation_failed(self, investigation_id: str) -> None:
         with self.engine.begin() as conn:
+            investigation = (
+                conn.execute(
+                    select(investigation_revisions).where(
+                        investigation_revisions.c.id == investigation_id
+                    )
+                )
+                .mappings()
+                .one()
+            )
             conn.execute(
                 update(investigation_revisions)
                 .where(investigation_revisions.c.id == investigation_id)
                 .values(status="failed", updated_at=utcnow())
             )
+            latest = conn.execute(
+                select(func.max(investigation_revisions.c.revision)).where(
+                    investigation_revisions.c.incident_id == investigation["incident_id"]
+                )
+            ).scalar_one()
+            if latest == investigation["revision"]:
+                conn.execute(
+                    update(incidents)
+                    .where(incidents.c.id == investigation["incident_id"])
+                    .values(state="failed", updated_at=utcnow())
+                )
 
     def save_report(
         self,
@@ -554,11 +582,17 @@ class Database:
                     .where(investigation_revisions.c.id == inv["id"])
                     .values(status="completed", updated_at=now)
                 )
-                conn.execute(
-                    update(incidents)
-                    .where(incidents.c.id == incident_id)
-                    .values(state="review", updated_at=now)
-                )
+                latest = conn.execute(
+                    select(func.max(investigation_revisions.c.revision)).where(
+                        investigation_revisions.c.incident_id == incident_id
+                    )
+                ).scalar_one()
+                if latest == revision:
+                    conn.execute(
+                        update(incidents)
+                        .where(incidents.c.id == incident_id)
+                        .values(state="review", updated_at=now)
+                    )
             return values
         except IntegrityError as exc:
             with self.engine.connect() as conn:
@@ -844,10 +878,13 @@ class Database:
                 yield conn
             finally:
                 try:
-                    conn.execute(
-                        text("SELECT pg_advisory_unlock(hashtextextended(:key, 0))"),
-                        {"key": incident_id},
-                    )
+                    if not conn.invalidated:
+                        conn.execute(
+                            text("SELECT pg_advisory_unlock(hashtextextended(:key, 0))"),
+                            {"key": incident_id},
+                        )
+                except SQLAlchemyError:
+                    conn.invalidate()
                 finally:
                     conn.close()
             return

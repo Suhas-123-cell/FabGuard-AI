@@ -895,9 +895,9 @@ def run_training(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--manifest", default="manifests/uored-v5.json")
+    parser.add_argument("--manifest", default="manifests/uored_vafcls_v5.json")
     parser.add_argument("--config", default="configs/experiment.json")
-    parser.add_argument("--run-dir", default="runs/latest")
+    parser.add_argument("--run-dir", default="runs/uored-v5-seed17")
     parser.add_argument("--report-dir", default="reports/model-evaluation")
     args = parser.parse_args()
     print(
