@@ -5,7 +5,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
 from pathlib import Path
 from typing import Any
 
@@ -46,6 +45,8 @@ def replay_recording(
     entry = _manifest_entry(manifest_path, recording_id)
     if not entry.get("technically_usable", False):
         raise ValueError("recording is not technically usable under the frozen audit")
+    if file_sha256(entry["canonical_path"]) != entry["sha256"]:
+        raise ValueError("recording failed integrity verification against the audit manifest")
     model_file = Path(model_path)
     digest_file = model_file.with_suffix(model_file.suffix + ".sha256")
     if not digest_file.is_file():
@@ -162,15 +163,21 @@ def register_and_submit(
     database_url: str,
     api_url: str,
     api_token: str,
+    artifact_root: str | Path | None = None,
+    graph_version: str = "fabguard-graph-v1",
+    prompt_version: str = "fabguard-report-v1",
 ) -> dict[str, Any]:
     """Register the opaque on-disk artifact, then send an idempotent API event."""
 
     path = Path(result["artifact_path"])
     digest = hashlib.sha256(path.read_bytes()).hexdigest()
-    database = Database(database_url, artifact_root=path.parent)
-    registered = database.register_artifact(
-        artifact_key=f"replay:{result['artifact_id']}", path=path, sha256=digest
-    )
+    database = Database(database_url, artifact_root=artifact_root or path.parent)
+    try:
+        registered = database.register_artifact(
+            artifact_key=f"replay:{result['artifact_id']}", path=path, sha256=digest
+        )
+    finally:
+        database.engine.dispose()
     prediction = result["prediction"]
     response = httpx.post(
         f"{api_url.rstrip('/')}/v1/events",
@@ -188,8 +195,8 @@ def register_and_submit(
             },
             "evidence_version": result["preprocessing_version"],
             "model_version": result["model_version"],
-            "graph_version": "fabguard-graph-v1",
-            "prompt_version": "fabguard-report-v1",
+            "graph_version": graph_version,
+            "prompt_version": prompt_version,
         },
         timeout=20,
     )
@@ -198,11 +205,12 @@ def register_and_submit(
 
 
 def main() -> None:
+    settings = RuntimeSettings()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("recording_id")
-    parser.add_argument("--manifest", default="manifests/uored_vafcls_v5.json")
-    parser.add_argument("--model", default="runs/uored-v5-seed17/model.joblib")
-    parser.add_argument("--output-dir", default="runs/replays")
+    parser.add_argument("--manifest", default=settings.manifest)
+    parser.add_argument("--model", default=settings.model)
+    parser.add_argument("--output-dir", default=settings.artifact_root)
     parser.add_argument("--submit", action="store_true", help="submit using environment settings")
     args = parser.parse_args()
     result = replay_recording(
@@ -212,14 +220,16 @@ def main() -> None:
         output_directory=args.output_dir,
     )
     if args.submit:
-        settings = RuntimeSettings()
         if not settings.producer_token:
             parser.error("FABGUARD_PRODUCER_TOKEN is required with --submit")
         result["submission"] = register_and_submit(
             result,
             database_url=settings.database_url,
-            api_url=os.environ.get("FABGUARD_API_URL", "http://127.0.0.1:8000"),
+            api_url=settings.api_url,
             api_token=settings.producer_token,
+            artifact_root=settings.artifact_root,
+            graph_version=settings.graph_version,
+            prompt_version=settings.prompt_version,
         )
     print(json.dumps(result, indent=2))
 

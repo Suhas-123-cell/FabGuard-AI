@@ -7,16 +7,18 @@ import json
 import socket
 import time
 import uuid
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, Protocol
 
 from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
 
 from .config import RuntimeSettings
 from .graph import (
     AudioEvidence,
+    GraphRunContext,
     InvestigationGraph,
     InvestigationInput,
     InvestigationResult,
@@ -36,7 +38,13 @@ from .storage import Database, LeaseLost
 
 
 class InvestigationRunner(Protocol):
-    def __call__(self, incident: Mapping[str, Any], investigation: Mapping[str, Any]) -> None: ...
+    def __call__(
+        self,
+        incident: Mapping[str, Any],
+        investigation: Mapping[str, Any],
+        *,
+        ensure_owned: Callable[[], None],
+    ) -> None: ...
 
 
 @dataclass(frozen=True)
@@ -85,8 +93,16 @@ class InvestigationWorker:
                         max_attempts=self.max_attempts,
                     )
                     return WorkerResult("contended", event.incident_id, event.id)
-                if not self.database.lease_is_owned(event.id, self.worker_id):
-                    raise LeaseLost("event lease expired before investigation started")
+
+                def ensure_owned() -> None:
+                    try:
+                        lock_connection.execute(text("SELECT 1")).scalar_one()
+                    except SQLAlchemyError as exc:
+                        raise LeaseLost("incident lock connection was lost") from exc
+                    if not self.database.lease_is_owned(event.id, self.worker_id):
+                        raise LeaseLost("event lease is no longer owned")
+
+                ensure_owned()
                 incident = self.database.get_incident(event.incident_id)
                 investigation = self.database.get_investigation_revision(
                     event.incident_id, event.investigation_revision
@@ -97,7 +113,7 @@ class InvestigationWorker:
                 if investigation["status"] == "failed":
                     raise RuntimeError("investigation revision is terminally failed")
                 self.database.mark_investigation_running(investigation["id"])
-                self.runner(incident, investigation)
+                self.runner(incident, investigation, ensure_owned=ensure_owned)
                 completed = self.database.get_investigation_revision(
                     event.incident_id, event.investigation_revision
                 )
@@ -105,9 +121,7 @@ class InvestigationWorker:
                     raise RuntimeError("runner returned without saving a terminal report")
                 # A session-level advisory lock disappears with its connection.
                 # Validate that connection before publishing completion.
-                lock_connection.execute(text("SELECT 1")).scalar_one()
-                if not self.database.lease_is_owned(event.id, self.worker_id):
-                    raise LeaseLost("event lease expired while investigation was running")
+                ensure_owned()
                 self.database.finish_event(event.id, self.worker_id)
             return WorkerResult("completed", event.incident_id, event.id)
         except LeaseLost:
@@ -142,7 +156,13 @@ class RuntimeGraphRunner:
         self.prompt_version = prompt_version
         self.audio_enabled = audio_enabled
 
-    def __call__(self, incident: Mapping[str, Any], investigation: Mapping[str, Any]) -> None:
+    def __call__(
+        self,
+        incident: Mapping[str, Any],
+        investigation: Mapping[str, Any],
+        *,
+        ensure_owned: Callable[[], None] | None = None,
+    ) -> None:
         artifact_path = self.database.resolve_artifact(
             incident["evidence_artifact_id"], incident_id=incident["id"]
         )
@@ -163,7 +183,17 @@ class RuntimeGraphRunner:
                 )
         if artifact.get("evaluation_scope") != incident["prediction"].get("evaluation_scope"):
             raise ValueError("artifact evaluation scope does not match the incident envelope")
-        selected = artifact["windows"][int(prediction["selected_window_index"])]
+        selected_index = prediction["selected_window_index"]
+        if not isinstance(selected_index, int) or not 0 <= selected_index < len(
+            artifact["windows"]
+        ):
+            raise ValueError("selected window index is outside the replay evidence")
+        selected = artifact["windows"][selected_index]
+        if (
+            selected.get("anomaly_score", prediction["score"]) != prediction["score"]
+            or selected.get("threshold", prediction["threshold"]) != prediction["threshold"]
+        ):
+            raise ValueError("selected window does not match the incident prediction")
         vibration_quality = artifact["quality"]["vibration"]
         audio_quality = artifact["quality"]["audio"]
         evidence = InvestigationInput(
@@ -198,17 +228,53 @@ class RuntimeGraphRunner:
             evidence_version=incident["evidence_version"],
             prompt_version=investigation["prompt_version"],
         )
-        state = self.graph.invoke(
-            {"request": evidence.model_dump(mode="json")},
-            config={
-                "configurable": {
-                    "thread_id": investigation["thread_id"],
-                    "checkpoint_ns": investigation["checkpoint_namespace"],
+        configuration = {
+            "configurable": {"thread_id": investigation["thread_id"]},
+            "recursion_limit": 20,
+        }
+        saved = self.graph.get_state(configuration)
+        revision = int(investigation["revision"])
+        if saved.values.get("investigation_revision") == revision:
+            if saved.values.get("request") != evidence.model_dump(mode="json"):
+                raise ValueError("checkpoint evidence does not match the pinned revision")
+            # A saved terminal result may still need its report transaction.
+            state = (
+                saved.values
+                if not saved.next
+                else self.graph.invoke(
+                    None,
+                    config=configuration,
+                    context=GraphRunContext(ensure_owned),
+                    durability="sync",
+                )
+            )
+        else:
+            if saved.values.get("investigation_revision", 0) > revision:
+                raise ValueError("checkpoint has advanced beyond this investigation revision")
+            # Root checkpoint_ns is reserved for LangGraph subgraphs and is
+            # normalized to ''. Keep the stable incident thread, and reset all
+            # node-owned outputs only for an explicit fresh revision.
+            state = self.graph.invoke(
+                {
+                    "request": evidence.model_dump(mode="json"),
+                    "investigation_revision": revision,
+                    "started_at_epoch": time.time(),
+                    "initial_passages": [],
+                    "refined_passages": [],
+                    "decision": {},
+                    "report": {},
+                    "failure": "",
+                    "retrieval_count": 0,
+                    "llm_call_count": 0,
+                    "trace": [],
+                    "result": {},
                 },
-                "recursion_limit": 20,
-            },
-            durability="sync",
-        )
+                config=configuration,
+                context=GraphRunContext(ensure_owned),
+                durability="sync",
+            )
+        if not state.get("result"):
+            raise RuntimeError("investigation paused before a terminal report")
         result = InvestigationResult.model_validate(state["result"])
         report = result.report.model_dump(mode="json")
         ticket = report.pop("ticket_draft")
@@ -225,6 +291,8 @@ class RuntimeGraphRunner:
             "retrieval_count": result.retrieval_count,
             "llm_call_count": result.llm_call_count,
         }
+        if ensure_owned:
+            ensure_owned()
         self.database.save_report(
             incident["id"],
             revision=int(investigation["revision"]),
@@ -272,7 +340,7 @@ def main() -> None:
         adaptive=args.adaptive,
         deadline_seconds=settings.run_deadline_seconds,
     )
-    with postgres_saver_factory(settings.checkpoint_database_url) as saver:
+    with postgres_saver_factory(settings.checkpoint_url) as saver:
         saver.setup()
         runner = RuntimeGraphRunner(
             database,

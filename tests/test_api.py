@@ -61,6 +61,7 @@ def create_incident(client: TestClient, artifact_id: str) -> str:
 def test_auth_and_event_idempotency(api):
     client, _, artifact_id = api
     assert client.post("/v1/events", json={}).status_code == 401
+    assert client.get("/health").json() == {"status": "ready"}
     incident_id = create_incident(client, artifact_id)
     body = {
         "evidence_artifact_id": artifact_id,
@@ -171,3 +172,13 @@ def test_approval_is_bound_to_authenticated_reviewer(api):
     )
     assert first.status_code == 200 and first.json()["created"] is True
     assert second.status_code == 200 and second.json()["created"] is False
+    refreshed = client.get(f"/v1/incidents/{incident_id}", headers=auth("reviewer-token"))
+    assert len(refreshed.json()["tickets"]) == 1
+
+
+def test_readiness_fails_when_migrations_are_missing(tmp_path):
+    db = Database(f"sqlite:///{tmp_path / 'empty.db'}", artifact_root=tmp_path)
+    client = TestClient(create_app(db, api_keys={}))
+    response = client.get("/health")
+    assert response.status_code == 503
+    assert response.json() == {"detail": "runtime database unavailable"}

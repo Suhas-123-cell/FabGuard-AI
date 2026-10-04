@@ -398,11 +398,12 @@ def index_reference_corpus(database_url: str, corpus_path: str | Path) -> int:
 
 
 def main() -> None:
+    from .config import RuntimeSettings
+
     parser = argparse.ArgumentParser(description="Index reviewed FabGuard references")
-    parser.add_argument("--database-url", required=True)
     parser.add_argument("--corpus", default="references/corpus.json")
     args = parser.parse_args()
-    count = index_reference_corpus(args.database_url, args.corpus)
+    count = index_reference_corpus(RuntimeSettings().database_url, args.corpus)
     print(f"indexed {count} reviewed passages")
 
 
