@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
@@ -13,6 +14,7 @@ import numpy as np
 from joblib import load
 
 from fabguard.alerting import DEFAULT_ALERT_RULE, persistent_score
+from fabguard.calibration import calibrated_threshold
 from fabguard.config import RuntimeSettings
 from fabguard.data import CHANNEL_MAPPING, read_numeric_table
 from fabguard.signals import assess_quality, extract_recording_features
@@ -40,8 +42,13 @@ def replay_recording(
     model_path: str | Path,
     recording_id: str,
     output_directory: str | Path = "runs/replays",
+    baseline_scores: Sequence[float] | None = None,
 ) -> dict[str, Any]:
-    """Score all complete windows without exposing evaluator labels or source names."""
+    """Score all complete windows without exposing evaluator labels or source names.
+
+    ``baseline_scores`` are this machine's healthy window scores; they can only raise the fleet
+    threshold and raise ``InsufficientBaseline`` when too short to trust.
+    """
 
     entry = _manifest_entry(manifest_path, recording_id)
     if not entry.get("technically_usable", False):
@@ -109,6 +116,10 @@ def replay_recording(
         bundle["estimator"], bundle["model_family"], np.asarray(model_rows, dtype=float)
     )
     threshold = float(bundle["threshold"])
+    threshold_source = "fleet"
+    if baseline_scores is not None:
+        threshold = calibrated_threshold(baseline_scores, threshold)
+        threshold_source = "machine_baseline"
     for window, score in zip(windows, scores, strict=True):
         window["anomaly_score"] = float(score)
         window["threshold"] = threshold
@@ -142,6 +153,7 @@ def replay_recording(
             "threshold": threshold,
             "decision": "abnormal" if persistent >= threshold else "healthy",
             "alert_rule": rule.to_dict(),
+            "threshold_source": threshold_source,
             "selected_window_index": selected_index,
         },
         "windows": windows,
