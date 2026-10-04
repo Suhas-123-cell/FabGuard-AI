@@ -3,25 +3,26 @@
 from __future__ import annotations
 
 import json
-import os
 from pathlib import Path
 
 import httpx
 import pandas as pd
 import streamlit as st
+from sqlalchemy.exc import SQLAlchemyError
 
+from fabguard.config import RuntimeSettings
 from fabguard.replay import register_and_submit, replay_recording
+from fabguard.storage import StorageError
 
 ROOT = Path(__file__).resolve().parent
-MANIFEST = Path(os.getenv("FABGUARD_MANIFEST", ROOT / "manifests/uored_vafcls_v5.json"))
-MODEL = Path(os.getenv("FABGUARD_MODEL", ROOT / "runs/uored-v5-seed17/model.joblib"))
-API_URL = os.getenv("FABGUARD_API_URL", "http://127.0.0.1:8000")
-API_TOKEN = os.getenv("FABGUARD_REVIEWER_TOKEN", "")
-PRODUCER_TOKEN = os.getenv("FABGUARD_PRODUCER_TOKEN", "")
-ANALYST_TOKEN = os.getenv("FABGUARD_ANALYST_TOKEN", "")
-DATABASE_URL = os.getenv(
-    "FABGUARD_DATABASE_URL", "postgresql+psycopg://fabguard:fabguard@localhost:5432/fabguard"
-)
+SETTINGS = RuntimeSettings()
+MANIFEST = ROOT / SETTINGS.manifest
+MODEL = ROOT / SETTINGS.model
+API_URL = SETTINGS.api_url
+API_TOKEN = SETTINGS.reviewer_token or SETTINGS.analyst_token or ""
+PRODUCER_TOKEN = SETTINGS.producer_token or ""
+ANALYST_TOKEN = SETTINGS.analyst_token or ""
+DATABASE_URL = SETTINGS.database_url
 
 st.set_page_config(page_title="FabGuard AI", page_icon="⚙️", layout="wide")
 st.title("FabGuard AI")
@@ -52,16 +53,20 @@ if view == "Replay":
         ]
         selected = st.selectbox("Opaque recording ID", recording_ids)
         if st.button("Run recorded-data replay", type="primary"):
-            with st.spinner("Validating channels, extracting windows, and scoring…"):
-                replay = replay_recording(
-                    manifest_path=MANIFEST,
-                    model_path=MODEL,
-                    recording_id=selected,
-                    output_directory=ROOT / "runs/replays",
-                )
-            st.session_state["last_replay"] = replay
+            try:
+                with st.spinner("Validating channels, extracting windows, and scoring…"):
+                    replay = replay_recording(
+                        manifest_path=MANIFEST,
+                        model_path=MODEL,
+                        recording_id=selected,
+                        output_directory=ROOT / SETTINGS.artifact_root,
+                    )
+                st.session_state["last_replay"] = replay
+            except (ValueError, OSError) as error:
+                st.session_state.pop("last_replay", None)
+                st.error(f"Replay failed: {error}")
         replay = st.session_state.get("last_replay")
-        if replay:
+        if replay and replay["recording_id"] == selected:
             prediction = replay["prediction"]
             first, second, third = st.columns(3)
             first.metric("Decision", prediction["decision"])
@@ -131,18 +136,27 @@ if view == "Replay":
                         database_url=DATABASE_URL,
                         api_url=API_URL,
                         api_token=PRODUCER_TOKEN,
+                        artifact_root=ROOT / SETTINGS.artifact_root,
+                        graph_version=SETTINGS.graph_version,
+                        prompt_version=SETTINGS.prompt_version,
                     )
                     incident = submission["incident"]
                     st.session_state["incident"] = incident
                     st.success(f"Submitted incident {incident['id']} for the worker.")
-                except (httpx.HTTPError, ValueError) as error:
+                except SQLAlchemyError:
+                    st.error(
+                        "Runtime database unavailable. Start PostgreSQL and run fabguard-init."
+                    )
+                except (httpx.HTTPError, ValueError, StorageError, OSError) as error:
                     st.error(f"Replay submission failed: {error}")
 
 elif view == "Incident":
     st.subheader("Incident")
     st.write("This view reads durable state through FastAPI. It never starts work on a page rerun.")
-    incident_id = st.text_input("Incident UUID")
-    if st.button("Load incident", disabled=not incident_id):
+    incident_id = st.text_input(
+        "Incident UUID", value=st.session_state.get("incident", {}).get("id", "")
+    )
+    if st.button("Load / refresh incident", disabled=not incident_id or not API_TOKEN):
         try:
             response = httpx.get(
                 f"{API_URL.rstrip('/')}/v1/incidents/{incident_id}",
@@ -162,21 +176,35 @@ elif view == "Incident":
         st.json(
             {"id": incident["id"], "state": incident["state"], "prediction": incident["prediction"]}
         )
-        if not incident.get("reports") and st.button(
-            "Request investigation revision", disabled=not ANALYST_TOKEN
-        ):
+        investigations = incident.get("investigations", [])
+        latest_revision = max((item["revision"] for item in investigations), default=0)
+        pending = any(item["status"] in {"pending", "running"} for item in investigations)
+        if pending:
+            st.info("Investigation is queued or running. Refresh to load the worker's report.")
+        elif incident["state"] == "failed":
+            st.warning("The investigation failed. Check the worker and request a new revision.")
+        if st.button("Request investigation revision", disabled=not ANALYST_TOKEN or pending):
             try:
                 response = httpx.post(
                     f"{API_URL.rstrip('/')}/v1/incidents/{incident['id']}/investigations",
                     headers={
                         **api_headers(ANALYST_TOKEN),
-                        "Idempotency-Key": f"ui:investigation:{incident['id']}",
+                        "Idempotency-Key": (
+                            f"ui:investigation:{incident['id']}:after:{latest_revision}"
+                        ),
                     },
                     timeout=10,
                 )
                 response.raise_for_status()
                 st.success("Investigation request persisted for the worker.")
-                st.json(response.json())
+                refreshed = httpx.get(
+                    f"{API_URL.rstrip('/')}/v1/incidents/{incident['id']}",
+                    headers=api_headers(),
+                    timeout=10,
+                )
+                refreshed.raise_for_status()
+                st.session_state["incident"] = refreshed.json()
+                st.rerun()
             except httpx.HTTPError as error:
                 st.error(f"Investigation request failed: {error}")
         for report in incident.get("reports", []):
@@ -187,15 +215,28 @@ elif view == "Incident":
             st.write("Predictions", content.get("predictions", []))
             st.write("Hypotheses", content.get("hypotheses", []))
             st.write("Guidance and citations", content.get("guidance", []))
+            with st.expander("Cited reference passages"):
+                for passage in content.get("initial_passages", []) + content.get(
+                    "refined_passages", []
+                ):
+                    st.markdown(f"**{passage['title']}** · {passage['passage_id']}")
+                    st.caption(
+                        f"Section {passage['section']} · page {passage.get('page') or 'n/a'}"
+                    )
+                    st.write(passage["text"])
+            if report["status"] == "insufficient_evidence":
+                st.warning("; ".join(content.get("insufficiency_reasons", [])))
             st.write("Ticket preview", report.get("ticket_draft"))
             if report.get("ticket_draft") and st.button(
-                "Approve concrete ticket draft", key=f"approve-{report['revision']}"
+                "Approve concrete ticket draft",
+                key=f"approve-{report['revision']}",
+                disabled=(not SETTINGS.reviewer_token or report["revision"] != latest_revision),
             ):
                 try:
                     approval = httpx.post(
                         f"{API_URL.rstrip('/')}/v1/incidents/{incident['id']}/approve",
                         headers={
-                            **api_headers(),
+                            **api_headers(SETTINGS.reviewer_token or ""),
                             "Idempotency-Key": f"ui:{incident['id']}:{report['revision']}",
                         },
                         json={
@@ -209,6 +250,9 @@ elif view == "Incident":
                     st.json(approval.json())
                 except httpx.HTTPError as error:
                     st.error(f"Approval failed: {error}")
+        if incident.get("tickets"):
+            st.markdown("### Approved internal tickets")
+            st.json(incident["tickets"])
 
 else:
     st.subheader("Results")
