@@ -32,6 +32,16 @@ confidence interval.
 | Audio / healthy reference | 0.954 ± 0.111 | 0.980 ± 0.079 | 0.011 ± 0.041 | 0.933 ± 0.258 | 0.902 ± 0.278 |
 | **Fusion / Isolation Forest** | **0.955 ± 0.079** | **1.000 ± 0.000** | **0.056 ± 0.131** | **0.989 ± 0.041** | **0.944 ± 0.217** |
 
+Alerts need persistence: a recording alarms only when 3 of any 5 consecutive windows (about two
+seconds) are abnormal. The rule was declared from physical reasoning, not tuned on the outer folds,
+and every alternative is in
+[alert_rule_sensitivity.csv](reports/model-evaluation/alert_rule_sensitivity.csv). Out of fold, the
+old single-window rule alarmed 3 of 15 healthy recordings (20%); 3-of-5 alarms 2 of 15 (13%) and
+misses 1 of 15 faulty recordings (bearing 19). The false alarms sit on whole bearings (6, 9, 16),
+so persistence helps only a little; a per-machine baseline (`calibrated_threshold`) is the intended
+fix, but it needs at least 120 healthy windows per machine and could not be validated on UORED,
+which has 19 per bearing. It can only raise the threshold, never lower it.
+
 The deployed fusion Isolation Forest was selected from grouped inner predictions, not from a test
 bearing. The separate all-20 load-only Random Forest reached 0.625 ± 0.222 balanced accuracy,
 which is evidence of the operating-condition shortcut and is not combined with the primary score.
