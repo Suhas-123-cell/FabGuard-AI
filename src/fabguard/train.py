@@ -325,7 +325,13 @@ def evaluate_lobo(
     config: ExperimentConfig | None = None,
     cohort: str = "primary",
     candidates: Sequence[Candidate] | None = None,
+    outer_folds: Sequence[Sequence[int]] | None = None,
 ) -> tuple[pd.DataFrame, list[dict[str, Any]]]:
+    """Grouped outer evaluation; one bearing per fold unless ``outer_folds`` groups several.
+
+    Datasets where each bearing is only healthy or only damaged need grouped folds so every
+    outer test fold still contains both labels.
+    """
     experiment = config or ExperimentConfig()
     eligible = table.copy() if cohort == "all" else table.loc[table["cohort"] == cohort].copy()
     if eligible.empty:
@@ -338,16 +344,18 @@ def evaluate_lobo(
         columns = _feature_columns(policy)
         for family in families:
             family_grid = [candidate for candidate in grid if candidate.family == family]
-            for bearing in sorted(eligible["bearing_id"].unique()):
-                outer_train = eligible.loc[eligible["bearing_id"] != bearing].reset_index(drop=True)
-                outer_test = eligible.loc[eligible["bearing_id"] == bearing].reset_index(drop=True)
+            groups = outer_folds or [(b,) for b in sorted(eligible["bearing_id"].unique())]
+            for held in (tuple(int(b) for b in group) for group in groups):
+                held_out = eligible["bearing_id"].isin(held)
+                outer_train = eligible.loc[~held_out].reset_index(drop=True)
+                outer_test = eligible.loc[held_out].reset_index(drop=True)
                 if set(outer_test["binary_label"].unique()) != {0, 1}:
-                    raise ValueError(f"outer bearing {bearing} lacks both health labels")
+                    raise ValueError(f"outer bearings {held} lack both health labels")
                 selected, threshold, inner = choose_candidate(
                     outer_train,
                     columns,
                     family_grid,
-                    seed=experiment.evaluation.seed + int(bearing),
+                    seed=experiment.evaluation.seed + held[0],
                     inner_folds=experiment.evaluation.inner_folds,
                 )
                 x_train = outer_train[columns].to_numpy(dtype=float)
@@ -377,8 +385,11 @@ def evaluate_lobo(
                 predictions.append(output)
                 folds.append(
                     {
-                        "fold": f"bearing-{int(bearing):02d}",
-                        "test_bearing_id": int(bearing),
+                        **(
+                            {"fold": f"bearing-{held[0]:02d}", "test_bearing_id": held[0]}
+                            if len(held) == 1
+                            else {"fold": f"bearings-{held[0]:03d}", "test_bearing_ids": held}
+                        ),
                         "feature_policy": policy,
                         "selected_candidate": asdict(selected),
                         "threshold": threshold,
