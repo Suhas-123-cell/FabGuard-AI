@@ -8,18 +8,22 @@ import statistics
 import time
 import uuid
 from collections.abc import Sequence
+from contextlib import nullcontext
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
 import pandas as pd
+from langgraph.checkpoint.memory import InMemorySaver
 
+from fabguard.config import RuntimeSettings
 from fabguard.graph import (
     AudioEvidence,
     Guidance,
     Hypothesis,
     InvestigationGraph,
     InvestigationInput,
+    InvestigationResult,
     Observation,
     PlannerDecision,
     Prediction,
@@ -27,6 +31,8 @@ from fabguard.graph import (
     ReportDraft,
     TelemetryEvidence,
     TicketDraft,
+    build_langgraph,
+    postgres_saver_factory,
 )
 from fabguard.llm import OpenAICompatibleLLM, ScriptedLLM, Usage
 from fabguard.retrieval import InMemoryRetriever, Passage, ingest_documents, load_reference_corpus
@@ -50,7 +56,7 @@ class EvaluationRow:
     provider_attempts: int
     prompt_tokens: int
     completion_tokens: int
-    estimated_cost_usd: float
+    estimated_cost_usd: float | None
     latency_ms: float
     unsupported_claims: int
     errors: tuple[str, ...]
@@ -266,7 +272,17 @@ def run_evaluation(
     model: str = "openai/gpt-oss-20b",
     input_cost_per_million: float = 0.0,
     output_cost_per_million: float = 0.0,
+    checkpointer: object | None = None,
 ) -> dict[str, Any]:
+    if repeats < 1:
+        raise ValueError("repeats must be positive")
+    if input_cost_per_million < 0 or output_cost_per_million < 0:
+        raise ValueError("token prices cannot be negative")
+    pricing_configured = provider == "offline" or (
+        input_cost_per_million > 0 and output_cost_per_million > 0
+    )
+    saver = checkpointer or InMemorySaver()
+    evaluation_id = str(uuid.uuid4())
     cases = json.loads(Path(cases_path).read_text(encoding="utf-8"))
     split = json.loads(Path(split_path).read_text(encoding="utf-8"))
     by_id = {case["id"]: case for case in cases}
@@ -292,15 +308,31 @@ def run_evaluation(
                     llm = OpenAICompatibleLLM.from_env(model=model)
                 else:
                     raise ValueError("provider must be 'offline' or 'groq'")
-                graph = InvestigationGraph(retriever=retriever, llm=llm, adaptive=adaptive)
+                graph = build_langgraph(
+                    InvestigationGraph(retriever=retriever, llm=llm, adaptive=adaptive),
+                    checkpointer=saver,
+                )
+                thread_id = f"{evaluation_id}:{case['id']}:{repeat}:{variant}"
                 started = time.perf_counter()
-                result = graph.run(evidence)
+                state = graph.invoke(
+                    {"request": evidence.model_dump(mode="json")},
+                    config={"configurable": {"thread_id": thread_id}, "recursion_limit": 20},
+                    durability="sync",
+                )
+                result = InvestigationResult.model_validate(state["result"])
                 latency_ms = (time.perf_counter() - started) * 1_000
                 usage: Usage = llm.usage
                 cost = (
-                    usage.prompt_tokens * input_cost_per_million
-                    + usage.completion_tokens * output_cost_per_million
-                ) / 1_000_000
+                    (
+                        (
+                            usage.prompt_tokens * input_cost_per_million
+                            + usage.completion_tokens * output_cost_per_million
+                        )
+                        / 1_000_000
+                    )
+                    if pricing_configured
+                    else None
+                )
                 scores = _score(case, result)
                 row = EvaluationRow(
                     case_id=case["id"],
@@ -332,6 +364,7 @@ def run_evaluation(
                         "case_id": case["id"],
                         "variant": variant,
                         "repeat": repeat,
+                        "thread_id": thread_id,
                         "result": result.model_dump(mode="json"),
                     }
                 )
@@ -348,20 +381,26 @@ def run_evaluation(
     fixed_passes = int(pivot["fixed"].sum())
     adaptive_passes = int(pivot["adaptive"].sum())
     unsafe = frame.loc[~frame["no_unauthorized_action"]].groupby("variant").size().to_dict()
-    fixed_cost = float(frame.loc[frame.variant == "fixed", "estimated_cost_usd"].median())
-    adaptive_cost = float(frame.loc[frame.variant == "adaptive", "estimated_cost_usd"].median())
-    cost_ratio = (
-        1.0
-        if fixed_cost == adaptive_cost == 0
-        else (float("inf") if fixed_cost == 0 else adaptive_cost / fixed_cost)
-    )
+    cost_ratio = None
+    if pricing_configured:
+        fixed_cost = float(frame.loc[frame.variant == "fixed", "estimated_cost_usd"].median())
+        adaptive_cost = float(frame.loc[frame.variant == "adaptive", "estimated_cost_usd"].median())
+        cost_ratio = (
+            1.0
+            if fixed_cost == adaptive_cost == 0
+            else (None if fixed_cost == 0 else adaptive_cost / fixed_cost)
+        )
     adoption = (
         adaptive_passes >= fixed_passes + 2
         and int(unsafe.get("adaptive", 0)) <= int(unsafe.get("fixed", 0))
+        and cost_ratio is not None
         and cost_ratio <= 1.5
     )
     summary = {
         "provider": provider,
+        "evaluation_id": evaluation_id,
+        "checkpoint_backend": "postgres" if checkpointer is not None else "memory",
+        "pricing_configured": pricing_configured,
         "model": model if provider == "groq" else "scripted-offline-fixture",
         "cases": len(evaluation_cases),
         "repeats": repeats,
@@ -393,8 +432,10 @@ def run_evaluation(
     )
     (output / "summary.md").write_text(
         "# Fixed versus adaptive investigation\n\n"
-        f"Provider: `{summary['model']}`. The fixed path passed {fixed_passes}/10 cases; "
-        f"the adaptive path passed {adaptive_passes}/10 under majority-of-three scoring. "
+        f"Provider: `{summary['model']}`. The fixed path passed "
+        f"{fixed_passes}/{len(evaluation_cases)} "
+        f"cases; the adaptive path passed {adaptive_passes}/{len(evaluation_cases)} under "
+        f"majority-of-{repeats} scoring. "
         f"The predeclared rule therefore selects **{summary['default_variant']}**. "
         "These are authored workflow fixtures, not industrial maintenance ground truth.\n",
         encoding="utf-8",
@@ -410,20 +451,29 @@ def main() -> None:
     parser.add_argument("--repeats", type=int, default=3)
     parser.add_argument("--input-cost-per-million", type=float, default=0.0)
     parser.add_argument("--output-cost-per-million", type=float, default=0.0)
-    args = parser.parse_args()
-    print(
-        json.dumps(
-            run_evaluation(
-                output_directory=args.output_dir,
-                provider=args.provider,
-                model=args.model,
-                repeats=args.repeats,
-                input_cost_per_million=args.input_cost_per_million,
-                output_cost_per_million=args.output_cost_per_million,
-            ),
-            indent=2,
-        )
+    parser.add_argument(
+        "--durable", action="store_true", help="persist both variants in PostgreSQL"
     )
+    args = parser.parse_args()
+    settings = RuntimeSettings()
+    manager = postgres_saver_factory(settings.checkpoint_url) if args.durable else nullcontext(None)
+    with manager as saver:
+        if saver is not None:
+            saver.setup()
+        print(
+            json.dumps(
+                run_evaluation(
+                    output_directory=args.output_dir,
+                    provider=args.provider,
+                    model=args.model,
+                    repeats=args.repeats,
+                    input_cost_per_million=args.input_cost_per_million,
+                    output_cost_per_million=args.output_cost_per_million,
+                    checkpointer=saver,
+                ),
+                indent=2,
+            )
+        )
 
 
 if __name__ == "__main__":
