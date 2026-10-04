@@ -46,6 +46,7 @@ fabguard-worker = "fabguard.worker:main"
 fabguard-evaluate = "fabguard.evaluate:main"
 fabguard-index-references = "fabguard.retrieval:main"
 fabguard-init = "fabguard.initialize:main"
+fabguard-paderborn = "fabguard.paderborn:main"
 
 [build-system]
 requires = ["hatchling"]
