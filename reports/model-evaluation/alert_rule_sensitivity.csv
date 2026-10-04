@@ -1,0 +1,6 @@
+rule,healthy_alarmed,healthy_recordings,developing_alarmed,developing_recordings,faulty_alarmed,faulty_recordings
+1-of-1,0.2,15,1.0,15,1.0,15
+2-of-2,0.1333,15,1.0,15,1.0,15
+3-of-5,0.1333,15,1.0,15,0.9333,15
+5-of-8,0.1333,15,1.0,15,0.9333,15
+8-of-19,0.0667,15,1.0,15,0.9333,15

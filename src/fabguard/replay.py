@@ -12,6 +12,7 @@ import httpx
 import numpy as np
 from joblib import load
 
+from fabguard.alerting import DEFAULT_ALERT_RULE, persistent_score
 from fabguard.config import RuntimeSettings
 from fabguard.data import CHANNEL_MAPPING, read_numeric_table
 from fabguard.signals import assess_quality, extract_recording_features
@@ -112,7 +113,8 @@ def replay_recording(
         window["anomaly_score"] = float(score)
         window["threshold"] = threshold
         window["abnormal"] = bool(score >= threshold)
-    selected_index = int(np.argmax(scores))
+    rule = DEFAULT_ALERT_RULE
+    persistent, selected_index = persistent_score(scores, rule)
     selected = windows[selected_index]
     artifact_id = _artifact_id(recording_id, bundle["model_version"], entry["sha256"])
     visible = min(len(vibration), int(sample_rate * 2))
@@ -138,7 +140,8 @@ def replay_recording(
         "prediction": {
             "score": float(selected["anomaly_score"]),
             "threshold": threshold,
-            "decision": "abnormal" if selected["abnormal"] else "healthy",
+            "decision": "abnormal" if persistent >= threshold else "healthy",
+            "alert_rule": rule.to_dict(),
             "selected_window_index": selected_index,
         },
         "windows": windows,
