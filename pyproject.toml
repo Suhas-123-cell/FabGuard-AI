@@ -45,6 +45,7 @@ fabguard-replay = "fabguard.replay:main"
 fabguard-worker = "fabguard.worker:main"
 fabguard-evaluate = "fabguard.evaluate:main"
 fabguard-index-references = "fabguard.retrieval:main"
+fabguard-init = "fabguard.initialize:main"
 
 [build-system]
 requires = ["hatchling"]
