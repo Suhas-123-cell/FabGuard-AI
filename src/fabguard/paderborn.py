@@ -75,6 +75,7 @@ MD5 = {
 RECORDING = re.compile(
     r"^N(?P<rpm>\d{2})_M(?P<torque>\d{2})_F(?P<force>\d{2})_(?P<code>K[0-9AIB]\d{2,3})_(?P<index>\d+)$"
 )
+MAX_UNREADABLE_PER_BEARING = 2  # a corrupt recording is excluded and reported, not guessed
 BASELINE_MEASUREMENTS = range(1, 11)  # calibration uses measurements 1-10, tests on 11-20
 
 
@@ -153,18 +154,30 @@ def extract(archive: Path, destination: Path) -> list[Path]:
     raise RuntimeError("install bsdtar (libarchive-tools), unrar, or 7z to unpack RAR archives")
 
 
-def bearing_features(code: str, mat_files: list[Path], config: ExperimentConfig) -> pd.DataFrame:
+def bearing_features(
+    code: str, mat_files: list[Path], config: ExperimentConfig
+) -> tuple[pd.DataFrame, list[dict[str, str]]]:
+    """Return window features plus the recordings excluded because they could not be read."""
     if len(mat_files) != 80:
         raise ValueError(f"{code} unpacked {len(mat_files)} recordings, expected 80")
     healthy = code in HEALTHY
     origin = "none" if healthy else ("artificial" if code in ARTIFICIAL else "real")
     rows = []
+    excluded: list[dict[str, str]] = []
     for path in mat_files:
         meta = parse_recording(path.stem)
         if meta["code"] != code:
             raise ValueError(f"{path.name} does not belong to {code}")
+        try:
+            vibration = read_vibration(path)
+        except (TypeError, ValueError) as error:  # scipy raises both for malformed structs
+            reason = f"{type(error).__name__}: {error}"
+            excluded.append({"recording_id": path.stem, "reason": reason})
+            if len(excluded) > MAX_UNREADABLE_PER_BEARING:
+                raise ValueError(f"{code} has {len(excluded)} unreadable recordings") from error
+            continue
         windows = extract_recording_features(
-            read_vibration(path),
+            vibration,
             sample_rate_hz=SAMPLE_RATE_HZ,
             window_seconds=config.feature.window_seconds,
             hop_seconds=config.feature.hop_seconds,
@@ -191,7 +204,7 @@ def bearing_features(code: str, mat_files: list[Path], config: ExperimentConfig)
             }
             row.update({f"vibration__{name}": float(window[name]) for name in FEATURE_COLUMNS})
             rows.append(row)
-    return pd.DataFrame(rows)
+    return pd.DataFrame(rows), excluded
 
 
 def build_feature_table(
@@ -207,12 +220,15 @@ def build_feature_table(
         started = time.monotonic()
         archive = download(code, root / "rar", source=source)
         with tempfile.TemporaryDirectory(dir=root) as scratch:
-            table = bearing_features(code, extract(archive, Path(scratch)), config)
+            table, excluded = bearing_features(code, extract(archive, Path(scratch)), config)
+        (cache / f"{code}.excluded.json").write_text(json.dumps(excluded, indent=2) + "\n")
         table.to_parquet(cached, index=False)
         if not keep_raw:
             archive.unlink()
         elapsed = time.monotonic() - started
-        print(f"[{number:02d}/{len(BEARINGS)}] {code}: {len(table)} windows in {elapsed:.0f}s")
+        note = f", excluded {len(excluded)} unreadable" if excluded else ""
+        progress = f"[{number:02d}/{len(BEARINGS)}] {code}"
+        print(f"{progress}: {len(table)} windows in {elapsed:.0f}s{note}")
     return pd.concat(
         [pd.read_parquet(cache / f"{code}.parquet") for code in BEARINGS], ignore_index=True
     )
@@ -304,6 +320,11 @@ def run(root: Path, output: Path, *, source: str = "official", keep_raw: bool = 
         "windows": len(table),
         "outer_folds": [list(held) for held in folds],
         "alert_rule": DEFAULT_ALERT_RULE.to_dict(),
+        "excluded_recordings": [
+            item
+            for path in sorted((root / "features").glob("*.excluded.json"))
+            for item in json.loads(path.read_text())
+        ],
         "summary": summary.to_dict(orient="records"),
     }
     (output / "summary.json").write_text(json.dumps(result, indent=2, default=float) + "\n")

@@ -72,3 +72,31 @@ def test_calibration_check_compares_fleet_and_machine_thresholds():
     assert result.fleet_healthy_alarmed == 1.0
     assert result.machine_healthy_alarmed == 0.0
     assert result.machine_real_recall == 1.0
+
+
+
+def test_unreadable_recordings_are_excluded_and_reported(tmp_path, monkeypatch):
+    from fabguard import paderborn
+    from fabguard.config import ExperimentConfig
+
+    files = [
+        tmp_path / f"{condition}_KA08_{measurement}.mat"
+        for condition in ("N15_M07_F10", "N09_M07_F10", "N15_M01_F10", "N15_M07_F04")
+        for measurement in range(1, 21)
+    ]
+    broken = {files[3].stem}
+
+    def fake_read(path):
+        if path.stem in broken:
+            raise TypeError("Expecting matrix here")
+        return np.sin(np.arange(2 * paderborn.SAMPLE_RATE_HZ) / 7.0)
+
+    monkeypatch.setattr(paderborn, "read_vibration", fake_read)
+    table, excluded = paderborn.bearing_features("KA08", files, ExperimentConfig())
+    assert [item["recording_id"] for item in excluded] == list(broken)
+    assert "Expecting matrix" in excluded[0]["reason"]
+    assert table.recording_id.nunique() == 79
+
+    broken.update(path.stem for path in files[4:6])
+    with pytest.raises(ValueError, match="3 unreadable"):
+        paderborn.bearing_features("KA08", files, ExperimentConfig())
