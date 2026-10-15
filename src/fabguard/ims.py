@@ -28,6 +28,7 @@ import shutil
 import subprocess
 import tempfile
 import urllib.request
+import zipfile
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -104,7 +105,19 @@ def download(destination: Path) -> Path:
 
 
 def _unpack(archive: Path, destination: Path) -> None:
-    subprocess.run(["bsdtar", "-xf", str(archive), "-C", str(destination)], check=True)
+    """Zip layers in Python; the NASA archive's inner 7z/RAR layers need bsdtar or 7z."""
+    if zipfile.is_zipfile(archive):
+        with zipfile.ZipFile(archive) as bundle:
+            bundle.extractall(destination)
+        return
+    for tool, arguments in (
+        ("bsdtar", ["-xf", str(archive), "-C", str(destination)]),
+        ("7z", ["x", "-y", f"-o{destination}", str(archive)]),
+    ):
+        if shutil.which(tool):
+            subprocess.run([tool, *arguments], check=True)
+            return
+    raise RuntimeError("install bsdtar (libarchive-tools) or 7z to unpack 7z/RAR archives")
 
 
 def unpack_tests(archive: Path, destination: Path) -> dict[str, Path]:
