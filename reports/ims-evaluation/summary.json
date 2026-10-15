@@ -1,0 +1,49 @@
+{
+  "dataset": "NASA/IMS bearing run-to-failure data, one vibration channel per bearing",
+  "sample_rate_hz": 20000,
+  "baseline_hours": 24.0,
+  "threshold_quantile": 0.99,
+  "alert_rule": {
+    "min_abnormal": 3,
+    "window_count": 5
+  },
+  "features": [
+    "vibration__rms",
+    "vibration__crest_factor",
+    "vibration__kurtosis",
+    "vibration__peak_to_peak",
+    "vibration__spectral_power",
+    "vibration__band_power_0_500_hz",
+    "vibration__band_power_500_2000_hz",
+    "vibration__band_power_2000_5000_hz",
+    "vibration__band_power_5000_10000_hz"
+  ],
+  "summary": [
+    {
+      "model_family": "healthy_reference",
+      "healthy_bearings": 8,
+      "healthy_monitored_days": 203.37554398148148,
+      "healthy_alarm_episodes": 289,
+      "false_alarms_per_day": 1.4210164818357665,
+      "healthy_alarmed_fraction": 0.5415143386007907,
+      "pre_failure_false_alarms_per_day": 1.7598862563935342,
+      "pre_failure_alarmed_fraction": 0.20525592579869462,
+      "failed_bearings": 4,
+      "failed_alarmed_at_end": 4,
+      "median_final_alarm_hours_before_end": 149.75972222222225
+    },
+    {
+      "model_family": "isolation_forest",
+      "healthy_bearings": 8,
+      "healthy_monitored_days": 203.37554398148148,
+      "healthy_alarm_episodes": 545,
+      "false_alarms_per_day": 2.67977156609167,
+      "healthy_alarmed_fraction": 0.4749992380104655,
+      "pre_failure_false_alarms_per_day": 2.965599758676706,
+      "pre_failure_alarmed_fraction": 0.22294190424504398,
+      "failed_bearings": 4,
+      "failed_alarmed_at_end": 4,
+      "median_final_alarm_hours_before_end": 119.81194444444446
+    }
+  ]
+}

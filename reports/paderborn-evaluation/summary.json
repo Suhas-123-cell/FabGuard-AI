@@ -1,0 +1,114 @@
+{
+  "dataset": "Paderborn KAt bearing data (CC BY 4.0), vibration_1 at 64 kHz",
+  "bearings": 32,
+  "windows": 17862,
+  "outer_folds": [
+    [
+      1,
+      101,
+      108,
+      323,
+      205,
+      218
+    ],
+    [
+      2,
+      103,
+      109,
+      324,
+      207,
+      221
+    ],
+    [
+      3,
+      104,
+      115,
+      327,
+      208
+    ],
+    [
+      4,
+      105,
+      116,
+      201,
+      214
+    ],
+    [
+      5,
+      106,
+      122,
+      203,
+      216
+    ],
+    [
+      6,
+      107,
+      130,
+      204,
+      217
+    ]
+  ],
+  "alert_rule": {
+    "min_abnormal": 3,
+    "window_count": 5
+  },
+  "excluded_recordings": [
+    {
+      "recording_id": "N15_M01_F10_KA08_2",
+      "reason": "TypeError: Expecting matrix here"
+    }
+  ],
+  "summary": [
+    {
+      "feature_policy": "vibration",
+      "model_family": "healthy_reference",
+      "bearing_folds": 6,
+      "auroc_mean": 0.5261624004167892,
+      "auroc_std": 0.14827429859703786,
+      "average_precision_mean": 0.8696212062130954,
+      "average_precision_std": 0.06227426353017864,
+      "balanced_accuracy_mean": 0.5936627602260354,
+      "balanced_accuracy_std": 0.11085353240229524,
+      "healthy_false_positive_rate_mean": 0.0005963029218843172,
+      "healthy_false_positive_rate_std": 0.001460637890747274,
+      "developing_recall_mean": NaN,
+      "developing_recall_std": NaN,
+      "faulty_recall_mean": 0.18792182337395502,
+      "faulty_recall_std": 0.22174331444935255
+    },
+    {
+      "feature_policy": "vibration",
+      "model_family": "isolation_forest",
+      "bearing_folds": 6,
+      "auroc_mean": 0.7314060576626945,
+      "auroc_std": 0.2119978147374603,
+      "average_precision_mean": 0.9262002605886588,
+      "average_precision_std": 0.05986758731140017,
+      "balanced_accuracy_mean": 0.5628400244791514,
+      "balanced_accuracy_std": 0.09713229961505654,
+      "healthy_false_positive_rate_mean": 0.16666666666666666,
+      "healthy_false_positive_rate_std": 0.408248290463863,
+      "developing_recall_mean": NaN,
+      "developing_recall_std": NaN,
+      "faulty_recall_mean": 0.2923467156249694,
+      "faulty_recall_std": 0.28442570576337567
+    },
+    {
+      "feature_policy": "vibration",
+      "model_family": "random_forest",
+      "bearing_folds": 6,
+      "auroc_mean": 0.8030873757492721,
+      "auroc_std": 0.25152405748221457,
+      "average_precision_mean": 0.9484903001677844,
+      "average_precision_std": 0.06938198594197376,
+      "balanced_accuracy_mean": 0.5400599476199789,
+      "balanced_accuracy_std": 0.1486564399256022,
+      "healthy_false_positive_rate_mean": 0.12671330607377118,
+      "healthy_false_positive_rate_std": 0.30863661416887456,
+      "developing_recall_mean": NaN,
+      "developing_recall_std": NaN,
+      "faulty_recall_mean": 0.20683320131372915,
+      "faulty_recall_std": 0.17456456266819134
+    }
+  ]
+}
