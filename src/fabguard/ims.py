@@ -1,8 +1,12 @@
 """Run-to-failure check on the NASA/IMS bearing data, vibration only, one model per bearing.
 
 This simulates commissioning a new machine: each bearing gets its own healthy-only detector fitted
-on its first ``BASELINE_HOURS`` of snapshots, then every later snapshot is scored causally with
-the same 3-of-5 alert rule. Nothing is tuned on outcomes; the model settings below are fixed.
+on its first recorded hours, then every later snapshot is scored causally with the same 3-of-5
+alert rule. Nothing is tuned on outcomes; the model settings below are fixed.
+
+``BASELINE_POLICIES`` compares commissioning rules: the first 24 h, the first 72 h, and re-fitting
+on the first 24 h after any stop of at least ``STOP_HOURS``. The last two were added after the
+first run; re-fitting after a stop risks learning damage that is already present as normal.
 
 Each IMS snapshot is 20,480 samples at 20 kHz taken every 10 minutes (5 minutes for the first 43
 files of test 1), so one snapshot gives one one-second window and the alert rule spans
@@ -38,7 +42,14 @@ from .train import Candidate, _build_estimator, anomaly_scores
 
 URL = "https://phm-datasets.s3.amazonaws.com/NASA/4.+Bearings.zip"
 SAMPLE_RATE_HZ = 20_000
-BASELINE_HOURS = 24.0
+SNAPSHOT_MINUTES = 10  # nominal spacing; recorded time is counted in snapshots, not calendar time
+STOP_HOURS = 12.0
+MIN_BASELINE_HOURS = 12.0  # a shorter run after a stop keeps the previous model
+BASELINE_POLICIES = {  # name -> (baseline hours, re-fit after a stop)
+    "first_24h": (24.0, False),
+    "first_72h": (72.0, False),
+    "restart_24h": (24.0, True),
+}
 THRESHOLD_QUANTILE = 0.99
 SEED = 17
 SNAPSHOT = re.compile(r"^\d{4}\.\d{2}\.\d{2}\.\d{2}\.\d{2}\.\d{2}$")
@@ -166,23 +177,46 @@ def episodes(alarm: np.ndarray) -> np.ndarray:
     return np.flatnonzero(alarm & ~previous)
 
 
-def score_bearing(frame: pd.DataFrame, family: str) -> pd.DataFrame:
-    """Fit on this bearing's first BASELINE_HOURS, then score every later snapshot."""
+def _snapshots(hours: float) -> int:
+    return round(hours * 60 / SNAPSHOT_MINUTES)
+
+
+def score_bearing(frame: pd.DataFrame, family: str, policy: str = "first_24h") -> pd.DataFrame:
+    """Fit on this bearing's own baseline snapshots, then score every later snapshot causally."""
     ordered = frame.sort_values("timestamp").reset_index(drop=True)
     hours = ((ordered.timestamp - ordered.timestamp.iloc[0]).dt.total_seconds() / 3600).to_numpy()
-    baseline = hours < BASELINE_HOURS
+    baseline_hours, refit_after_stop = BASELINE_POLICIES[policy]
+    starts = [0]
+    if refit_after_stop:
+        starts += [int(i) for i in np.flatnonzero(np.diff(hours) >= STOP_HOURS) + 1]
     x = ordered[COLUMNS].to_numpy()
     candidate = MODELS[family]
-    model = _build_estimator(candidate, SEED).fit(x[baseline])
-    scores = anomaly_scores(model, family, x)
-    threshold = float(np.quantile(scores[baseline], candidate.threshold_quantile))
-    monitored = ordered.loc[~baseline].copy()
-    monitored["hours"] = hours[~baseline]
-    monitored["anomaly_score"] = scores[~baseline]
-    monitored["threshold"] = threshold
-    monitored["alarm"] = causal_alarm(scores[~baseline] >= threshold)
+    model, threshold, fits, first_baseline = None, np.nan, 0, 0
+    parts = []
+    for begin, end in zip(starts, [*starts[1:], len(hours)], strict=True):
+        segment = np.arange(begin, end)
+        baseline = segment[: _snapshots(baseline_hours)]
+        if model is None or baseline.size >= _snapshots(MIN_BASELINE_HOURS):
+            model = _build_estimator(candidate, SEED).fit(x[baseline])
+            fitted = anomaly_scores(model, family, x[baseline])
+            threshold = float(np.quantile(fitted, candidate.threshold_quantile))
+            first_baseline = first_baseline or int(baseline.size)
+            fits += 1
+            segment = segment[baseline.size :]
+        if not segment.size:
+            continue
+        scores = anomaly_scores(model, family, x[segment])
+        part = ordered.loc[segment].copy()
+        part["hours"] = hours[segment]
+        part["anomaly_score"] = scores
+        part["threshold"] = threshold
+        part["alarm"] = causal_alarm(scores >= threshold)  # the k-of-n count restarts after a stop
+        parts.append(part)
+    monitored = pd.concat(parts)
     monitored["model_family"] = family
-    monitored["baseline_snapshots"] = int(baseline.sum())
+    monitored["baseline_policy"] = policy
+    monitored["baseline_snapshots"] = first_baseline
+    monitored["baseline_fits"] = fits
     return monitored
 
 
@@ -196,11 +230,13 @@ def summarize_bearing(scored: pd.DataFrame, test: Test, bearing: int) -> dict[st
         "test": test.name,
         "bearing": bearing,
         "model_family": scored.model_family.iloc[0],
+        "baseline_policy": scored.baseline_policy.iloc[0],
+        "baseline_fits": int(scored.baseline_fits.iloc[0]),
         "failed": failed,
         "failure_mode": test.failed.get(bearing, "none"),
         "baseline_snapshots": int(scored.baseline_snapshots.iloc[0]),
         "monitored_snapshots": len(scored),
-        "monitored_days": (end - float(hours[0])) / 24,
+        "monitored_days": len(scored) * SNAPSHOT_MINUTES / 1440,
         "alarm_episodes": len(starts),
         "alarmed_fraction": float(alarm.mean()),
         "alarmed_at_end": bool(alarm[-1]),
@@ -230,16 +266,21 @@ def add_pre_failure(per_bearing: pd.DataFrame, scored: pd.DataFrame) -> pd.DataF
     frame = per_bearing.copy()
     for column in ("pre_failure_days", "pre_failure_episodes", "pre_failure_alarmed_fraction"):
         frame[column] = np.nan
-    for (test, family), group in frame.groupby(["test", "model_family"]):
+    keys = ["test", "model_family", "baseline_policy"]
+    for (test, family, policy), group in frame.groupby(keys):
         failed = group[group.failed & group.final_alarm_hours_before_end.notna()]
-        same = scored[(scored.test == test) & (scored.model_family == family)]
+        same = scored[
+            (scored.test == test)
+            & (scored.model_family == family)
+            & (scored.baseline_policy == policy)
+        ]
         end = float(same.hours.max())
         onset = float((end - failed.final_alarm_hours_before_end).min()) if len(failed) else end
         for index, row in group[~group.failed].iterrows():
             before = same[(same.bearing == row.bearing) & (same.hours < onset)]
             if len(before) < 2:
                 continue
-            frame.loc[index, "pre_failure_days"] = (before.hours.max() - before.hours.min()) / 24
+            frame.loc[index, "pre_failure_days"] = len(before) * SNAPSHOT_MINUTES / 1440
             frame.loc[index, "pre_failure_episodes"] = len(episodes(before.alarm.to_numpy()))
             frame.loc[index, "pre_failure_alarmed_fraction"] = float(before.alarm.mean())
     return frame
@@ -257,6 +298,7 @@ def _plot(scored: pd.DataFrame, path: Path) -> None:
             (scored.test == test.name)
             & (scored.bearing == bearing)
             & (scored.model_family == "isolation_forest")
+            & (scored.baseline_policy == "first_24h")
         ]
         axis.plot(part.hours, part.anomaly_score, linewidth=0.6)
         axis.axhline(part.threshold.iloc[0], color="black", linestyle="--", linewidth=0.8)
@@ -277,20 +319,24 @@ def run(root: Path, output: Path) -> dict[str, Any]:
         for bearing in test.bearing_channel:
             frame = table[(table.test == test.name) & (table.bearing == bearing)]
             for family in MODELS:
-                scored = score_bearing(frame, family)
-                scored_parts.append(scored)
-                rows.append(summarize_bearing(scored, test, bearing))
+                for policy in BASELINE_POLICIES:
+                    scored = score_bearing(frame, family, policy)
+                    scored_parts.append(scored)
+                    rows.append(summarize_bearing(scored, test, bearing))
     scored = pd.concat(scored_parts, ignore_index=True)
     per_bearing = add_pre_failure(pd.DataFrame(rows), scored)
     per_bearing.to_csv(output / "per_bearing.csv", index=False)
-    keep = ["test", "bearing", "model_family", "snapshot", "hours", "anomaly_score", "threshold"]
-    scored[[*keep, "alarm"]].to_csv(output / "scores.csv.gz", index=False)
+    keep = ["test", "bearing", "model_family", "baseline_policy", "snapshot", "hours"]
+    scored[[*keep, "anomaly_score", "threshold", "alarm"]].to_csv(
+        output / "scores.csv.gz", index=False
+    )
     _plot(scored, output / "failed_bearings.png")
     summary = []
-    for family, group in per_bearing.groupby("model_family"):
+    for (policy, family), group in per_bearing.groupby(["baseline_policy", "model_family"]):
         healthy, failed = group[~group.failed], group[group.failed]
         summary.append(
             {
+                "baseline_policy": policy,
                 "model_family": family,
                 "healthy_bearings": len(healthy),
                 "healthy_monitored_days": float(healthy.monitored_days.sum()),
@@ -313,7 +359,8 @@ def run(root: Path, output: Path) -> dict[str, Any]:
     result = {
         "dataset": "NASA/IMS bearing run-to-failure data, one vibration channel per bearing",
         "sample_rate_hz": SAMPLE_RATE_HZ,
-        "baseline_hours": BASELINE_HOURS,
+        "baseline_policies": BASELINE_POLICIES,
+        "stop_hours": STOP_HOURS,
         "threshold_quantile": THRESHOLD_QUANTILE,
         "alert_rule": DEFAULT_ALERT_RULE.to_dict(),
         "features": COLUMNS,

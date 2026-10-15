@@ -45,6 +45,17 @@ FEATURE_COLUMNS: tuple[str, ...] = (
     *(_band_name(low, high) for low, high in DEFAULT_FREQUENCY_BANDS_HZ),
 )
 
+# Gain-invariant features for comparing different sensors: shape statistics plus each band's share
+# of 0-10 kHz energy, so any sensor sampled at 20 kHz or more yields the same columns.
+RELATIVE_BANDS = tuple(
+    _band_name(low, high) for low, high in DEFAULT_FREQUENCY_BANDS_HZ if high <= 10_000.0
+)
+RELATIVE_FEATURE_COLUMNS: tuple[str, ...] = (
+    "crest_factor",
+    "kurtosis",
+    *(name.replace("band_power_", "band_share_") for name in RELATIVE_BANDS),
+)
+
 
 @dataclass(frozen=True)
 class QualityThresholds:

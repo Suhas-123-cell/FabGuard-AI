@@ -62,7 +62,7 @@ def test_healthy_bearing_reports_false_alarms_per_day():
     scored = score_bearing(_bearing(72), "healthy_reference")
     row = summarize_bearing(scored, TESTS[1], 2)
     assert not row["failed"]
-    assert row["monitored_days"] == pytest.approx(48 / 24 - 1 / 144, rel=1e-3)
+    assert row["monitored_days"] == pytest.approx(2.0)  # 288 recorded snapshots
     assert row["false_alarms_per_day"] == row["alarm_episodes"] / row["monitored_days"]
     assert np.isnan(row["final_alarm_hours_before_end"])
 
@@ -106,6 +106,7 @@ def test_pre_failure_cut_stops_at_failing_bearings_final_alarm():
         {
             "test": "test2",
             "model_family": "healthy_reference",
+            "baseline_policy": "first_24h",
             "bearing": [1] * 10 + [2] * 10,
             "hours": np.concatenate([hours, hours]),
             "alarm": [0] * 6 + [1] * 4 + [0, 1, 0, 0, 0, 0, 0, 1, 1, 1],
@@ -115,6 +116,7 @@ def test_pre_failure_cut_stops_at_failing_bearings_final_alarm():
         {
             "test": "test2",
             "model_family": "healthy_reference",
+            "baseline_policy": "first_24h",
             "bearing": [1, 2],
             "failed": [True, False],
             "final_alarm_hours_before_end": [3.0, np.nan],
@@ -123,4 +125,41 @@ def test_pre_failure_cut_stops_at_failing_bearings_final_alarm():
     row = add_pre_failure(per_bearing, scored).iloc[1]
     # Bearing 1's final alarm starts at hour 6, so bearing 2's alarm from hour 7 is excluded.
     assert row.pre_failure_episodes == 1 and row.pre_failure_alarmed_fraction == 1 / 6
-    assert row.pre_failure_days == 5 / 24
+    assert row.pre_failure_days == pytest.approx(6 * 10 / 1440)
+
+
+def test_restart_policy_refits_after_a_stop_and_skips_its_new_baseline():
+    before = _bearing(48)
+    after = _bearing(48, shift_after=0)  # the machine runs at a new level after the stop
+    after["timestamp"] += timedelta(hours=48 + 20)
+    frame = pd.concat([before, after], ignore_index=True)
+    fixed = score_bearing(frame, "healthy_reference", "first_24h")
+    refit = score_bearing(frame, "healthy_reference", "restart_24h")
+    assert fixed.baseline_fits.iloc[0] == 1 and refit.baseline_fits.iloc[0] == 2
+    # The first day after the restart is a new baseline, so it is not scored.
+    assert len(fixed) - len(refit) == 144
+    assert fixed.alarm.tail(100).all() and not refit.alarm.tail(100).any()
+
+
+def test_short_run_after_a_stop_keeps_the_previous_model():
+    before = _bearing(48)
+    after = _bearing(6)
+    after["timestamp"] += timedelta(hours=48 + 20)
+    refit = score_bearing(pd.concat([before, after]), "healthy_reference", "restart_24h")
+    assert refit.baseline_fits.iloc[0] == 1 and len(refit) == 144 + 36
+
+
+def test_relative_features_ignore_sensor_gain():
+    from fabguard.signals import RELATIVE_FEATURE_COLUMNS, extract_features
+    from fabguard.train import _feature_columns, add_relative_features
+
+    signal = np.random.default_rng(1).normal(size=42_000)
+    rows = [
+        {f"vibration__{k}": v for k, v in extract_features(signal * gain).items()}
+        for gain in (1.0, 37.0)
+    ]
+    table = add_relative_features(pd.DataFrame(rows), "vibration")
+    columns = _feature_columns("vibration_relative")
+    assert len(columns) == len(RELATIVE_FEATURE_COLUMNS)
+    np.testing.assert_allclose(table.loc[0, columns], table.loc[1, columns], rtol=1e-9)
+    assert table[[c for c in columns if "band_share" in c]].sum(axis=1).round(9).eq(1).all()

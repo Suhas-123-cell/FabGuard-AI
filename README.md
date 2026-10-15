@@ -85,21 +85,32 @@ At the recording level the healthy reference never alarmed on a healthy recordin
 20% of damaged ones; Isolation Forest caught 32% while alarming on 17% of healthy recordings, all
 from one bearing (K002). Calibrating on that bearing's own healthy measurements removed those
 false alarms but cut its fold's recall from 0.88 to 0 for artificial damage and 0.75 to 0.38 for
-real damage. See `reports/paderborn-evaluation/`.
+real damage.
+
+A follow-up added after that result (`vibration_relative`: crest factor, kurtosis and each band's
+share of 0-10 kHz energy, so sensor gain cancels) did worse: balanced accuracy 0.50-0.53 and
+10-17% of damaged recordings caught. Sensor gain was not the reason for the poor transfer; a model
+fitted on other bearings does not carry over with these features. See
+`reports/paderborn-evaluation/`.
 
 **NASA/IMS run-to-failure (3 tests, 4 bearings each, 20 kHz snapshots every 10 minutes).** Each
-bearing got its own model fitted on its first 24 hours, as if commissioning a new machine:
+bearing got its own model fitted on its own early snapshots, as if commissioning a new machine.
+Three commissioning rules were compared; the last two were added after the first was seen to fail.
+Figures are for the healthy reference, counted over recorded time, on the other bearings before a
+failing bearing on the same shaft entered its final alarm (after that they see its vibration):
 
-| Test | Failing bearing | Other bearings before it failed |
-|---|---|---|
-| 2 | alarm held for the last 59-75 h, no earlier alarms (healthy reference) | 0 (healthy reference) to 3 (Isolation Forest) false alarms in 8-10 bearing-days |
-| 3 | alarm held for the last 59 h, one earlier episode in 44 days | in alarm 55-59% of the time, 1.9-3.2 episodes/day |
-| 1 | not assessable | the rig stopped for days after the baseline; everything alarms after restart |
+| Commissioning rule | False alarms/day | Time in alarm | Failing bearings in alarm at the end |
+|---|---|---|---|
+| first 24 h | 1.78 | 21% | 4/4 |
+| first 72 h | 0.10 | 0.6% | 4/4: last 75 h (test 2), 59 h (test 3), 50 h and 158 h (test 1) |
+| first 24 h, re-fit after any stop of 12 h or more | 1.69 | 22% | 4/4 |
 
-The detector does see real run-to-failure damage days ahead, but a single 24-hour baseline is not
-a usable commissioning step: it breaks after a restart and when a machine's normal level drifts.
-After a bearing fails, its neighbours on the shared shaft alarm too, so those late alarms are
-excluded from the false-alarm figures above (a reporting cut made after the first run). See
+Isolation Forest was worse on false alarms in every rule (0.91/day with 72 h). The 24-hour rule
+failed on test 3, where the machine's normal level drifted after the first day, and on test 1,
+where the rig stopped for days. Re-fitting after a stop only helped test 1, and re-fitting can
+also learn damage that is already present as normal. The 72-hour rule worked best but was picked
+after seeing these tests, uses 44% of test 2's short life as baseline, and still left unattributed
+alarm episodes on test 1's failing bearings, so it needs a check on data it has not seen. See
 `reports/ims-evaluation/`.
 
 ## Reproduce

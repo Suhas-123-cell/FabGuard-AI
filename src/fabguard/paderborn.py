@@ -32,7 +32,7 @@ from .alerting import DEFAULT_ALERT_RULE, AlertRule, persistent_score, rule_sens
 from .calibration import InsufficientBaseline, calibrated_threshold
 from .config import ExperimentConfig
 from .signals import extract_recording_features
-from .train import FEATURE_COLUMNS, evaluate_lobo, summarize_folds
+from .train import FEATURE_COLUMNS, add_relative_features, evaluate_lobo, summarize_folds
 
 OFFICIAL_URL = "https://groups.uni-paderborn.de/kat/BearingDataCenter/{code}.rar"
 ZENODO_URL = "https://zenodo.org/records/15845309/files/{code}.rar?download=1"
@@ -77,6 +77,8 @@ RECORDING = re.compile(
 )
 MAX_UNREADABLE_PER_BEARING = 2  # a corrupt recording is excluded and reported, not guessed
 BASELINE_MEASUREMENTS = range(1, 11)  # calibration uses measurements 1-10, tests on 11-20
+# vibration_relative was added after the first run showed poor cross-bearing transfer.
+POLICIES = ("vibration", "vibration_relative")
 
 
 def bearing_number(code: str) -> int:
@@ -293,11 +295,13 @@ def calibration_check(predictions: pd.DataFrame) -> pd.DataFrame:
 
 def run(root: Path, output: Path, *, source: str = "official", keep_raw: bool = False) -> dict:
     config = ExperimentConfig()
-    table = build_feature_table(root, config, source=source, keep_raw=keep_raw)
+    table = add_relative_features(
+        build_feature_table(root, config, source=source, keep_raw=keep_raw), "vibration"
+    )
     output.mkdir(parents=True, exist_ok=True)
     folds = outer_folds()
     predictions, fold_results = evaluate_lobo(
-        table, policies=("vibration",), config=config, outer_folds=folds
+        table, policies=POLICIES, config=config, outer_folds=folds
     )
     fold_of = {bearing: f"bearings-{held[0]:03d}" for held in folds for bearing in held}
     extra = ["recording_id", "window_index", "bearing_code", "damage_origin", "condition"]
@@ -309,9 +313,10 @@ def run(root: Path, output: Path, *, source: str = "official", keep_raw: bool = 
     summary.to_csv(output / "summary.csv", index=False)
     rules = [AlertRule(1, 1), AlertRule(2, 2), AlertRule(3, 5), AlertRule(5, 7)]
     sensitivity, calibration = [], []
-    for family, group in predictions.groupby("model_family"):
-        sensitivity.append(rule_sensitivity(group, rules).assign(model_family=family))
-        calibration.append(calibration_check(group).assign(model_family=family))
+    for (policy, family), group in predictions.groupby(["feature_policy", "model_family"]):
+        labels = {"feature_policy": policy, "model_family": family}
+        sensitivity.append(rule_sensitivity(group, rules).assign(**labels))
+        calibration.append(calibration_check(group).assign(**labels))
     pd.concat(sensitivity).to_csv(output / "alert_rule_sensitivity.csv", index=False)
     pd.concat(calibration).to_csv(output / "calibration.csv", index=False)
     result = {
