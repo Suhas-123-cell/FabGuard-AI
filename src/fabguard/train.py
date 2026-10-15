@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import platform
 import shutil
 import subprocess
@@ -30,6 +31,7 @@ from sklearn.model_selection import GroupKFold
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import RobustScaler
 
+from fabguard.alerting import AlertRule, rule_sensitivity
 from fabguard.config import ExperimentConfig
 from fabguard.data import (
     CHANNEL_MAPPING,
@@ -645,6 +647,28 @@ def _sha256(path: str | Path) -> str:
     return digest.hexdigest()
 
 
+# Rules compared in alert_rule_sensitivity.csv; 3-of-5 is the deployed default.
+ALERT_RULES = (
+    AlertRule(1, 1),
+    AlertRule(2, 2),
+    AlertRule(3, 5),
+    AlertRule(5, 8),
+    AlertRule(8, 19),
+)
+
+
+def alert_rule_table(predictions: pd.DataFrame) -> pd.DataFrame:
+    """Recording-level alarm rates per policy/family from out-of-fold window predictions."""
+
+    tables = [
+        rule_sensitivity(group, ALERT_RULES).assign(feature_policy=policy, model_family=family)
+        for (policy, family), group in predictions.groupby(["feature_policy", "model_family"])
+    ]
+    table = pd.concat(tables, ignore_index=True)
+    leading = ["feature_policy", "model_family", "rule"]
+    return table[leading + [column for column in table.columns if column not in leading]]
+
+
 def write_evaluation_report(
     destination: str | Path,
     *,
@@ -653,10 +677,10 @@ def write_evaluation_report(
     confound_summary: Sequence[dict[str, Any]],
     bundle: dict[str, Any],
     benchmark: dict[str, Any],
+    predictions: pd.DataFrame | None = None,
 ) -> None:
-    import matplotlib
-
-    matplotlib.use("Agg")
+    # Notebooks export an inline MPLBACKEND that this environment may not have.
+    os.environ["MPLBACKEND"] = "Agg"
     from matplotlib import pyplot as plt
 
     output = Path(destination)
@@ -675,6 +699,8 @@ def write_evaluation_report(
         for fold in folds
     ]
     pd.DataFrame(fold_rows).to_csv(output / "per_bearing_results.csv", index=False)
+    if predictions is not None:
+        alert_rule_table(predictions).to_csv(output / "alert_rule_sensitivity.csv", index=False)
 
     manufacturer_summary = summarize_manufacturer_subgroups(
         folds,
@@ -733,9 +759,12 @@ false-positive rate {selected["healthy_false_positive_rate_mean"]:.3f} ±
 recall {selected["faulty_recall_mean"]:.3f} ± {selected["faulty_recall_std"]:.3f}. Standard
 deviations describe bearing-fold variability; they are not confidence intervals.
 
-Candidates used grouped inner-fold predictions. Each candidate threshold came from its inner
-held-out healthy-score quantile (0.95, 0.975, or 0.99); the selected candidate was then refit on
-the outer-training bearings. No outer held-out bearing set its own threshold.
+Candidates used grouped inner-fold predictions. Every threshold is a quantile of inner held-out
+healthy scores: the healthy-reference grid tries 0.95, 0.975 and 0.99, while Isolation Forest and
+Random Forest candidates use 0.95 only. The selected candidate was then refit on the
+outer-training bearings. No outer held-out bearing set its own threshold. The feature policy and
+model family are not chosen inside a nested loop: every policy/family pair is reported on the same
+outer folds, and the deployed pair is chosen from inner predictions over all 15 bearings.
 
 All audio channels passed the frozen technical audit, and paired audio features contribute to the
 selected fusion model. Vibration-only and audio-only results remain in `primary_results.csv`.
@@ -862,6 +891,7 @@ def run_training(
         confound_summary=confound_summary,
         bundle=bundle,
         benchmark=benchmark,
+        predictions=predictions,
     )
     if (
         report_directory is not None
@@ -874,6 +904,7 @@ def run_training(
             confound_summary=confound_summary,
             bundle=bundle,
             benchmark=benchmark,
+            predictions=predictions,
         )
     experiment.write_json(run_dir / "config.json")
     lockfile = Path(__file__).resolve().parents[2] / "uv.lock"

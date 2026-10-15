@@ -130,6 +130,8 @@ approvals = Table(
     Column("report_hash", String(64), nullable=False),
     Column("created_at", DateTime(timezone=True), nullable=False),
     UniqueConstraint("incident_id", "report_revision", "reviewer_id", "action"),
+    # One ticket per report revision, whichever reviewer approves it first.
+    UniqueConstraint("incident_id", "report_revision", "action", name="approvals_one_per_revision"),
     ForeignKeyConstraint(
         ["incident_id", "report_revision"],
         ["reports.incident_id", "reports.revision"],
@@ -686,6 +688,23 @@ class Database:
                     raise NotFound("report not found")
                 if report["status"] != "ready" or not report["ticket_draft"]:
                     raise Conflict("report has no approvable ticket draft")
+                # The report row lock serializes approvals, so a second reviewer gets
+                # the existing ticket instead of creating another one.
+                prior = _row(
+                    conn.execute(
+                        select(tickets)
+                        .join(approvals, tickets.c.approval_id == approvals.c.id)
+                        .where(
+                            and_(
+                                approvals.c.incident_id == incident_id,
+                                approvals.c.report_revision == report_revision,
+                                approvals.c.action == action,
+                            )
+                        )
+                    ).first()
+                )
+                if prior is not None:
+                    return prior, False
                 approval_id = str(uuid.uuid4())
                 conn.execute(
                     insert(approvals).values(
@@ -827,6 +846,32 @@ class Database:
             )
             if result.rowcount != 1:
                 raise LeaseLost("event lease is no longer owned")
+
+    def release_event(self, event_id: str, owner: str, reason: str) -> None:
+        """Hand a claimed event back without spending one of its attempts."""
+
+        with self.engine.begin() as conn:
+            released = conn.execute(
+                update(event_deliveries)
+                .where(
+                    and_(
+                        event_deliveries.c.id == event_id,
+                        event_deliveries.c.lease_owner == owner,
+                    )
+                )
+                .values(
+                    status="pending",
+                    attempts=func.greatest(event_deliveries.c.attempts - 1, 0)
+                    if self.is_postgresql
+                    else func.max(event_deliveries.c.attempts - 1, 0),
+                    lease_owner=None,
+                    lease_expires_at=None,
+                    last_error=reason[:2000],
+                    updated_at=utcnow(),
+                )
+            ).rowcount
+        if not released:
+            raise LeaseLost("event lease is no longer owned")
 
     def fail_event(self, event_id: str, owner: str, error: str, *, max_attempts: int = 3) -> str:
         with self.engine.begin() as conn:
