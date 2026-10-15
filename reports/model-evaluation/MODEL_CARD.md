@@ -47,15 +47,15 @@ it demonstrates that operating condition contains label information for the ball
 
 ## Runtime measurement
 
-On `arm` with Python 3.12.13, one thread, batch size one,
+On `x86_64` with Python 3.13.16, one thread, batch size one,
 20 warm-up calls, and 200 measured calls, model-only
-latency was P50 3.862 ms and P95 3.990 ms.
-The measured model-only RSS delta was 278,528 bytes.
+latency was P50 26.189 ms and P95 38.234 ms.
+The measured model-only RSS delta was 0 bytes.
 For a one-second in-memory window, preprocessing plus model latency was P50
-8.618 ms and P95
-9.052 ms over 100 repetitions, with
+49.410 ms and P95
+87.712 ms over 100 repetitions, with
 an RSS delta of 0 bytes. The one-second acquisition window still
-dominates alert delay. These are laptop measurements, not physical edge-device benchmarks.
+dominates alert delay. These are training-machine measurements, not physical edge-device benchmarks.
 
 ## Limits
 
