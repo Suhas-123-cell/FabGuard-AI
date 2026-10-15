@@ -1,3 +1,18 @@
+# `docker compose up -d postgres` is enough for local development. `docker compose up --build`
+# also runs the API, worker and UI; set the three role tokens in .env first.
+x-app: &app
+  build: .
+  env_file:
+    - path: .env
+      required: false
+  environment:
+    FABGUARD_DATABASE_URL: postgresql+psycopg://fabguard:fabguard@postgres:5432/fabguard
+    FABGUARD_CHECKPOINT_DATABASE_URL: postgresql://fabguard:fabguard@postgres:5432/fabguard
+    FABGUARD_API_URL: http://api:8000
+  volumes:
+    - ./runs:/app/runs
+    - ./data:/app/data:ro
+
 services:
   postgres:
     image: pgvector/pgvector:pg16
@@ -14,6 +29,45 @@ services:
       retries: 12
     volumes:
       - fabguard-postgres-data:/var/lib/postgresql/data
+
+  init:
+    <<: *app
+    command: fabguard-init
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  api:
+    <<: *app
+    command: uvicorn fabguard.api:create_runtime_app --factory --host 0.0.0.0 --port 8000
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      init:
+        condition: service_completed_successfully
+
+  worker:
+    <<: *app
+    command: fabguard-worker
+    depends_on:
+      init:
+        condition: service_completed_successfully
+
+  ui:
+    <<: *app
+    command: streamlit run app.py --server.address 0.0.0.0 --server.port 8501
+    ports:
+      - "127.0.0.1:8501:8501"
+    depends_on:
+      - api
+
+  # Pipe a live stream in: ffmpeg ... -f s16le - | docker compose run --rm -T monitor - --rate 48000
+  monitor:
+    <<: *app
+    entrypoint: ["fabguard-monitor"]
+    profiles: ["tools"]
+    depends_on:
+      - api
 
 volumes:
   fabguard-postgres-data:

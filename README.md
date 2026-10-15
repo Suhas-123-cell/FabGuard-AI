@@ -1,8 +1,9 @@
 # FabGuard AI
 
 FabGuard replays recorded bearing vibration and audio, scores one-second windows with a small
-local detector, and produces a cited inspection report behind human ticket approval. It is a
-local, software-only build: no sensor hardware, cloud deployment, or equipment-control tool.
+local detector, and produces a cited inspection report behind human ticket approval. It can also
+monitor a live stream from any sensor or microphone a capture tool can read, against that
+machine's own baseline. It is a local build with no cloud deployment or equipment control.
 
 ## What is actually here
 
@@ -15,6 +16,8 @@ local, software-only build: no sensor hardware, cloud deployment, or equipment-c
 - FastAPI, PostgreSQL/pgvector migrations, durable deliveries/checkpoints/revisions, a synchronous
   worker, idempotent approvals, and three Streamlit views.
 - A 15-case workflow suite with five development and ten frozen evaluation fixtures.
+- `fabguard-monitor`: live or recorded single-channel monitoring with per-machine commissioning,
+  whose alarms feed the same investigation path as replays.
 
 The raw audit found 60/60 expected recordings, 420,000 samples each, no content duplicates, and
 usable vibration/audio in every file. UORED stores RPM/load once in the first row and zero-pads the
@@ -113,6 +116,31 @@ after seeing these tests, uses 44% of test 2's short life as baseline, and still
 alarm episodes on test 1's failing bearings, so it needs a check on data it has not seen. See
 `reports/ims-evaluation/`.
 
+## Monitor your own machine
+
+No industrial hardware is needed to try this. `fabguard-monitor` reads a WAV file or raw 16-bit
+mono PCM on stdin, resamples to 42 kHz, and takes the first two minutes as the machine's healthy
+baseline. After that it prints one JSON line per half second, and an `alarm` line with an evidence
+artifact when 3 of 5 windows are abnormal. A desk fan and a laptop microphone are enough:
+
+```bash
+# macOS microphone (Linux: arecord -q -f S16_LE -r 48000 -c 1 -t raw)
+ffmpeg -loglevel error -f avfoundation -i ":0" -ac 1 -ar 48000 -f s16le - \
+  | uv run fabguard-monitor - --rate 48000 --machine desk-fan
+
+uv run fabguard-monitor recording.wav --channel 0      # a recorded file instead
+```
+
+Let the fan run normally until the `commissioned` line, then change it: a fold of paper taped to
+the guard so the blades flick it, or a different speed. Keep fingers clear of the blades.
+
+This shows the software path, not detection quality. The baseline is assumed healthy and is never
+checked; two minutes is far shorter than the 72 hours that worked on IMS, so expect false alarms as
+room noise or temperature drifts; and a microphone hears the room as well as the machine. Alarms
+can be submitted for an investigation with `--modality vibration --submit`, because investigations
+read vibration evidence: feed it a vibration sensor (an accelerometer through an audio interface,
+or a contact microphone), not a room microphone.
+
 ## Reproduce
 
 Python 3.12 is the tested runtime. Raw data, run directories, WAV listening copies, and trained
@@ -149,7 +177,15 @@ The adapter uses strict JSON Schema output, a per-call timeout, and one transien
 `offline` provider remains available for deterministic tests and local recovery checks; it is never
 presented as a trained language model.
 
-Runtime setup:
+Runtime setup with Docker (after training, so `runs/` holds the model):
+
+```bash
+cp .env.example .env                    # set three distinct, long role tokens
+docker compose up --build               # Postgres, migrations, API :8000, worker, UI :8501
+ffmpeg ... -f s16le - | docker compose run --rm -T monitor - --rate 48000 --modality vibration --submit
+```
+
+Or run each process directly:
 
 ```bash
 cp .env.example .env                    # set three distinct, long role tokens
@@ -174,8 +210,9 @@ These are short, selected laboratory recordings with accelerated degradation, on
 bearings, and load/manufacturer/fault-family confounding. Cross-validation does not create machine
 diversity. On two other public rigs the method transferred poorly (see Other rigs); it is not
 validated on industrial equipment. Snapshot replay does not establish remaining
-useful life, continuous deterioration, root cause, or field false alarms per hour. The application
-can draft an inspection ticket; only an authenticated human can approve it.
+useful life, continuous deterioration, root cause, or field false alarms per hour. Live monitoring
+fits each machine on its own unchecked baseline and has no validation on real equipment. The
+application can draft an inspection ticket; only an authenticated human can approve it.
 
 Code is MIT licensed. UORED-VAFCLS v5 is CC BY 4.0 and is downloaded from its publisher rather
 than redistributed here.
