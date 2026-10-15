@@ -793,7 +793,7 @@ For a one-second in-memory window, preprocessing plus model latency was P50
 {native["p50_preprocessing_plus_model_ms"]:.3f} ms and P95
 {native["p95_preprocessing_plus_model_ms"]:.3f} ms over {native["repetitions"]} repetitions, with
 an RSS delta of {native["rss_delta_bytes"]:,} bytes. The one-second acquisition window still
-dominates alert delay. These are laptop measurements, not physical edge-device benchmarks.
+dominates alert delay. These are training-machine measurements, not physical edge-device benchmarks.
 
 ## Limits
 
