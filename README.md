@@ -73,6 +73,35 @@ A provider run refuses to start without prices, alternates variant order, scores
 draft as well as the verified report, and stops after three provider failures instead of scoring
 outages as case results.
 
+## Other rigs
+
+The UORED fusion model cannot run on other rigs (no microphone, different sensors and sample
+rates), so these checks reuse the *method*: the same vibration features, healthy-only models and
+3-of-5 alert rule. Nothing was tuned on their outcomes.
+
+**Paderborn KAt (32 bearings, 64 kHz, six folds each holding out one healthy bearing).** The
+method does not transfer across bearings. Window balanced accuracy was 0.54-0.59 (0.5 is chance).
+At the recording level the healthy reference never alarmed on a healthy recording but caught only
+20% of damaged ones; Isolation Forest caught 32% while alarming on 17% of healthy recordings, all
+from one bearing (K002). Calibrating on that bearing's own healthy measurements removed those
+false alarms but cut its fold's recall from 0.88 to 0 for artificial damage and 0.75 to 0.38 for
+real damage. See `reports/paderborn-evaluation/`.
+
+**NASA/IMS run-to-failure (3 tests, 4 bearings each, 20 kHz snapshots every 10 minutes).** Each
+bearing got its own model fitted on its first 24 hours, as if commissioning a new machine:
+
+| Test | Failing bearing | Other bearings before it failed |
+|---|---|---|
+| 2 | alarm held for the last 59-75 h, no earlier alarms (healthy reference) | 0 (healthy reference) to 3 (Isolation Forest) false alarms in 8-10 bearing-days |
+| 3 | alarm held for the last 59 h, one earlier episode in 44 days | in alarm 55-59% of the time, 1.9-3.2 episodes/day |
+| 1 | not assessable | the rig stopped for days after the baseline; everything alarms after restart |
+
+The detector does see real run-to-failure damage days ahead, but a single 24-hour baseline is not
+a usable commissioning step: it breaks after a restart and when a machine's normal level drifts.
+After a bearing fails, its neighbours on the shared shaft alarm too, so those late alarms are
+excluded from the false-alarm figures above (a reporting cut made after the first run). See
+`reports/ims-evaluation/`.
+
 ## Reproduce
 
 Python 3.12 is the tested runtime. Raw data, run directories, WAV listening copies, and trained
@@ -96,6 +125,10 @@ uv run fabguard-train \
 
 uv run fabguard-evaluate --provider offline --output-dir runs/investigation-eval
 uv run pytest -q
+
+# Other rigs: about 5.5 GB and 1.1 GB of downloads, processed into data/.
+uv run fabguard-paderborn
+uv run fabguard-ims
 ```
 
 The investigation worker defaults to Groq. Set `FABGUARD_LLM_API_KEY` in `.env` and keep
@@ -128,7 +161,8 @@ approves incidents through the API; rerenders do not launch investigations.
 
 These are short, selected laboratory recordings with accelerated degradation, only 20 independent
 bearings, and load/manufacturer/fault-family confounding. Cross-validation does not create machine
-diversity. Transfer to other equipment is unverified. Snapshot replay does not establish remaining
+diversity. On two other public rigs the method transferred poorly (see Other rigs); it is not
+validated on industrial equipment. Snapshot replay does not establish remaining
 useful life, continuous deterioration, root cause, or field false alarms per hour. The application
 can draft an inspection ticket; only an authenticated human can approve it.
 

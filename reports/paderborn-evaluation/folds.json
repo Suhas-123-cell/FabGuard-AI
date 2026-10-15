@@ -1,0 +1,2036 @@
+[
+  {
+    "fold": "bearings-001",
+    "test_bearing_ids": [
+      1,
+      101,
+      108,
+      323,
+      205,
+      218
+    ],
+    "feature_policy": "vibration",
+    "selected_candidate": {
+      "family": "healthy_reference",
+      "params": {},
+      "threshold_quantile": 0.99
+    },
+    "threshold": 3.9373195246403174,
+    "metrics": {
+      "auroc": 0.5512208913792217,
+      "average_precision": 0.9056885675590352,
+      "balanced_accuracy": 0.7362360561353005,
+      "healthy_false_positive_rate": 0.0,
+      "developing_recall": NaN,
+      "faulty_recall": 0.47247211227060093
+    },
+    "inner_selection": [
+      {
+        "candidate_id": "healthy_reference:q=0.95",
+        "candidate": {
+          "family": "healthy_reference",
+          "params": {},
+          "threshold_quantile": 0.95
+        },
+        "threshold": 3.4392228535545066,
+        "metrics": {
+          "auroc": 0.6131842487977319,
+          "average_precision": 0.8745074932901902,
+          "balanced_accuracy": 0.5776863940660193,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.20539065165472534
+        }
+      },
+      {
+        "candidate_id": "healthy_reference:q=0.975",
+        "candidate": {
+          "family": "healthy_reference",
+          "params": {},
+          "threshold_quantile": 0.975
+        },
+        "threshold": 3.630342946746588,
+        "metrics": {
+          "auroc": 0.6131842487977319,
+          "average_precision": 0.8745074932901902,
+          "balanced_accuracy": 0.5881011294792737,
+          "healthy_false_positive_rate": 0.025008931761343337,
+          "developing_recall": NaN,
+          "faulty_recall": 0.20121119071989083
+        }
+      },
+      {
+        "candidate_id": "healthy_reference:q=0.99",
+        "candidate": {
+          "family": "healthy_reference",
+          "params": {},
+          "threshold_quantile": 0.99
+        },
+        "threshold": 3.9373195246403174,
+        "metrics": {
+          "auroc": 0.6131842487977319,
+          "average_precision": 0.8745074932901902,
+          "balanced_accuracy": 0.590614044422211,
+          "healthy_false_positive_rate": 0.010003572704537335,
+          "developing_recall": NaN,
+          "faulty_recall": 0.1912316615489594
+        }
+      }
+    ]
+  },
+  {
+    "fold": "bearings-002",
+    "test_bearing_ids": [
+      2,
+      103,
+      109,
+      324,
+      207,
+      221
+    ],
+    "feature_policy": "vibration",
+    "selected_candidate": {
+      "family": "healthy_reference",
+      "params": {},
+      "threshold_quantile": 0.99
+    },
+    "threshold": 3.95590930246275,
+    "metrics": {
+      "auroc": 0.6039038078567129,
+      "average_precision": 0.8957684512555866,
+      "balanced_accuracy": 0.5985335563006315,
+      "healthy_false_positive_rate": 0.0035778175313059034,
+      "developing_recall": NaN,
+      "faulty_recall": 0.20064493013256898
+    },
+    "inner_selection": [
+      {
+        "candidate_id": "healthy_reference:q=0.95",
+        "candidate": {
+          "family": "healthy_reference",
+          "params": {},
+          "threshold_quantile": 0.95
+        },
+        "threshold": 3.8710865950971916,
+        "metrics": {
+          "auroc": 0.6880960614266198,
+          "average_precision": 0.9011358614666025,
+          "balanced_accuracy": 0.5956454918032786,
+          "healthy_false_positive_rate": 0.05,
+          "developing_recall": NaN,
+          "faulty_recall": 0.24129098360655737
+        }
+      },
+      {
+        "candidate_id": "healthy_reference:q=0.975",
+        "candidate": {
+          "family": "healthy_reference",
+          "params": {},
+          "threshold_quantile": 0.975
+        },
+        "threshold": 3.933445998612657,
+        "metrics": {
+          "auroc": 0.6880960614266198,
+          "average_precision": 0.9011358614666025,
+          "balanced_accuracy": 0.603833674863388,
+          "healthy_false_positive_rate": 0.025,
+          "developing_recall": NaN,
+          "faulty_recall": 0.23266734972677597
+        }
+      },
+      {
+        "candidate_id": "healthy_reference:q=0.99",
+        "candidate": {
+          "family": "healthy_reference",
+          "params": {},
+          "threshold_quantile": 0.99
+        },
+        "threshold": 3.95590930246275,
+        "metrics": {
+          "auroc": 0.6880960614266198,
+          "average_precision": 0.9011358614666025,
+          "balanced_accuracy": 0.6105225409836066,
+          "healthy_false_positive_rate": 0.01,
+          "developing_recall": NaN,
+          "faulty_recall": 0.23104508196721313
+        }
+      }
+    ]
+  },
+  {
+    "fold": "bearings-003",
+    "test_bearing_ids": [
+      3,
+      104,
+      115,
+      327,
+      208
+    ],
+    "feature_policy": "vibration",
+    "selected_candidate": {
+      "family": "healthy_reference",
+      "params": {},
+      "threshold_quantile": 0.99
+    },
+    "threshold": 28.031248511793045,
+    "metrics": {
+      "auroc": 0.3805774530538999,
+      "average_precision": 0.8246282918316843,
+      "balanced_accuracy": 0.5,
+      "healthy_false_positive_rate": 0.0,
+      "developing_recall": NaN,
+      "faulty_recall": 0.0
+    },
+    "inner_selection": [
+      {
+        "candidate_id": "healthy_reference:q=0.95",
+        "candidate": {
+          "family": "healthy_reference",
+          "params": {},
+          "threshold_quantile": 0.95
+        },
+        "threshold": 23.88396935095879,
+        "metrics": {
+          "auroc": 0.4283065840397968,
+          "average_precision": 0.8112602232789209,
+          "balanced_accuracy": 0.5206974394297924,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.09141274238227147
+        }
+      },
+      {
+        "candidate_id": "healthy_reference:q=0.975",
+        "candidate": {
+          "family": "healthy_reference",
+          "params": {},
+          "threshold_quantile": 0.975
+        },
+        "threshold": 26.04727996048207,
+        "metrics": {
+          "auroc": 0.4283065840397968,
+          "average_precision": 0.8112602232789209,
+          "balanced_accuracy": 0.5330796957618247,
+          "healthy_false_positive_rate": 0.025008931761343337,
+          "developing_recall": NaN,
+          "faulty_recall": 0.09116832328499266
+        }
+      },
+      {
+        "candidate_id": "healthy_reference:q=0.99",
+        "candidate": {
+          "family": "healthy_reference",
+          "params": {},
+          "threshold_quantile": 0.99
+        },
+        "threshold": 28.031248511793045,
+        "metrics": {
+          "auroc": 0.4283065840397968,
+          "average_precision": 0.8112602232789209,
+          "balanced_accuracy": 0.5405823752902277,
+          "healthy_false_positive_rate": 0.010003572704537335,
+          "developing_recall": NaN,
+          "faulty_recall": 0.09116832328499266
+        }
+      }
+    ]
+  },
+  {
+    "fold": "bearings-004",
+    "test_bearing_ids": [
+      4,
+      105,
+      116,
+      201,
+      214
+    ],
+    "feature_policy": "vibration",
+    "selected_candidate": {
+      "family": "healthy_reference",
+      "params": {},
+      "threshold_quantile": 0.99
+    },
+    "threshold": 5.066507730112487,
+    "metrics": {
+      "auroc": 0.6587153398926655,
+      "average_precision": 0.9159325302141578,
+      "balanced_accuracy": 0.7202593917710197,
+      "healthy_false_positive_rate": 0.0,
+      "developing_recall": NaN,
+      "faulty_recall": 0.4405187835420394
+    },
+    "inner_selection": [
+      {
+        "candidate_id": "healthy_reference:q=0.95",
+        "candidate": {
+          "family": "healthy_reference",
+          "params": {},
+          "threshold_quantile": 0.95
+        },
+        "threshold": 3.9409155207525277,
+        "metrics": {
+          "auroc": 0.7287065775654484,
+          "average_precision": 0.9084302964776134,
+          "balanced_accuracy": 0.5814963262479499,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.21301051601858645
+        }
+      },
+      {
+        "candidate_id": "healthy_reference:q=0.975",
+        "candidate": {
+          "family": "healthy_reference",
+          "params": {},
+          "threshold_quantile": 0.975
+        },
+        "threshold": 4.68250331896472,
+        "metrics": {
+          "auroc": 0.7287065775654484,
+          "average_precision": 0.9084302964776134,
+          "balanced_accuracy": 0.579408797345871,
+          "healthy_false_positive_rate": 0.025008931761343337,
+          "developing_recall": NaN,
+          "faulty_recall": 0.1838265264530855
+        }
+      },
+      {
+        "candidate_id": "healthy_reference:q=0.99",
+        "candidate": {
+          "family": "healthy_reference",
+          "params": {},
+          "threshold_quantile": 0.99
+        },
+        "threshold": 5.066507730112487,
+        "metrics": {
+          "auroc": 0.7287065775654484,
+          "average_precision": 0.9084302964776134,
+          "balanced_accuracy": 0.5836506959172348,
+          "healthy_false_positive_rate": 0.010003572704537335,
+          "developing_recall": NaN,
+          "faulty_recall": 0.1773049645390071
+        }
+      }
+    ]
+  },
+  {
+    "fold": "bearings-005",
+    "test_bearing_ids": [
+      5,
+      106,
+      122,
+      203,
+      216
+    ],
+    "feature_policy": "vibration",
+    "selected_candidate": {
+      "family": "healthy_reference",
+      "params": {},
+      "threshold_quantile": 0.99
+    },
+    "threshold": 7.122721761184264,
+    "metrics": {
+      "auroc": 0.6551466350771595,
+      "average_precision": 0.9127498361572346,
+      "balanced_accuracy": 0.5069475571492604,
+      "healthy_false_positive_rate": 0.0,
+      "developing_recall": NaN,
+      "faulty_recall": 0.013895114298520844
+    },
+    "inner_selection": [
+      {
+        "candidate_id": "healthy_reference:q=0.95",
+        "candidate": {
+          "family": "healthy_reference",
+          "params": {},
+          "threshold_quantile": 0.95
+        },
+        "threshold": 6.555438666252337,
+        "metrics": {
+          "auroc": 0.5589267714349463,
+          "average_precision": 0.8623219712400494,
+          "balanced_accuracy": 0.5623851360352669,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.17478813559322035
+        }
+      },
+      {
+        "candidate_id": "healthy_reference:q=0.975",
+        "candidate": {
+          "family": "healthy_reference",
+          "params": {},
+          "threshold_quantile": 0.975
+        },
+        "threshold": 6.689576389481588,
+        "metrics": {
+          "auroc": 0.5589267714349463,
+          "average_precision": 0.8623219712400494,
+          "balanced_accuracy": 0.5737487935717404,
+          "healthy_false_positive_rate": 0.025008931761343337,
+          "developing_recall": NaN,
+          "faulty_recall": 0.172506518904824
+        }
+      },
+      {
+        "candidate_id": "healthy_reference:q=0.99",
+        "candidate": {
+          "family": "healthy_reference",
+          "params": {},
+          "threshold_quantile": 0.99
+        },
+        "threshold": 7.122721761184264,
+        "metrics": {
+          "auroc": 0.5589267714349463,
+          "average_precision": 0.8623219712400494,
+          "balanced_accuracy": 0.5779920206881486,
+          "healthy_false_positive_rate": 0.010003572704537335,
+          "developing_recall": NaN,
+          "faulty_recall": 0.16598761408083443
+        }
+      }
+    ]
+  },
+  {
+    "fold": "bearings-006",
+    "test_bearing_ids": [
+      6,
+      107,
+      130,
+      204,
+      217
+    ],
+    "feature_policy": "vibration",
+    "selected_candidate": {
+      "family": "healthy_reference",
+      "params": {},
+      "threshold_quantile": 0.99
+    },
+    "threshold": 26.544195376540795,
+    "metrics": {
+      "auroc": 0.3074102752410754,
+      "average_precision": 0.7629595602608734,
+      "balanced_accuracy": 0.5,
+      "healthy_false_positive_rate": 0.0,
+      "developing_recall": NaN,
+      "faulty_recall": 0.0
+    },
+    "inner_selection": [
+      {
+        "candidate_id": "healthy_reference:q=0.95",
+        "candidate": {
+          "family": "healthy_reference",
+          "params": {},
+          "threshold_quantile": 0.95
+        },
+        "threshold": 25.2301038489807,
+        "metrics": {
+          "auroc": 0.41965743047105114,
+          "average_precision": 0.7868119577966606,
+          "balanced_accuracy": 0.5149388914899203,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.07989564650252731
+        }
+      },
+      {
+        "candidate_id": "healthy_reference:q=0.975",
+        "candidate": {
+          "family": "healthy_reference",
+          "params": {},
+          "threshold_quantile": 0.975
+        },
+        "threshold": 25.891503992044992,
+        "metrics": {
+          "auroc": 0.41965743047105114,
+          "average_precision": 0.7868119577966606,
+          "balanced_accuracy": 0.527443357370592,
+          "healthy_false_positive_rate": 0.025008931761343337,
+          "developing_recall": NaN,
+          "faulty_recall": 0.07989564650252731
+        }
+      },
+      {
+        "candidate_id": "healthy_reference:q=0.99",
+        "candidate": {
+          "family": "healthy_reference",
+          "params": {},
+          "threshold_quantile": 0.99
+        },
+        "threshold": 26.544195376540795,
+        "metrics": {
+          "auroc": 0.41965743047105114,
+          "average_precision": 0.7868119577966606,
+          "balanced_accuracy": 0.534946036898995,
+          "healthy_false_positive_rate": 0.010003572704537335,
+          "developing_recall": NaN,
+          "faulty_recall": 0.07989564650252731
+        }
+      }
+    ]
+  },
+  {
+    "fold": "bearings-001",
+    "test_bearing_ids": [
+      1,
+      101,
+      108,
+      323,
+      205,
+      218
+    ],
+    "feature_policy": "vibration",
+    "selected_candidate": {
+      "family": "isolation_forest",
+      "params": {
+        "n_estimators": 250,
+        "contamination": 0.01
+      },
+      "threshold_quantile": 0.95
+    },
+    "threshold": 0.05694136928966252,
+    "metrics": {
+      "auroc": 0.7755442605253688,
+      "average_precision": 0.9494508152268923,
+      "balanced_accuracy": 0.6110111550917596,
+      "healthy_false_positive_rate": 0.0,
+      "developing_recall": NaN,
+      "faulty_recall": 0.22202231018351926
+    },
+    "inner_selection": [
+      {
+        "candidate_id": "isolation_forest:contamination=0.01:n_estimators=100:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 100,
+            "contamination": 0.01
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.06420695400832119,
+        "metrics": {
+          "auroc": 0.61368398252093,
+          "average_precision": 0.8673875728019081,
+          "balanced_accuracy": 0.5540169979554769,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.1580518594336404
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.025:n_estimators=100:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 100,
+            "contamination": 0.025
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.09572406086799841,
+        "metrics": {
+          "auroc": 0.605703571083351,
+          "average_precision": 0.8645389441689357,
+          "balanced_accuracy": 0.5472786833870702,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.14457523029682703
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.05:n_estimators=100:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 100,
+            "contamination": 0.05
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.11730853528432524,
+        "metrics": {
+          "auroc": 0.6068977637258712,
+          "average_precision": 0.8647212548605478,
+          "balanced_accuracy": 0.5368300310499838,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.12367792562265438
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.01:n_estimators=250:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 250,
+            "contamination": 0.01
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.05694136928966252,
+        "metrics": {
+          "auroc": 0.5916559308784672,
+          "average_precision": 0.865734615462709,
+          "balanced_accuracy": 0.5566611467101681,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.16334015694302287
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.025:n_estimators=250:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 250,
+            "contamination": 0.025
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.0867565175491512,
+        "metrics": {
+          "auroc": 0.5800569828699117,
+          "average_precision": 0.8639431277043039,
+          "balanced_accuracy": 0.5548699491666675,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.15975776185602183
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.05:n_estimators=250:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 250,
+            "contamination": 0.05
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.11062032833730313,
+        "metrics": {
+          "auroc": 0.576932877645901,
+          "average_precision": 0.8635932263075949,
+          "balanced_accuracy": 0.5538464077132387,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.1577106789491641
+        }
+      }
+    ]
+  },
+  {
+    "fold": "bearings-002",
+    "test_bearing_ids": [
+      2,
+      103,
+      109,
+      324,
+      207,
+      221
+    ],
+    "feature_policy": "vibration",
+    "selected_candidate": {
+      "family": "isolation_forest",
+      "params": {
+        "n_estimators": 250,
+        "contamination": 0.05
+      },
+      "threshold_quantile": 0.95
+    },
+    "threshold": 0.05848354318283451,
+    "metrics": {
+      "auroc": 0.32896500315029975,
+      "average_precision": 0.8115917191753932,
+      "balanced_accuracy": 0.4084557506270154,
+      "healthy_false_positive_rate": 1.0,
+      "developing_recall": NaN,
+      "faulty_recall": 0.8169115012540308
+    },
+    "inner_selection": [
+      {
+        "candidate_id": "isolation_forest:contamination=0.01:n_estimators=100:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 100,
+            "contamination": 0.01
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.021405558468947875,
+        "metrics": {
+          "auroc": 0.8706952271174864,
+          "average_precision": 0.9641014747627283,
+          "balanced_accuracy": 0.7449795081967212,
+          "healthy_false_positive_rate": 0.05,
+          "developing_recall": NaN,
+          "faulty_recall": 0.5399590163934426
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.025:n_estimators=100:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 100,
+            "contamination": 0.025
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.04259167913652892,
+        "metrics": {
+          "auroc": 0.8850540654274004,
+          "average_precision": 0.9688742678890696,
+          "balanced_accuracy": 0.7589395491803279,
+          "healthy_false_positive_rate": 0.05,
+          "developing_recall": NaN,
+          "faulty_recall": 0.5678790983606558
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.05:n_estimators=100:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 100,
+            "contamination": 0.05
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.059838698772232725,
+        "metrics": {
+          "auroc": 0.8887612217017955,
+          "average_precision": 0.9703678885773961,
+          "balanced_accuracy": 0.7673497267759563,
+          "healthy_false_positive_rate": 0.05,
+          "developing_recall": NaN,
+          "faulty_recall": 0.5846994535519126
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.01:n_estimators=250:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 250,
+            "contamination": 0.01
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.02015970033777929,
+        "metrics": {
+          "auroc": 0.8866121133391881,
+          "average_precision": 0.9706784466089861,
+          "balanced_accuracy": 0.7872011612021858,
+          "healthy_false_positive_rate": 0.05,
+          "developing_recall": NaN,
+          "faulty_recall": 0.6244023224043715
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.025:n_estimators=250:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 250,
+            "contamination": 0.025
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.04066830499311008,
+        "metrics": {
+          "auroc": 0.8967773894906325,
+          "average_precision": 0.9739624970518235,
+          "balanced_accuracy": 0.8083760245901639,
+          "healthy_false_positive_rate": 0.05,
+          "developing_recall": NaN,
+          "faulty_recall": 0.6667520491803278
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.05:n_estimators=250:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 250,
+            "contamination": 0.05
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.05848354318283451,
+        "metrics": {
+          "auroc": 0.9012160604508197,
+          "average_precision": 0.9752864789457887,
+          "balanced_accuracy": 0.8148224043715846,
+          "healthy_false_positive_rate": 0.05,
+          "developing_recall": NaN,
+          "faulty_recall": 0.6796448087431693
+        }
+      }
+    ]
+  },
+  {
+    "fold": "bearings-003",
+    "test_bearing_ids": [
+      3,
+      104,
+      115,
+      327,
+      208
+    ],
+    "feature_policy": "vibration",
+    "selected_candidate": {
+      "family": "isolation_forest",
+      "params": {
+        "n_estimators": 100,
+        "contamination": 0.025
+      },
+      "threshold_quantile": 0.95
+    },
+    "threshold": 0.09285299472645658,
+    "metrics": {
+      "auroc": 0.7823078895084279,
+      "average_precision": 0.9367220572174118,
+      "balanced_accuracy": 0.5953342305966801,
+      "healthy_false_positive_rate": 0.0,
+      "developing_recall": NaN,
+      "faulty_recall": 0.19066846119336026
+    },
+    "inner_selection": [
+      {
+        "candidate_id": "isolation_forest:contamination=0.01:n_estimators=100:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 100,
+            "contamination": 0.01
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.07583009356753123,
+        "metrics": {
+          "auroc": 0.713533264487311,
+          "average_precision": 0.8988325074564485,
+          "balanced_accuracy": 0.5393891694017912,
+          "healthy_false_positive_rate": 0.051089674883887104,
+          "developing_recall": NaN,
+          "faulty_recall": 0.12986801368746945
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.025:n_estimators=100:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 100,
+            "contamination": 0.025
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.09285299472645658,
+        "metrics": {
+          "auroc": 0.7270864882666317,
+          "average_precision": 0.906809086013112,
+          "balanced_accuracy": 0.5470883709660734,
+          "healthy_false_positive_rate": 0.051089674883887104,
+          "developing_recall": NaN,
+          "faulty_recall": 0.1452664168160339
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.05:n_estimators=100:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 100,
+            "contamination": 0.05
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.1129254563748564,
+        "metrics": {
+          "auroc": 0.7194320983255793,
+          "average_precision": 0.9027571224774475,
+          "balanced_accuracy": 0.543910922701449,
+          "healthy_false_positive_rate": 0.051089674883887104,
+          "developing_recall": NaN,
+          "faulty_recall": 0.13891152028678508
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.01:n_estimators=250:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 250,
+            "contamination": 0.01
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.08374019307734798,
+        "metrics": {
+          "auroc": 0.6943873783922573,
+          "average_precision": 0.8859859039424318,
+          "balanced_accuracy": 0.5266449707969099,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.10330780511650643
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.025:n_estimators=250:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 250,
+            "contamination": 0.025
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.09828632065478266,
+        "metrics": {
+          "auroc": 0.7168078312845151,
+          "average_precision": 0.9019075159133777,
+          "balanced_accuracy": 0.5448541935441805,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.13972625061104774
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.05:n_estimators=250:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 250,
+            "contamination": 0.05
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.11497457447405629,
+        "metrics": {
+          "auroc": 0.714424184758832,
+          "average_precision": 0.9011802358590716,
+          "balanced_accuracy": 0.544080199736131,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.13817826299494868
+        }
+      }
+    ]
+  },
+  {
+    "fold": "bearings-004",
+    "test_bearing_ids": [
+      4,
+      105,
+      116,
+      201,
+      214
+    ],
+    "feature_policy": "vibration",
+    "selected_candidate": {
+      "family": "isolation_forest",
+      "params": {
+        "n_estimators": 250,
+        "contamination": 0.025
+      },
+      "threshold_quantile": 0.95
+    },
+    "threshold": 0.06103983375832309,
+    "metrics": {
+      "auroc": 0.820471824686941,
+      "average_precision": 0.9499488902295563,
+      "balanced_accuracy": 0.688953488372093,
+      "healthy_false_positive_rate": 0.0,
+      "developing_recall": NaN,
+      "faulty_recall": 0.37790697674418605
+    },
+    "inner_selection": [
+      {
+        "candidate_id": "isolation_forest:contamination=0.01:n_estimators=100:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 100,
+            "contamination": 0.01
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.046408867125977325,
+        "metrics": {
+          "auroc": 0.6944912839493941,
+          "average_precision": 0.8886011367786724,
+          "balanced_accuracy": 0.5425299938113313,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.13507785114534931
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.025:n_estimators=100:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 100,
+            "contamination": 0.025
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.07301540149483629,
+        "metrics": {
+          "auroc": 0.6965863561014538,
+          "average_precision": 0.8902095465109904,
+          "balanced_accuracy": 0.548399399534002,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.14681666259069048
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.05:n_estimators=100:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 100,
+            "contamination": 0.05
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.0936506697067879,
+        "metrics": {
+          "auroc": 0.7008596217779509,
+          "average_precision": 0.8914498094628127,
+          "balanced_accuracy": 0.544201144051814,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.1384201516263145
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.01:n_estimators=250:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 250,
+            "contamination": 0.01
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.03608793743076994,
+        "metrics": {
+          "auroc": 0.7114900851551375,
+          "average_precision": 0.9028340198075095,
+          "balanced_accuracy": 0.5781947855289477,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.20640743458058206
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.025:n_estimators=250:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 250,
+            "contamination": 0.025
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.06103983375832309,
+        "metrics": {
+          "auroc": 0.7126767344880562,
+          "average_precision": 0.9036703121847385,
+          "balanced_accuracy": 0.5784801038626887,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.20697807124806392
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.05:n_estimators=250:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 250,
+            "contamination": 0.05
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.08194500908856606,
+        "metrics": {
+          "auroc": 0.7149408162140148,
+          "average_precision": 0.9020063474774835,
+          "balanced_accuracy": 0.5767274340982801,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.20347273171924676
+        }
+      }
+    ]
+  },
+  {
+    "fold": "bearings-005",
+    "test_bearing_ids": [
+      5,
+      106,
+      122,
+      203,
+      216
+    ],
+    "feature_policy": "vibration",
+    "selected_candidate": {
+      "family": "isolation_forest",
+      "params": {
+        "n_estimators": 100,
+        "contamination": 0.01
+      },
+      "threshold_quantile": 0.95
+    },
+    "threshold": 0.07096246855406717,
+    "metrics": {
+      "auroc": 0.7255746942434527,
+      "average_precision": 0.9235933297721485,
+      "balanced_accuracy": 0.57328552218736,
+      "healthy_false_positive_rate": 0.0,
+      "developing_recall": NaN,
+      "faulty_recall": 0.14657104437471985
+    },
+    "inner_selection": [
+      {
+        "candidate_id": "isolation_forest:contamination=0.01:n_estimators=100:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 100,
+            "contamination": 0.01
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.07096246855406717,
+        "metrics": {
+          "auroc": 0.5537276886464852,
+          "average_precision": 0.8655209283948634,
+          "balanced_accuracy": 0.577297130820143,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.2046121251629726
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.025:n_estimators=100:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 100,
+            "contamination": 0.025
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.09797764301615462,
+        "metrics": {
+          "auroc": 0.5591852917763049,
+          "average_precision": 0.8641519133724289,
+          "balanced_accuracy": 0.5674780304290087,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.18497392438070404
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.05:n_estimators=100:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 100,
+            "contamination": 0.05
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.12633276376970945,
+        "metrics": {
+          "auroc": 0.5354686123699421,
+          "average_precision": 0.8448803882020305,
+          "balanced_accuracy": 0.5340686432060622,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.11815514993481095
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.01:n_estimators=250:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 250,
+            "contamination": 0.01
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.08072411765571297,
+        "metrics": {
+          "auroc": 0.5357039590410619,
+          "average_precision": 0.8401077402779092,
+          "balanced_accuracy": 0.5030511222810531,
+          "healthy_false_positive_rate": 0.07538406573776349,
+          "developing_recall": NaN,
+          "faulty_recall": 0.08148631029986962
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.025:n_estimators=250:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 250,
+            "contamination": 0.025
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.11342641484835325,
+        "metrics": {
+          "auroc": 0.5405087400836488,
+          "average_precision": 0.826208383268116,
+          "balanced_accuracy": 0.4852463634805316,
+          "healthy_false_positive_rate": 0.07538406573776349,
+          "developing_recall": NaN,
+          "faulty_recall": 0.0458767926988266
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.05:n_estimators=250:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 250,
+            "contamination": 0.05
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.13651032083130643,
+        "metrics": {
+          "auroc": 0.529396091824562,
+          "average_precision": 0.8171745019436761,
+          "balanced_accuracy": 0.4825573152406359,
+          "healthy_false_positive_rate": 0.07538406573776349,
+          "developing_recall": NaN,
+          "faulty_recall": 0.0404986962190352
+        }
+      }
+    ]
+  },
+  {
+    "fold": "bearings-006",
+    "test_bearing_ids": [
+      6,
+      107,
+      130,
+      204,
+      217
+    ],
+    "feature_policy": "vibration",
+    "selected_candidate": {
+      "family": "isolation_forest",
+      "params": {
+        "n_estimators": 250,
+        "contamination": 0.05
+      },
+      "threshold_quantile": 0.95
+    },
+    "threshold": 0.14074087890332648,
+    "metrics": {
+      "auroc": 0.9555726738616769,
+      "average_precision": 0.9858947519105512,
+      "balanced_accuracy": 0.5,
+      "healthy_false_positive_rate": 0.0,
+      "developing_recall": NaN,
+      "faulty_recall": 0.0
+    },
+    "inner_selection": [
+      {
+        "candidate_id": "isolation_forest:contamination=0.01:n_estimators=100:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 100,
+            "contamination": 0.01
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.1007920694283162,
+        "metrics": {
+          "auroc": 0.3554808683798289,
+          "average_precision": 0.7685650182340527,
+          "balanced_accuracy": 0.49577425598704716,
+          "healthy_false_positive_rate": 0.051089674883887104,
+          "developing_recall": NaN,
+          "faulty_recall": 0.04263818685798141
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.025:n_estimators=100:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 100,
+            "contamination": 0.025
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.12468408466037151,
+        "metrics": {
+          "auroc": 0.3489595320869704,
+          "average_precision": 0.7679767064868132,
+          "balanced_accuracy": 0.501358798625234,
+          "healthy_false_positive_rate": 0.051089674883887104,
+          "developing_recall": NaN,
+          "faulty_recall": 0.05380727213435513
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.05:n_estimators=100:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 100,
+            "contamination": 0.05
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.14278606047286546,
+        "metrics": {
+          "auroc": 0.3369748938426741,
+          "average_precision": 0.7625904222790651,
+          "balanced_accuracy": 0.4964672284312018,
+          "healthy_false_positive_rate": 0.051089674883887104,
+          "developing_recall": NaN,
+          "faulty_recall": 0.04402413174629056
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.01:n_estimators=250:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 250,
+            "contamination": 0.01
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.09865792150602753,
+        "metrics": {
+          "auroc": 0.3453214959315266,
+          "average_precision": 0.7873510618413719,
+          "balanced_accuracy": 0.5264340814458962,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.10288602641447905
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.025:n_estimators=250:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 250,
+            "contamination": 0.025
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.1243770004772406,
+        "metrics": {
+          "auroc": 0.34315864946059615,
+          "average_precision": 0.7848467305476825,
+          "balanced_accuracy": 0.5284722356934096,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.10696233490950595
+        }
+      },
+      {
+        "candidate_id": "isolation_forest:contamination=0.05:n_estimators=250:q=0.95",
+        "candidate": {
+          "family": "isolation_forest",
+          "params": {
+            "n_estimators": 250,
+            "contamination": 0.05
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.14074087890332648,
+        "metrics": {
+          "auroc": 0.3374693810832606,
+          "average_precision": 0.7851627349458291,
+          "balanced_accuracy": 0.5368694311931651,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.12375672590901679
+        }
+      }
+    ]
+  },
+  {
+    "fold": "bearings-001",
+    "test_bearing_ids": [
+      1,
+      101,
+      108,
+      323,
+      205,
+      218
+    ],
+    "feature_policy": "vibration",
+    "selected_candidate": {
+      "family": "random_forest",
+      "params": {
+        "n_estimators": 150,
+        "max_depth": 8
+      },
+      "threshold_quantile": 0.95
+    },
+    "threshold": 1.0,
+    "metrics": {
+      "auroc": 0.9033015473191796,
+      "average_precision": 0.9810393731521003,
+      "balanced_accuracy": 0.5935588341129903,
+      "healthy_false_positive_rate": 0.0,
+      "developing_recall": NaN,
+      "faulty_recall": 0.18711766822598058
+    },
+    "inner_selection": [
+      {
+        "candidate_id": "random_forest:max_depth=4:n_estimators=150:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 150,
+            "max_depth": 4
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.9932756267709525,
+        "metrics": {
+          "auroc": 0.7170822541169295,
+          "average_precision": 0.9102044367427575,
+          "balanced_accuracy": 0.5458576465567648,
+          "healthy_false_positive_rate": 0.05251875669882101,
+          "developing_recall": NaN,
+          "faulty_recall": 0.14423404981235075
+        }
+      },
+      {
+        "candidate_id": "random_forest:max_depth=8:n_estimators=150:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 150,
+            "max_depth": 8
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 1.0,
+        "metrics": {
+          "auroc": 0.6990341538851974,
+          "average_precision": 0.8846061722982984,
+          "balanced_accuracy": 0.5519058294324299,
+          "healthy_false_positive_rate": 0.10968202929617721,
+          "developing_recall": NaN,
+          "faulty_recall": 0.2134936881610372
+        }
+      },
+      {
+        "candidate_id": "random_forest:max_depth=4:n_estimators=300:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 300,
+            "max_depth": 4
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.9926123040485388,
+        "metrics": {
+          "auroc": 0.7094786008894096,
+          "average_precision": 0.9068669708793645,
+          "balanced_accuracy": 0.5508956810500022,
+          "healthy_false_positive_rate": 0.05037513397642015,
+          "developing_recall": NaN,
+          "faulty_recall": 0.15216649607642443
+        }
+      },
+      {
+        "candidate_id": "random_forest:max_depth=8:n_estimators=300:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 300,
+            "max_depth": 8
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 1.0,
+        "metrics": {
+          "auroc": 0.7006389150046155,
+          "average_precision": 0.8814969917797667,
+          "balanced_accuracy": 0.5237495259858489,
+          "healthy_false_positive_rate": 0.09682029296177207,
+          "developing_recall": NaN,
+          "faulty_recall": 0.14431934493346982
+        }
+      }
+    ]
+  },
+  {
+    "fold": "bearings-002",
+    "test_bearing_ids": [
+      2,
+      103,
+      109,
+      324,
+      207,
+      221
+    ],
+    "feature_policy": "vibration",
+    "selected_candidate": {
+      "family": "random_forest",
+      "params": {
+        "n_estimators": 150,
+        "max_depth": 8
+      },
+      "threshold_quantile": 0.95
+    },
+    "threshold": 0.9933333333333333,
+    "metrics": {
+      "auroc": 0.34920960485690977,
+      "average_precision": 0.8216290377064837,
+      "balanced_accuracy": 0.2864612743875824,
+      "healthy_false_positive_rate": 0.7567084078711985,
+      "developing_recall": NaN,
+      "faulty_recall": 0.3296309566463633
+    },
+    "inner_selection": [
+      {
+        "candidate_id": "random_forest:max_depth=4:n_estimators=150:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 150,
+            "max_depth": 4
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.9843119174564764,
+        "metrics": {
+          "auroc": 0.8942763222092115,
+          "average_precision": 0.9637856989899992,
+          "balanced_accuracy": 0.632744193989071,
+          "healthy_false_positive_rate": 0.05,
+          "developing_recall": NaN,
+          "faulty_recall": 0.3154883879781421
+        }
+      },
+      {
+        "candidate_id": "random_forest:max_depth=8:n_estimators=150:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 150,
+            "max_depth": 8
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.9933333333333333,
+        "metrics": {
+          "auroc": 0.8880102520003903,
+          "average_precision": 0.9607214232091525,
+          "balanced_accuracy": 0.704847531225605,
+          "healthy_false_positive_rate": 0.09892857142857144,
+          "developing_recall": NaN,
+          "faulty_recall": 0.5086236338797814
+        }
+      },
+      {
+        "candidate_id": "random_forest:max_depth=4:n_estimators=300:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 300,
+            "max_depth": 4
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.9854540212840116,
+        "metrics": {
+          "auroc": 0.8897594042740047,
+          "average_precision": 0.9609451504795091,
+          "balanced_accuracy": 0.6237363387978142,
+          "healthy_false_positive_rate": 0.05,
+          "developing_recall": NaN,
+          "faulty_recall": 0.2974726775956284
+        }
+      },
+      {
+        "candidate_id": "random_forest:max_depth=8:n_estimators=300:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 300,
+            "max_depth": 8
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.9966666666666667,
+        "metrics": {
+          "auroc": 0.8889955052205308,
+          "average_precision": 0.9627600068166056,
+          "balanced_accuracy": 0.6989000292740046,
+          "healthy_false_positive_rate": 0.05071428571428571,
+          "developing_recall": NaN,
+          "faulty_recall": 0.4485143442622951
+        }
+      }
+    ]
+  },
+  {
+    "fold": "bearings-003",
+    "test_bearing_ids": [
+      3,
+      104,
+      115,
+      327,
+      208
+    ],
+    "feature_policy": "vibration",
+    "selected_candidate": {
+      "family": "random_forest",
+      "params": {
+        "n_estimators": 300,
+        "max_depth": 8
+      },
+      "threshold_quantile": 0.95
+    },
+    "threshold": 0.9904639751665265,
+    "metrics": {
+      "auroc": 0.972543741588156,
+      "average_precision": 0.9932606006066429,
+      "balanced_accuracy": 0.7007626738447734,
+      "healthy_false_positive_rate": 0.0,
+      "developing_recall": NaN,
+      "faulty_recall": 0.4015253476895469
+    },
+    "inner_selection": [
+      {
+        "candidate_id": "random_forest:max_depth=4:n_estimators=150:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 150,
+            "max_depth": 4
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.9762134992489367,
+        "metrics": {
+          "auroc": 0.8049899452555944,
+          "average_precision": 0.9390087508092497,
+          "balanced_accuracy": 0.5965826851147926,
+          "healthy_false_positive_rate": 0.06037870668095748,
+          "developing_recall": NaN,
+          "faulty_recall": 0.2535440769105426
+        }
+      },
+      {
+        "candidate_id": "random_forest:max_depth=8:n_estimators=150:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 150,
+            "max_depth": 8
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.993882667868056,
+        "metrics": {
+          "auroc": 0.8169368055108022,
+          "average_precision": 0.940192409755334,
+          "balanced_accuracy": 0.5799283340036885,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.20987453153006355
+        }
+      },
+      {
+        "candidate_id": "random_forest:max_depth=4:n_estimators=300:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 300,
+            "max_depth": 4
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.9770646629103094,
+        "metrics": {
+          "auroc": 0.8002966299505346,
+          "average_precision": 0.9356223758604283,
+          "balanced_accuracy": 0.5784147519339731,
+          "healthy_false_positive_rate": 0.051089674883887104,
+          "developing_recall": NaN,
+          "faulty_recall": 0.20791917875183313
+        }
+      },
+      {
+        "candidate_id": "random_forest:max_depth=8:n_estimators=300:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 300,
+            "max_depth": 8
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.9904639751665265,
+        "metrics": {
+          "auroc": 0.8094323067381952,
+          "average_precision": 0.9363777325763952,
+          "balanced_accuracy": 0.6030666752127483,
+          "healthy_false_positive_rate": 0.050017863522686674,
+          "developing_recall": NaN,
+          "faulty_recall": 0.25615121394818313
+        }
+      }
+    ]
+  },
+  {
+    "fold": "bearings-004",
+    "test_bearing_ids": [
+      4,
+      105,
+      116,
+      201,
+      214
+    ],
+    "feature_policy": "vibration",
+    "selected_candidate": {
+      "family": "random_forest",
+      "params": {
+        "n_estimators": 150,
+        "max_depth": 4
+      },
+      "threshold_quantile": 0.95
+    },
+    "threshold": 0.9999292740455051,
+    "metrics": {
+      "auroc": 0.9288461538461539,
+      "average_precision": 0.9822692267336253,
+      "balanced_accuracy": 0.5,
+      "healthy_false_positive_rate": 0.0,
+      "developing_recall": NaN,
+      "faulty_recall": 0.0
+    },
+    "inner_selection": [
+      {
+        "candidate_id": "random_forest:max_depth=4:n_estimators=150:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 150,
+            "max_depth": 4
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.9999292740455051,
+        "metrics": {
+          "auroc": 0.6732294834595022,
+          "average_precision": 0.8555648402909198,
+          "balanced_accuracy": 0.48923535997160705,
+          "healthy_false_positive_rate": 0.05144694533762058,
+          "developing_recall": NaN,
+          "faulty_recall": 0.02991766528083476
+        }
+      },
+      {
+        "candidate_id": "random_forest:max_depth=8:n_estimators=150:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 150,
+            "max_depth": 8
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 1.0,
+        "metrics": {
+          "auroc": 0.6455170975041948,
+          "average_precision": 0.8320558413390684,
+          "balanced_accuracy": 0.4476254096618198,
+          "healthy_false_positive_rate": 0.35476956055734193,
+          "developing_recall": NaN,
+          "faulty_recall": 0.25002037988098147
+        }
+      },
+      {
+        "candidate_id": "random_forest:max_depth=4:n_estimators=300:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 300,
+            "max_depth": 4
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.9997822885475077,
+        "metrics": {
+          "auroc": 0.6622367984606411,
+          "average_precision": 0.8480601340940089,
+          "balanced_accuracy": 0.4887965699939476,
+          "healthy_false_positive_rate": 0.052161486245087534,
+          "developing_recall": NaN,
+          "faulty_recall": 0.0297546262329828
+        }
+      },
+      {
+        "candidate_id": "random_forest:max_depth=8:n_estimators=300:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 300,
+            "max_depth": 8
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 1.0,
+        "metrics": {
+          "auroc": 0.6509663092535029,
+          "average_precision": 0.837628554320712,
+          "balanced_accuracy": 0.47033161146274594,
+          "healthy_false_positive_rate": 0.29867809932118616,
+          "developing_recall": NaN,
+          "faulty_recall": 0.2393413222466781
+        }
+      }
+    ]
+  },
+  {
+    "fold": "bearings-005",
+    "test_bearing_ids": [
+      5,
+      106,
+      122,
+      203,
+      216
+    ],
+    "feature_policy": "vibration",
+    "selected_candidate": {
+      "family": "random_forest",
+      "params": {
+        "n_estimators": 150,
+        "max_depth": 8
+      },
+      "threshold_quantile": 0.95
+    },
+    "threshold": 1.0,
+    "metrics": {
+      "auroc": 0.6679415860920792,
+      "average_precision": 0.9136725622859476,
+      "balanced_accuracy": 0.6595769033745278,
+      "healthy_false_positive_rate": 0.0035714285714285713,
+      "developing_recall": NaN,
+      "faulty_recall": 0.3227252353204841
+    },
+    "inner_selection": [
+      {
+        "candidate_id": "random_forest:max_depth=4:n_estimators=150:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 150,
+            "max_depth": 4
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 1.0,
+        "metrics": {
+          "auroc": 0.585271653640502,
+          "average_precision": 0.8260996255745698,
+          "balanced_accuracy": 0.49023401564071356,
+          "healthy_false_positive_rate": 0.1354055019649875,
+          "developing_recall": NaN,
+          "faulty_recall": 0.1158735332464146
+        }
+      },
+      {
+        "candidate_id": "random_forest:max_depth=8:n_estimators=150:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 150,
+            "max_depth": 8
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 1.0,
+        "metrics": {
+          "auroc": 0.6502873069307208,
+          "average_precision": 0.8583216121765105,
+          "balanced_accuracy": 0.5521155755943755,
+          "healthy_false_positive_rate": 0.3744194355126831,
+          "developing_recall": NaN,
+          "faulty_recall": 0.4786505867014342
+        }
+      },
+      {
+        "candidate_id": "random_forest:max_depth=4:n_estimators=300:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 300,
+            "max_depth": 4
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 1.0,
+        "metrics": {
+          "auroc": 0.5893127952896197,
+          "average_precision": 0.8277419685318844,
+          "balanced_accuracy": 0.4896636114686145,
+          "healthy_false_positive_rate": 0.1354055019649875,
+          "developing_recall": NaN,
+          "faulty_recall": 0.11473272490221642
+        }
+      },
+      {
+        "candidate_id": "random_forest:max_depth=8:n_estimators=300:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 300,
+            "max_depth": 8
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 1.0,
+        "metrics": {
+          "auroc": 0.6451607583123606,
+          "average_precision": 0.8541278575814714,
+          "balanced_accuracy": 0.5344799321838261,
+          "healthy_false_positive_rate": 0.3687031082529475,
+          "developing_recall": NaN,
+          "faulty_recall": 0.4376629726205997
+        }
+      }
+    ]
+  },
+  {
+    "fold": "bearings-006",
+    "test_bearing_ids": [
+      6,
+      107,
+      130,
+      204,
+      217
+    ],
+    "feature_policy": "vibration",
+    "selected_candidate": {
+      "family": "random_forest",
+      "params": {
+        "n_estimators": 150,
+        "max_depth": 4
+      },
+      "threshold_quantile": 0.95
+    },
+    "threshold": 0.999758030231557,
+    "metrics": {
+      "auroc": 0.9966816207931541,
+      "average_precision": 0.9990710005219061,
+      "balanced_accuracy": 0.5,
+      "healthy_false_positive_rate": 0.0,
+      "developing_recall": NaN,
+      "faulty_recall": 0.0
+    },
+    "inner_selection": [
+      {
+        "candidate_id": "random_forest:max_depth=4:n_estimators=150:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 150,
+            "max_depth": 4
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.999758030231557,
+        "metrics": {
+          "auroc": 0.3213499038550432,
+          "average_precision": 0.7821206503124528,
+          "balanced_accuracy": 0.5132488181618053,
+          "healthy_false_positive_rate": 0.09717756341550554,
+          "developing_recall": NaN,
+          "faulty_recall": 0.12367519973911625
+        }
+      },
+      {
+        "candidate_id": "random_forest:max_depth=8:n_estimators=150:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 150,
+            "max_depth": 8
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 1.0,
+        "metrics": {
+          "auroc": 0.3088976624912102,
+          "average_precision": 0.7505977813318638,
+          "balanced_accuracy": 0.40630088650025076,
+          "healthy_false_positive_rate": 0.5276884601643445,
+          "developing_recall": NaN,
+          "faulty_recall": 0.3402902331648459
+        }
+      },
+      {
+        "candidate_id": "random_forest:max_depth=4:n_estimators=300:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 300,
+            "max_depth": 4
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 0.9998055612675157,
+        "metrics": {
+          "auroc": 0.30379684470712237,
+          "average_precision": 0.7644093137366847,
+          "balanced_accuracy": 0.4946608514244827,
+          "healthy_false_positive_rate": 0.09717756341550554,
+          "developing_recall": NaN,
+          "faulty_recall": 0.0864992662644709
+        }
+      },
+      {
+        "candidate_id": "random_forest:max_depth=8:n_estimators=300:q=0.95",
+        "candidate": {
+          "family": "random_forest",
+          "params": {
+            "n_estimators": 300,
+            "max_depth": 8
+          },
+          "threshold_quantile": 0.95
+        },
+        "threshold": 1.0,
+        "metrics": {
+          "auroc": 0.2967001066685028,
+          "average_precision": 0.7419242945931543,
+          "balanced_accuracy": 0.3871733004036346,
+          "healthy_false_positive_rate": 0.5148267238299392,
+          "developing_recall": NaN,
+          "faulty_recall": 0.2891733246372085
+        }
+      }
+    ]
+  }
+]
