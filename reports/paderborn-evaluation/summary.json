@@ -109,6 +109,57 @@
       "developing_recall_std": NaN,
       "faulty_recall_mean": 0.20683320131372915,
       "faulty_recall_std": 0.17456456266819134
+    },
+    {
+      "feature_policy": "vibration_relative",
+      "model_family": "healthy_reference",
+      "bearing_folds": 6,
+      "auroc_mean": 0.704733064557329,
+      "auroc_std": 0.27130775746519026,
+      "average_precision_mean": 0.9159660053312071,
+      "average_precision_std": 0.08279862475922392,
+      "balanced_accuracy_mean": 0.534311046107589,
+      "balanced_accuracy_std": 0.0330406232437104,
+      "healthy_false_positive_rate_mean": 0.017590936195587357,
+      "healthy_false_positive_rate_std": 0.043088817777044576,
+      "developing_recall_mean": NaN,
+      "developing_recall_std": NaN,
+      "faulty_recall_mean": 0.0862130284107651,
+      "faulty_recall_std": 0.0861210312793528
+    },
+    {
+      "feature_policy": "vibration_relative",
+      "model_family": "isolation_forest",
+      "bearing_folds": 6,
+      "auroc_mean": 0.7303599080987769,
+      "auroc_std": 0.25584042920305894,
+      "average_precision_mean": 0.926231300257696,
+      "average_precision_std": 0.07424839277372783,
+      "balanced_accuracy_mean": 0.5135818788407355,
+      "balanced_accuracy_std": 0.02398775103983422,
+      "healthy_false_positive_rate_mean": 0.06410256410256411,
+      "healthy_false_positive_rate_std": 0.15701857325533194,
+      "developing_recall_mean": NaN,
+      "developing_recall_std": NaN,
+      "faulty_recall_mean": 0.09126632178403493,
+      "faulty_recall_std": 0.14676277230482754
+    },
+    {
+      "feature_policy": "vibration_relative",
+      "model_family": "random_forest",
+      "bearing_folds": 6,
+      "auroc_mean": 0.7340279303696805,
+      "auroc_std": 0.24000554935023696,
+      "average_precision_mean": 0.919343566835094,
+      "average_precision_std": 0.07818857905558661,
+      "balanced_accuracy_mean": 0.49458699811283674,
+      "balanced_accuracy_std": 0.11334651751185654,
+      "healthy_false_positive_rate_mean": 0.1680812888661726,
+      "healthy_false_positive_rate_std": 0.30427127321270275,
+      "developing_recall_mean": NaN,
+      "developing_recall_std": NaN,
+      "faulty_recall_mean": 0.1572552850918461,
+      "faulty_recall_std": 0.13942464745622646
     }
   ]
 }

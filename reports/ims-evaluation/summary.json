@@ -1,7 +1,21 @@
 {
   "dataset": "NASA/IMS bearing run-to-failure data, one vibration channel per bearing",
   "sample_rate_hz": 20000,
-  "baseline_hours": 24.0,
+  "baseline_policies": {
+    "first_24h": [
+      24.0,
+      false
+    ],
+    "first_72h": [
+      72.0,
+      false
+    ],
+    "restart_24h": [
+      24.0,
+      true
+    ]
+  },
+  "stop_hours": 12.0,
   "threshold_quantile": 0.99,
   "alert_rule": {
     "min_abnormal": 3,
@@ -20,30 +34,88 @@
   ],
   "summary": [
     {
+      "baseline_policy": "first_24h",
       "model_family": "healthy_reference",
       "healthy_bearings": 8,
-      "healthy_monitored_days": 203.37554398148148,
-      "healthy_alarm_episodes": 289,
-      "false_alarms_per_day": 1.4210164818357665,
-      "healthy_alarmed_fraction": 0.5415143386007907,
-      "pre_failure_false_alarms_per_day": 1.7598862563935342,
-      "pre_failure_alarmed_fraction": 0.20525592579869462,
+      "healthy_monitored_days": 174.19444444444443,
+      "healthy_alarm_episodes": 288,
+      "false_alarms_per_day": 1.653324828575985,
+      "healthy_alarmed_fraction": 0.5413988617991542,
+      "pre_failure_false_alarms_per_day": 1.781968179139658,
+      "pre_failure_alarmed_fraction": 0.2075176026103383,
       "failed_bearings": 4,
       "failed_alarmed_at_end": 4,
-      "median_final_alarm_hours_before_end": 149.75972222222225
+      "median_final_alarm_hours_before_end": 140.0916666666667
     },
     {
+      "baseline_policy": "first_24h",
       "model_family": "isolation_forest",
       "healthy_bearings": 8,
-      "healthy_monitored_days": 203.37554398148148,
-      "healthy_alarm_episodes": 545,
-      "false_alarms_per_day": 2.67977156609167,
-      "healthy_alarmed_fraction": 0.4749992380104655,
-      "pre_failure_false_alarms_per_day": 2.965599758676706,
-      "pre_failure_alarmed_fraction": 0.22294190424504398,
+      "healthy_monitored_days": 174.19444444444443,
+      "healthy_alarm_episodes": 553,
+      "false_alarms_per_day": 3.1746132993143044,
+      "healthy_alarmed_fraction": 0.465694847902874,
+      "pre_failure_false_alarms_per_day": 3.166921575866252,
+      "pre_failure_alarmed_fraction": 0.2188046929648893,
       "failed_bearings": 4,
       "failed_alarmed_at_end": 4,
-      "median_final_alarm_hours_before_end": 119.81194444444446
+      "median_final_alarm_hours_before_end": 117.89527777777784
+    },
+    {
+      "baseline_policy": "first_72h",
+      "model_family": "healthy_reference",
+      "healthy_bearings": 8,
+      "healthy_monitored_days": 158.19444444444443,
+      "healthy_alarm_episodes": 59,
+      "false_alarms_per_day": 0.37295873573309923,
+      "healthy_alarmed_fraction": 0.19908731036391353,
+      "pre_failure_false_alarms_per_day": 0.09891677675033025,
+      "pre_failure_alarmed_fraction": 0.005833897568476321,
+      "failed_bearings": 4,
+      "failed_alarmed_at_end": 4,
+      "median_final_alarm_hours_before_end": 66.91666666666667
+    },
+    {
+      "baseline_policy": "first_72h",
+      "model_family": "isolation_forest",
+      "healthy_bearings": 8,
+      "healthy_monitored_days": 158.19444444444443,
+      "healthy_alarm_episodes": 166,
+      "false_alarms_per_day": 1.0493415276558387,
+      "healthy_alarmed_fraction": 0.1753132878069072,
+      "pre_failure_false_alarms_per_day": 0.9113447356033265,
+      "pre_failure_alarmed_fraction": 0.016049458164595666,
+      "failed_bearings": 4,
+      "failed_alarmed_at_end": 4,
+      "median_final_alarm_hours_before_end": 74.025
+    },
+    {
+      "baseline_policy": "restart_24h",
+      "model_family": "healthy_reference",
+      "healthy_bearings": 8,
+      "healthy_monitored_days": 162.0972222222222,
+      "healthy_alarm_episodes": 274,
+      "false_alarms_per_day": 1.6903435866678094,
+      "healthy_alarmed_fraction": 0.36346052120294187,
+      "pre_failure_false_alarms_per_day": 1.6892765829448035,
+      "pre_failure_alarmed_fraction": 0.2166919145369438,
+      "failed_bearings": 4,
+      "failed_alarmed_at_end": 4,
+      "median_final_alarm_hours_before_end": 67.08333333333336
+    },
+    {
+      "baseline_policy": "restart_24h",
+      "model_family": "isolation_forest",
+      "healthy_bearings": 8,
+      "healthy_monitored_days": 162.0972222222222,
+      "healthy_alarm_episodes": 489,
+      "false_alarms_per_day": 3.0167080798560537,
+      "healthy_alarmed_fraction": 0.3256669173268211,
+      "pre_failure_false_alarms_per_day": 3.0093374833259228,
+      "pre_failure_alarmed_fraction": 0.227214478897611,
+      "failed_bearings": 4,
+      "failed_alarmed_at_end": 4,
+      "median_final_alarm_hours_before_end": 58.91666666666671
     }
   ]
 }

@@ -39,7 +39,13 @@ from fabguard.data import (
     bearing_manufacturer,
     read_numeric_table,
 )
-from fabguard.signals import FEATURE_COLUMNS, extract_features, extract_recording_features
+from fabguard.signals import (
+    FEATURE_COLUMNS,
+    RELATIVE_BANDS,
+    RELATIVE_FEATURE_COLUMNS,
+    extract_features,
+    extract_recording_features,
+)
 
 IDENTITY_COLUMNS = (
     "recording_id",
@@ -164,9 +170,22 @@ def _feature_columns(policy: str) -> list[str]:
         return [f"vibration__{name}" for name in FEATURE_COLUMNS] + [
             f"audio__{name}" for name in FEATURE_COLUMNS
         ]
+    if policy == "vibration_relative":
+        return [f"vibration__{name}" for name in RELATIVE_FEATURE_COLUMNS]
     if policy == "load_only":
         return ["load_mean"]
     raise ValueError(f"unknown feature policy {policy!r}")
+
+
+def add_relative_features(table: pd.DataFrame, prefix: str) -> pd.DataFrame:
+    """Add ``{prefix}__band_share_*`` columns derived from the absolute band powers."""
+    powers = table[[f"{prefix}__{name}" for name in RELATIVE_BANDS]].to_numpy(dtype=float)
+    total = powers.sum(axis=1, keepdims=True)
+    shares = np.divide(powers, total, out=np.zeros_like(powers), where=total > 0)
+    out = table.copy()
+    for index, name in enumerate(RELATIVE_BANDS):
+        out[f"{prefix}__{name.replace('band_power_', 'band_share_')}"] = shares[:, index]
+    return out
 
 
 def declared_candidates(config: ExperimentConfig | None = None) -> list[Candidate]:
