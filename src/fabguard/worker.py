@@ -86,12 +86,8 @@ class InvestigationWorker:
         try:
             with self.database.incident_lock(event.incident_id) as lock_connection:
                 if lock_connection is None:
-                    self.database.fail_event(
-                        event.id,
-                        self.worker_id,
-                        "incident is locked",
-                        max_attempts=self.max_attempts,
-                    )
+                    # Another worker holds the incident; waiting is not a failed attempt.
+                    self.database.release_event(event.id, self.worker_id, "incident is locked")
                     return WorkerResult("contended", event.incident_id, event.id)
 
                 def ensure_owned() -> None:
@@ -244,7 +240,7 @@ class RuntimeGraphRunner:
                 else self.graph.invoke(
                     None,
                     config=configuration,
-                    context=GraphRunContext(ensure_owned),
+                    context=GraphRunContext(ensure_owned, attempt_started=time.monotonic()),
                     durability="sync",
                 )
             )
@@ -270,7 +266,7 @@ class RuntimeGraphRunner:
                     "result": {},
                 },
                 config=configuration,
-                context=GraphRunContext(ensure_owned),
+                context=GraphRunContext(ensure_owned, attempt_started=time.monotonic()),
                 durability="sync",
             )
         if not state.get("result"):

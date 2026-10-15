@@ -4,10 +4,10 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from collections.abc import Sequence
 from pathlib import Path
 
-import matplotlib
 import numpy as np
 import pandas as pd
 import soundfile as sf
@@ -22,7 +22,8 @@ from fabguard.data import (
 )
 from fabguard.signals import DEFAULT_SAMPLE_RATE_HZ
 
-matplotlib.use("Agg")
+# Notebooks export an inline MPLBACKEND that this environment may not have.
+os.environ["MPLBACKEND"] = "Agg"
 from matplotlib import pyplot as plt  # noqa: E402
 
 

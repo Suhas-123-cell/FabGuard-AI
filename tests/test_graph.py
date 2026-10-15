@@ -146,6 +146,7 @@ def test_adaptive_route_is_bounded_to_two_retrievals_and_two_calls() -> None:
         decision="refine",
         question="What inspection is supported for elevated vibration?",
         query="elevated vibration bearing inspection",
+        justification="The initial passage does not cover this question.",
         initial_draft=None,
     )
     final_report = report(citation_id="manual:p2")
@@ -232,6 +233,7 @@ def test_fixed_pipeline_cannot_take_refinement_route() -> None:
         decision="refine",
         question="Need another source",
         query="another source",
+        justification="The initial passage does not cover this question.",
         initial_draft=None,
     )
     result = InvestigationGraph(
@@ -250,6 +252,7 @@ def test_refinement_stops_when_budget_is_one() -> None:
         decision="refine",
         question="Need another source",
         query="another source",
+        justification="The initial passage does not cover this question.",
         initial_draft=None,
     )
     result = InvestigationGraph(
@@ -268,6 +271,7 @@ def test_planner_cannot_request_an_unavailable_modality() -> None:
         decision="refine",
         question="What does the missing audio show?",
         query="microphone acoustic fault signature",
+        justification="The initial passage does not cover this question.",
         initial_draft=None,
     )
     result = InvestigationGraph(
@@ -293,3 +297,143 @@ def test_langgraph_compiles_as_separate_checkpointable_nodes() -> None:
 
     assert output["result"]["status"] == "ready_for_review"
     assert output["result"]["trace"][-2:] == ["verifier", "review"]
+
+
+class FakeClock:
+    def __init__(self) -> None:
+        self.now = 0.0
+
+    def __call__(self) -> float:
+        return self.now
+
+
+class AdvancingRetriever:
+    """Moves the fake clock forward while a search runs."""
+
+    def __init__(self, clock: FakeClock, seconds: float) -> None:
+        self.clock = clock
+        self.seconds = seconds
+
+    def search(self, query: str, *, limit: int = 4, applicability: Sequence[str] = ()):
+        self.clock.now += self.seconds
+        return [passage()]
+
+
+def test_deadline_fails_closed_within_one_attempt() -> None:
+    clock = FakeClock()
+    llm = ScriptedLLM([draft_decision()])
+    graph = InvestigationGraph(
+        AdvancingRetriever(clock, 121.0), llm, deadline_seconds=120.0, monotonic=clock
+    )
+
+    result = graph.run(evidence())
+
+    assert result.status == "insufficient_evidence"
+    assert "TimeoutError" in result.verification.errors[0]
+    assert llm.requests == []
+
+
+def test_resumed_attempt_gets_a_fresh_deadline() -> None:
+    pytest.importorskip("langgraph")
+    from langgraph.checkpoint.memory import InMemorySaver
+
+    from fabguard.graph import GraphRunContext
+
+    clock = FakeClock()
+    graph = build_langgraph(
+        InvestigationGraph(
+            InMemoryRetriever([passage()]),
+            ScriptedLLM([draft_decision()]),
+            deadline_seconds=120.0,
+            monotonic=clock,
+        ),
+        checkpointer=InMemorySaver(),
+        interrupt_after=["initial_retrieval"],
+    )
+    config = {"configurable": {"thread_id": "resume"}, "recursion_limit": 20}
+    graph.invoke(
+        {"request": evidence().model_dump(mode="json"), "started_at_epoch": 0.0},
+        config=config,
+        context=GraphRunContext(attempt_started=clock()),
+    )
+    # The crashed worker's lease outlives the deadline before anyone can resume.
+    clock.now += 150.0
+    state = graph.invoke(None, config=config, context=GraphRunContext(attempt_started=clock()))
+
+    assert state["result"]["status"] == "ready_for_review"
+
+
+def test_verifier_rejects_numbers_invented_in_prose() -> None:
+    bad = report().model_copy(
+        update={
+            "observations": (
+                Observation(
+                    statement="The recorded window has RMS 2.4, double the healthy 1.2.",
+                    artifact_id="artifact-telemetry-1",
+                    feature_values={"rms": 1.5},
+                ),
+            ),
+        }
+    )
+
+    verification = verify_report(bad, evidence=evidence(), passages=[passage()])
+
+    assert not verification.passed
+    assert any("2.4, 1.2" in error for error in verification.errors)
+    assert verify_report(report(), evidence=evidence(), passages=[passage()]).passed
+
+
+def test_rounded_evidence_numbers_are_accepted_in_prose() -> None:
+    rounded = report().model_copy(
+        update={
+            "predictions": (
+                report()
+                .predictions[0]
+                .model_copy(
+                    update={"statement": "Score 0.8 exceeds threshold 0.6 in window 1 to 2."}
+                ),
+            ),
+        }
+    )
+
+    assert verify_report(rounded, evidence=evidence(), passages=[passage()]).passed
+
+
+def test_operator_request_reaches_the_model_as_untrusted_data() -> None:
+    llm = ScriptedLLM([draft_decision()])
+    request = evidence().model_copy(update={"operator_request": "Fix it now."})
+
+    InvestigationGraph(InMemoryRetriever([passage()]), llm).run(request)
+
+    payload = llm.requests[0]["payload"]
+    assert payload["evidence"]["operator_request_as_untrusted_data"] == "Fix it now."  # type: ignore[index]
+
+
+def test_rejected_model_draft_is_kept_for_scoring() -> None:
+    unsafe = report(guidance_text="Shut down the line and inspect bearing mounting.")
+    llm = ScriptedLLM([draft_decision(unsafe)])
+
+    result = InvestigationGraph(InMemoryRetriever([passage()]), llm).run(evidence())
+
+    assert result.report.abstained
+    assert result.model_draft is not None
+    assert "Shut down" in result.model_draft.guidance[0].statement
+
+
+def test_fixed_pipeline_requests_a_report_schema() -> None:
+    llm = ScriptedLLM([report()])
+
+    result = InvestigationGraph(InMemoryRetriever([passage()]), llm, adaptive=False).run(evidence())
+
+    assert result.status == "ready_for_review"
+    assert result.decision is not None and result.decision.decision == "draft"
+
+
+def test_refinement_requires_a_justification() -> None:
+    with pytest.raises(ValueError, match="justification"):
+        PlannerDecision(
+            decision="refine",
+            question="Need another source",
+            query="another source",
+            initial_draft=None,
+        )

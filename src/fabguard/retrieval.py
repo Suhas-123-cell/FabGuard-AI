@@ -34,6 +34,12 @@ _INJECTION_MARKERS = (
     "follow these instructions",
     "you are chatgpt",
     "tool call",
+    "ignore all rules",
+    "system:",
+    "reveal api",
+    "api key",
+    "approve a",
+    "create a ticket",
 )
 
 

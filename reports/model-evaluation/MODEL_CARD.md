@@ -21,9 +21,12 @@ false-positive rate 0.056 ±
 recall 0.944 ± 0.217. Standard
 deviations describe bearing-fold variability; they are not confidence intervals.
 
-Candidates used grouped inner-fold predictions. Each candidate threshold came from its inner
-held-out healthy-score quantile (0.95, 0.975, or 0.99); the selected candidate was then refit on
-the outer-training bearings. No outer held-out bearing set its own threshold.
+Candidates used grouped inner-fold predictions. Every threshold is a quantile of inner held-out
+healthy scores: the healthy-reference grid tries 0.95, 0.975 and 0.99, while Isolation Forest and
+Random Forest candidates use 0.95 only. The selected candidate was then refit on the
+outer-training bearings. No outer held-out bearing set its own threshold. The feature policy and
+model family are not chosen inside a nested loop: every policy/family pair is reported on the same
+outer folds, and the deployed pair is chosen from inner predictions over all 15 bearings.
 
 All audio channels passed the frozen technical audit, and paired audio features contribute to the
 selected fusion model. Vibration-only and audio-only results remain in `primary_results.csv`.

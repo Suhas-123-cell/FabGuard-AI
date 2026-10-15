@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import os
+import time
 import urllib.error
 import urllib.request
 from collections import deque
@@ -27,6 +28,10 @@ class LLMError(RuntimeError):
 
 class TransientLLMError(LLMError):
     """A retryable timeout, rate-limit, or provider-side error."""
+
+    def __init__(self, message: str, *, retry_after: float | None = None):
+        super().__init__(message)
+        self.retry_after = retry_after
 
 
 class InvalidStructuredOutput(LLMError):
@@ -279,7 +284,9 @@ class OpenAICompatibleLLM:
     max_output_tokens: int = 1_200
     temperature: float = 0.0
     max_transient_retries: int = 1
+    max_backoff_seconds: float = 5.0
     transport: Transport | None = None
+    sleep: Callable[[float], None] = time.sleep
     usage: Usage = field(default_factory=Usage)
 
     @classmethod
@@ -359,9 +366,12 @@ class OpenAICompatibleLLM:
                     self.timeout_seconds,
                 )
                 break
-            except TransientLLMError:
+            except TransientLLMError as exc:
                 if attempt >= self.max_transient_retries:
                     raise
+                # Honour Retry-After, capped so the retry stays inside the run deadline.
+                wait = exc.retry_after if exc.retry_after is not None else 2.0**attempt
+                self.sleep(min(max(wait, 0.0), self.max_backoff_seconds))
         assert response is not None
         usage = response.get("usage")
         if isinstance(usage, Mapping):
@@ -393,7 +403,13 @@ def _default_transport(
             decoded = json.loads(response.read().decode("utf-8"))
     except urllib.error.HTTPError as exc:
         if exc.code in {408, 409, 429} or exc.code >= 500:
-            raise TransientLLMError(f"provider returned HTTP {exc.code}") from exc
+            try:
+                retry_after = float(exc.headers.get("Retry-After", "")) if exc.headers else None
+            except ValueError:
+                retry_after = None
+            raise TransientLLMError(
+                f"provider returned HTTP {exc.code}", retry_after=retry_after
+            ) from exc
         raise LLMError(f"provider returned HTTP {exc.code}") from exc
     except (urllib.error.URLError, TimeoutError) as exc:
         raise TransientLLMError("provider request timed out or failed") from exc

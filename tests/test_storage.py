@@ -137,3 +137,43 @@ def test_registered_artifact_is_content_addressed_and_verified(db: Database):
 
     assert resolved.read_bytes() == b"original"
     assert resolved != source
+
+
+def test_second_reviewer_gets_the_existing_ticket(db: Database):
+    incident, _ = ingest(db, artifact(db))
+    db.save_report(
+        incident["id"],
+        revision=1,
+        status="ready",
+        content={"observations": [], "guidance": []},
+        ticket_draft={"title": "Inspect"},
+    )
+    first, created = db.approve_ticket(
+        incident["id"],
+        report_revision=1,
+        reviewer_id="operator-1",
+        action="create_internal_ticket",
+        idempotency_key="approval:0001",
+    )
+    second, second_created = db.approve_ticket(
+        incident["id"],
+        report_revision=1,
+        reviewer_id="operator-2",
+        action="create_internal_ticket",
+        idempotency_key="approval:0002",
+    )
+
+    assert created is True and second_created is False
+    assert second["id"] == first["id"]
+
+
+def test_released_event_keeps_its_attempt_budget(db: Database):
+    ingest(db, artifact(db))
+    for _ in range(5):
+        event = db.claim_event("worker-a")
+        assert event is not None
+        db.release_event(event.id, "worker-a", "incident is locked")
+
+    claimed = db.claim_event("worker-a")
+    assert claimed is not None
+    assert db.fail_event(claimed.id, "worker-a", "boom", max_attempts=2) == "pending"
