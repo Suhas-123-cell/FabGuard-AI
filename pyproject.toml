@@ -48,6 +48,7 @@ fabguard-index-references = "fabguard.retrieval:main"
 fabguard-init = "fabguard.initialize:main"
 fabguard-paderborn = "fabguard.paderborn:main"
 fabguard-ims = "fabguard.ims:main"
+fabguard-monitor = "fabguard.monitor:main"
 
 [build-system]
 requires = ["hatchling"]
