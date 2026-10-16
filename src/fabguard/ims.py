@@ -190,11 +190,16 @@ def episodes(alarm: np.ndarray) -> np.ndarray:
     return np.flatnonzero(alarm & ~previous)
 
 
-def _snapshots(hours: float) -> int:
-    return round(hours * 60 / SNAPSHOT_MINUTES)
+def _snapshots(hours: float, snapshot_minutes: float = SNAPSHOT_MINUTES) -> int:
+    return round(hours * 60 / snapshot_minutes)
 
 
-def score_bearing(frame: pd.DataFrame, family: str, policy: str = "first_24h") -> pd.DataFrame:
+def score_bearing(
+    frame: pd.DataFrame,
+    family: str,
+    policy: str = "first_24h",
+    snapshot_minutes: float = SNAPSHOT_MINUTES,
+) -> pd.DataFrame:
     """Fit on this bearing's own baseline snapshots, then score every later snapshot causally."""
     ordered = frame.sort_values("timestamp").reset_index(drop=True)
     hours = ((ordered.timestamp - ordered.timestamp.iloc[0]).dt.total_seconds() / 3600).to_numpy()
@@ -208,8 +213,8 @@ def score_bearing(frame: pd.DataFrame, family: str, policy: str = "first_24h") -
     parts = []
     for begin, end in zip(starts, [*starts[1:], len(hours)], strict=True):
         segment = np.arange(begin, end)
-        baseline = segment[: _snapshots(baseline_hours)]
-        if model is None or baseline.size >= _snapshots(MIN_BASELINE_HOURS):
+        baseline = segment[: _snapshots(baseline_hours, snapshot_minutes)]
+        if model is None or baseline.size >= _snapshots(MIN_BASELINE_HOURS, snapshot_minutes):
             model = _build_estimator(candidate, SEED).fit(x[baseline])
             fitted = anomaly_scores(model, family, x[baseline])
             threshold = float(np.quantile(fitted, candidate.threshold_quantile))

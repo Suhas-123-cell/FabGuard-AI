@@ -116,6 +116,26 @@ after seeing these tests, uses 44% of test 2's short life as baseline, and still
 alarm episodes on test 1's failing bearings, so it needs a check on data it has not seen. See
 `reports/ims-evaluation/`.
 
+**University of Ferrara run-to-failure trials (the independent check of the 72-hour rule).** Three
+continuous trials of 165-410 h, one record every 5 minutes, one test bearing each and no healthy
+companion. The [protocol](reports/ferrara-evaluation/PROTOCOL.md), including when damage starts
+(trailing one-hour RMS held at twice its first-day level) and what would confirm the rule, was
+written before the data was opened. **The rule was not confirmed.** With the healthy reference,
+every bearing was in alarm at the end, but before damage started:
+
+| Trial | Time in alarm, 24 h baseline | Time in alarm, 72 h baseline | 72 h alarm episodes |
+|---|---:|---:|---:|
+| E1 (410 h) | 84% | 24% | 142 |
+| E2 (165 h) | 92% | 1% | 1 |
+| E3 (199 h) | 82% | 92% | 3 (one long alarm) |
+
+The longer baseline helped where the change it absorbed was run-in, as on IMS (E2's level rose
+for three days, then held). It did not help where the level kept creeping (E3's RMS climbed to
+65% above its first-day level by hour 168, still below the damage line) or flickered (E1). Whether E3's early
+alarm was a correct early warning cannot be told from this data; the protocol counts it as false.
+The pre-registered episodes-per-day metric also hid continuous alarms, so time in alarm is shown.
+See `reports/ferrara-evaluation/`.
+
 ## Monitor your own machine
 
 No industrial hardware is needed to try this. `fabguard-monitor` reads a WAV file or raw 16-bit
@@ -168,6 +188,8 @@ uv run pytest -q
 # Other rigs: about 5.5 GB and 1.1 GB of downloads, processed into data/.
 uv run fabguard-paderborn
 uv run fabguard-ims
+# Ferrara: put E1.7z-E3.7z from Mendeley Data htk59pp5wx in data/ferrara/archives (needs bsdtar or 7z)
+uv run fabguard-ferrara
 ```
 
 The investigation worker defaults to Groq. Set `FABGUARD_LLM_API_KEY` in `.env` and keep
@@ -211,10 +233,10 @@ bearings, and load/manufacturer/fault-family confounding. Cross-validation does 
 diversity. On two other public rigs the method transferred poorly (see Other rigs); it is not
 validated on industrial equipment. Snapshot replay does not establish remaining
 useful life, continuous deterioration, root cause, or field false alarms per hour. Live monitoring
-fits each machine on its own unchecked baseline and has no validation on real equipment. The
-72-hour commissioning rule from IMS is still unconfirmed: XJTU-SY cannot test it, because its 15
-runs last 42 minutes to 42 hours and every tested bearing fails, leaving no healthy bearing to
-count false alarms on. A check needs multi-day recordings that include bearings that stay healthy.
+fits each machine on its own unchecked baseline and has no validation on real equipment. No
+commissioning rule tested here gives few false alarms in general: the 72-hour rule chosen on IMS
+worked on one of three independent Ferrara trials. (XJTU-SY could not test it: its runs last 42
+minutes to 42 hours.)
 The application can draft an inspection ticket; only an authenticated human can approve it.
 
 Code is MIT licensed. UORED-VAFCLS v5 is CC BY 4.0 and is downloaded from its publisher rather
