@@ -134,6 +134,8 @@ for three days, then held). It did not help where the level kept creeping (E3's 
 65% above its first-day level by hour 168, still below the damage line) or flickered (E1). Whether E3's early
 alarm was a correct early warning cannot be told from this data; the protocol counts it as false.
 The pre-registered episodes-per-day metric also hid continuous alarms, so time in alarm is shown.
+A rerun on Google Colab (Linux x86_64) from a fresh download reproduced `per_trial.csv` and
+`summary.json` byte for byte; anomaly scores differed by at most 7×10⁻¹³ and every alarm matched.
 See `reports/ferrara-evaluation/`.
 
 ## Monitor your own machine
