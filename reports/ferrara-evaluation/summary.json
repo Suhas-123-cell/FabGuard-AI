@@ -1,0 +1,40 @@
+{
+  "dataset": "University of Ferrara run-to-failure trials, Mendeley Data htk59pp5wx",
+  "protocol": "reports/ferrara-evaluation/PROTOCOL.md",
+  "trials": [
+    "E1",
+    "E2",
+    "E3"
+  ],
+  "record_minutes": 5,
+  "features": [
+    "vibration__rms",
+    "vibration__crest_factor",
+    "vibration__kurtosis",
+    "vibration__peak_to_peak",
+    "vibration__spectral_power",
+    "vibration__band_power_0_500_hz",
+    "vibration__band_power_500_2000_hz",
+    "vibration__band_power_2000_5000_hz",
+    "vibration__band_power_5000_10000_hz"
+  ],
+  "verdict": {
+    "eligible_trials": [
+      "E1",
+      "E2",
+      "E3"
+    ],
+    "trials_with_damage_inside_72h_baseline": [],
+    "false_alarms_per_day": {
+      "first_24h": 0.878370135415396,
+      "first_72h": 6.499922708301129
+    },
+    "checks": {
+      "pooled_false_alarms_at_most_0.5_per_day": false,
+      "every_eligible_bearing_in_alarm_at_end": true,
+      "fewer_false_alarms_than_first_24h": false,
+      "no_damage_inside_72h_baseline": true
+    },
+    "confirmed": false
+  }
+}
