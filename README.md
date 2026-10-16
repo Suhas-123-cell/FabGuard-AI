@@ -135,7 +135,8 @@ for three days, then held). It did not help where the level kept creeping (E3's 
 alarm was a correct early warning cannot be told from this data; the protocol counts it as false.
 The pre-registered episodes-per-day metric also hid continuous alarms, so time in alarm is shown.
 A rerun on Google Colab (Linux x86_64) from a fresh download reproduced `per_trial.csv` and
-`summary.json` byte for byte; anomaly scores differed by at most 7×10⁻¹³ and every alarm matched.
+`summary.json` byte for byte; anomaly scores differed by at most 7×10⁻¹³ and every alarm matched
+([details](reports/ferrara-evaluation/REPRODUCTION.md)).
 See `reports/ferrara-evaluation/`.
 
 ## Monitor your own machine
