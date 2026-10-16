@@ -212,7 +212,10 @@ diversity. On two other public rigs the method transferred poorly (see Other rig
 validated on industrial equipment. Snapshot replay does not establish remaining
 useful life, continuous deterioration, root cause, or field false alarms per hour. Live monitoring
 fits each machine on its own unchecked baseline and has no validation on real equipment. The
-application can draft an inspection ticket; only an authenticated human can approve it.
+72-hour commissioning rule from IMS is still unconfirmed: XJTU-SY cannot test it, because its 15
+runs last 42 minutes to 42 hours and every tested bearing fails, leaving no healthy bearing to
+count false alarms on. A check needs multi-day recordings that include bearings that stay healthy.
+The application can draft an inspection ticket; only an authenticated human can approve it.
 
 Code is MIT licensed. UORED-VAFCLS v5 is CC BY 4.0 and is downloaded from its publisher rather
 than redistributed here.
