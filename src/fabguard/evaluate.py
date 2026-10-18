@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 import random
 import statistics
 import time
@@ -296,6 +297,42 @@ def _score(case: dict[str, Any], result: Any) -> tuple[bool, bool, bool, bool, b
     return success, evidence_ok, guidance_ok, abstention_ok, safe, conflict_ok
 
 
+def quality_metrics(frame: pd.DataFrame) -> pd.DataFrame:
+    """Per-variant pass, schema-valid and fail-closed rates with p50/p95 latency.
+
+    Schema-valid counts only runs where a model call returned (no provider failure);
+    fail-closed is the share of runs that ended in the insufficient-evidence report.
+    """
+
+    called = (frame["llm_calls"] > 0) & ~frame["provider_failure"]
+    schema_invalid = frame["errors"].map(
+        lambda errors: any("InvalidStructuredOutput" in error for error in errors)
+    )
+    rows = []
+    for variant, group in frame.groupby("variant", sort=True):
+        model_runs = called[group.index]
+        rows.append(
+            {
+                "variant": variant,
+                "runs": len(group),
+                "pass_rate": round(float(group["success"].mean()), 3),
+                "schema_valid_rate": (
+                    round(float(1 - schema_invalid[group.index][model_runs].mean()), 3)
+                    if model_runs.any()
+                    else None
+                ),
+                "fail_closed_rate": round(
+                    float((group["status"] == "insufficient_evidence").mean()), 3
+                ),
+                "unsafe_runs": int((~group["no_unauthorized_action"]).sum()),
+                "provider_failures": int(group["provider_failure"].sum()),
+                "p50_latency_ms": round(float(group["latency_ms"].quantile(0.50)), 1),
+                "p95_latency_ms": round(float(group["latency_ms"].quantile(0.95)), 1),
+            }
+        )
+    return pd.DataFrame(rows)
+
+
 def run_evaluation(
     *,
     cases_path: str | Path = "evals/cases.json",
@@ -311,6 +348,8 @@ def run_evaluation(
     pause_seconds: float = 0.0,
     seed: int = 17,
     max_provider_failures: int = 3,
+    base_url: str | None = None,
+    trace_nodes: bool = False,
 ) -> dict[str, Any]:
     if repeats < 1:
         raise ValueError("repeats must be positive")
@@ -319,7 +358,7 @@ def run_evaluation(
     pricing_configured = provider == "offline" or (
         input_cost_per_million > 0 and output_cost_per_million > 0
     )
-    if not pricing_configured:
+    if provider == "groq" and not pricing_configured:
         # The adoption rule needs a cost ratio; without prices it cannot pass.
         raise ValueError("a provider run needs --input/--output-cost-per-million")
     order = random.Random(seed)
@@ -354,10 +393,19 @@ def run_evaluation(
                     )
                 elif provider == "groq":
                     llm = OpenAICompatibleLLM.from_env(model=model)
+                elif provider == "openai_compatible":
+                    # Local servers (Ollama, llama.cpp, vLLM) usually ignore the key.
+                    llm = OpenAICompatibleLLM.from_env(
+                        model=model,
+                        base_url=base_url or "http://localhost:11434/v1",
+                        api_key=RuntimeSettings().llm_api_key or "local",
+                    )
                 else:
-                    raise ValueError("provider must be 'offline' or 'groq'")
+                    raise ValueError("provider must be 'offline', 'groq' or 'openai_compatible'")
                 graph = build_langgraph(
-                    InvestigationGraph(retriever=retriever, llm=llm, adaptive=adaptive),
+                    InvestigationGraph(
+                        retriever=retriever, llm=llm, adaptive=adaptive, trace_nodes=trace_nodes
+                    ),
                     checkpointer=saver,
                 )
                 thread_id = f"{evaluation_id}:{case['id']}:{repeat}:{variant}"
@@ -431,6 +479,7 @@ def run_evaluation(
                     )
 
     frame = pd.DataFrame([asdict(row) for row in rows])
+    metrics = quality_metrics(frame)
     majority = (
         frame.groupby(["case_id", "variant"])["success"]
         .sum()
@@ -468,7 +517,7 @@ def run_evaluation(
         "evaluation_id": evaluation_id,
         "checkpoint_backend": "postgres" if checkpointer is not None else "memory",
         "pricing_configured": pricing_configured,
-        "model": model if provider == "groq" else "scripted-offline-fixture",
+        "model": model if provider != "offline" else "scripted-offline-fixture",
         "cases": len(evaluation_cases),
         "repeats": repeats,
         "fixed_majority_passes": fixed_passes,
@@ -502,6 +551,8 @@ def run_evaluation(
     output = Path(output_directory)
     output.mkdir(parents=True, exist_ok=True)
     frame.to_csv(output / "case_runs.csv", index=False)
+    metrics.insert(0, "model", summary["model"])
+    metrics.to_csv(output / "metrics.csv", index=False)
     majority.to_csv(output / "majority_scores.csv", index=False)
     (output / "results.json").write_text(
         json.dumps({"summary": summary, "runs": raw_results}, indent=2) + "\n",
@@ -522,8 +573,15 @@ def run_evaluation(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--provider", choices=("offline", "groq"), default="offline")
+    parser.add_argument(
+        "--provider", choices=("offline", "groq", "openai_compatible"), default="offline"
+    )
     parser.add_argument("--model", default="openai/gpt-oss-20b")
+    parser.add_argument(
+        "--base-url",
+        default=None,
+        help="openai_compatible only (default http://localhost:11434/v1, Ollama)",
+    )
     parser.add_argument("--output-dir", default="runs/investigation-eval")
     parser.add_argument("--repeats", type=int, default=3)
     parser.add_argument("--input-cost-per-million", type=float, default=0.0)
@@ -536,6 +594,8 @@ def main() -> None:
     )
     args = parser.parse_args()
     settings = RuntimeSettings()
+    if settings.trace_nodes:
+        logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
     manager = postgres_saver_factory(settings.checkpoint_url) if args.durable else nullcontext(None)
     with manager as saver:
         if saver is not None:
@@ -551,6 +611,8 @@ def main() -> None:
                     output_cost_per_million=args.output_cost_per_million,
                     checkpointer=saver,
                     pause_seconds=args.pause_seconds,
+                    base_url=args.base_url,
+                    trace_nodes=settings.trace_nodes,
                 ),
                 indent=2,
             )
