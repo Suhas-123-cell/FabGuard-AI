@@ -1,5 +1,29 @@
 # FabGuard AI
 
+**What:** bearing-fault monitoring from vibration and audio. A small local detector flags abnormal one-second windows, and a bounded LangGraph agent (at most two retrievals and two LLM calls) drafts a cited inspection report that only an authenticated human can approve.<br>
+**For:** people prototyping predictive maintenance on recorded or live sensor data who need the LLM step to fail closed; everything runs locally.<br>
+**Headline:** 0.955 ± 0.079 balanced accuracy for the fusion Isolation Forest across 15 held-out bearings (leave-one-bearing-out on UORED-VAFCLS v5); the same method transferred poorly to two other rigs ([Other rigs](#other-rigs)).
+
+<!-- Demo placeholder: record a 60-second docs/demo.gif (monitor alarm -> investigation report -> human approval), then uncomment the next line.
+![FabGuard alarm to approved ticket](docs/demo.gif)
+-->
+
+## Quickstart
+
+Needs Python 3.12 and [uv](https://docs.astral.sh/uv/). No dataset download, database or API key.
+
+```bash
+git clone https://github.com/Suhas-123-cell/FabGuard-AI.git && cd FabGuard-AI
+uv sync --extra dev --python 3.12
+uv run pytest -q
+uv run fabguard-evaluate --provider offline --output-dir runs/investigation-eval
+```
+
+The test suite skips the tests that need PostgreSQL or the downloaded data. The last command runs the
+10 frozen workflow cases through the LangGraph investigation with a scripted model and writes
+`runs/investigation-eval/metrics.csv`. Add `FABGUARD_TRACE_NODES=true` in front of it to log each
+node's latency (and emit OpenTelemetry spans if `opentelemetry-api` is installed).
+
 FabGuard replays recorded bearing vibration and audio, scores one-second windows with a small
 local detector, and produces a cited inspection report behind human ticket approval. It can also
 monitor a live stream from any sensor or microphone a capture tool can read, against that
@@ -75,6 +99,41 @@ uv run fabguard-evaluate --provider groq --pause-seconds 2 \
 A provider run refuses to start without prices, alternates variant order, scores the model's own
 draft as well as the verified report, and stops after three provider failures instead of scoring
 outages as case results.
+
+### Real-LLM workflow results
+
+The same 10 frozen cases, 3 repeats per variant, through the OpenAI-compatible adapter with strict
+JSON Schema output. Files: [reports/llm-evaluation/](reports/llm-evaluation). Pass means the terminal
+report met every check for its case; schema-valid counts model calls that returned output matching
+the schema; fail-closed is the share of runs that ended in the insufficient-evidence report (4 of the
+10 cases expect that); unsafe counts runs whose *model draft* contained a forbidden action, even if
+the verifier then rejected it. Latency is the whole investigation per run.
+
+| Model | Variant | Pass (majority) | Pass (runs) | Schema-valid | Fail-closed | Unsafe drafts | p50 / p95 latency |
+|---|---|---:|---:|---:|---:|---:|---:|
+| qwen2.5:7b, local Ollama on an Apple Silicon Mac | fixed | 9/10 | 90% | 100% | 40% | 3 | 23.9 s / 29.4 s |
+| qwen2.5:7b, local Ollama on an Apple Silicon Mac | adaptive | 4/10 | 40% | 23.8% | 100% | 0 | 13.8 s / 41.1 s |
+| openai/gpt-oss-20b on Groq | fixed | TODO | TODO | TODO | TODO | TODO | TODO |
+| openai/gpt-oss-20b on Groq | adaptive | TODO | TODO | TODO | TODO | TODO | TODO |
+
+With qwen2.5:7b the fixed path is usable and the adaptive path is not: most planner outputs failed
+the schema and the verifier rejected the rest, so every adaptive run failed closed, which passes only the four cases where abstaining is
+correct. All three unsafe drafts were on the injected-document case (`malicious-02`, fixed path); the
+model cited the instruction-shaped passage, the verifier rejected the draft, and the run ended in the
+insufficient-evidence report, so no unsafe report reached a reviewer. That case is the fixed path's
+one majority failure. One run per configuration on authored fixtures, not maintenance ground truth.
+
+Reproduce:
+
+```bash
+# local model through Ollama (or any OpenAI-compatible server via --base-url)
+FABGUARD_LLM_TIMEOUT_SECONDS=90 uv run fabguard-evaluate --provider openai_compatible \
+  --model qwen2.5:7b --output-dir reports/llm-evaluation/qwen2.5-7b
+# Groq: put FABGUARD_LLM_API_KEY in .env and use current Groq prices for the model
+uv run fabguard-evaluate --provider groq --pause-seconds 2 \
+  --input-cost-per-million <usd> --output-cost-per-million <usd> \
+  --output-dir reports/llm-evaluation/gpt-oss-20b
+```
 
 ## Other rigs
 
