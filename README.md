@@ -58,7 +58,7 @@ which is evidence of the operating-condition shortcut and is not combined with t
 Full comparisons and every bearing fold are in [reports/model-evaluation](reports/model-evaluation).
 The selected detector's manufacturer rows are descriptive only: manufacturer, bearing number, and
 fault family are confounded in this release, so they do not establish manufacturer generalization.
-The recorded end-to-end local training run took 3 minutes 30 seconds; its exact scope and timing are
+The recorded end-to-end training run took 19 minutes 9 seconds on a Colab CPU; its exact scope and timing are
 in [TRAINING_RUN.md](reports/model-evaluation/TRAINING_RUN.md).
 
 The offline workflow check passed 10/10 frozen cases for both fixed and adaptive paths over three
@@ -217,7 +217,8 @@ cp .env.example .env                    # set three distinct, long role tokens
 docker compose up -d postgres
 docker compose exec -T postgres psql -U fabguard -d fabguard < migrations/001_runtime.sql
 docker compose exec -T postgres psql -U fabguard -d fabguard < migrations/002_references.sql
-uv run fabguard-index-references --database-url "$FABGUARD_DATABASE_URL"
+docker compose exec -T postgres psql -U fabguard -d fabguard < migrations/003_one_ticket_per_revision.sql
+uv run fabguard-index-references    # reads FABGUARD_DATABASE_URL from .env
 
 uv run fabguard-api                     # terminal 1
 uv run fabguard-worker                  # terminal 2; add --adaptive only after an ablation passes
