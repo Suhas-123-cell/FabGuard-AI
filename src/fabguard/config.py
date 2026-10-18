@@ -85,6 +85,7 @@ class RuntimeSettings(BaseSettings):
     llm_api_key: str | None = None
     run_deadline_seconds: int = Field(default=120, ge=1)
     llm_timeout_seconds: int = Field(default=25, ge=1)
+    trace_nodes: bool = False
     audio_enabled: bool = True
     graph_version: str = "fabguard-graph-v1"
     prompt_version: str = "fabguard-report-v1"

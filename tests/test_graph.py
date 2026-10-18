@@ -437,3 +437,31 @@ def test_refinement_requires_a_justification() -> None:
             query="another source",
             initial_draft=None,
         )
+
+
+def test_trace_nodes_logs_each_node_latency(caplog: pytest.LogCaptureFixture) -> None:
+    graph = InvestigationGraph(
+        InMemoryRetriever([passage()]), ScriptedLLM([draft_decision()]), trace_nodes=True
+    )
+
+    with caplog.at_level("INFO", logger="fabguard.graph"):
+        graph.run(evidence())
+
+    traced = [record.getMessage().split()[0] for record in caplog.records]
+    assert traced == [
+        "node=quality_node",
+        "node=telemetry_node",
+        "node=initial_retrieval_node",
+        "node=planner_node",
+        "node=verifier_node",
+    ]
+    assert all("latency_ms=" in record.getMessage() for record in caplog.records)
+
+
+def test_node_tracing_is_off_by_default(caplog: pytest.LogCaptureFixture) -> None:
+    graph = InvestigationGraph(InMemoryRetriever([passage()]), ScriptedLLM([draft_decision()]))
+
+    with caplog.at_level("INFO", logger="fabguard.graph"):
+        graph.run(evidence())
+
+    assert caplog.records == []

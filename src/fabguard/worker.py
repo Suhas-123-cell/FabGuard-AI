@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 import socket
 import time
 import uuid
@@ -311,6 +312,8 @@ def main() -> None:
     parser.add_argument("--adaptive", action="store_true")
     args = parser.parse_args()
     settings = RuntimeSettings()
+    if settings.trace_nodes:
+        logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
     if settings.llm_timeout_seconds * 4 > settings.run_deadline_seconds - 10:
         raise RuntimeError("LLM timeout/retry budget exceeds the investigation deadline")
     database = Database(settings.database_url, artifact_root=settings.artifact_root)
@@ -335,6 +338,7 @@ def main() -> None:
         llm=llm,
         adaptive=args.adaptive,
         deadline_seconds=settings.run_deadline_seconds,
+        trace_nodes=settings.trace_nodes,
     )
     with postgres_saver_factory(settings.checkpoint_url) as saver:
         saver.setup()
