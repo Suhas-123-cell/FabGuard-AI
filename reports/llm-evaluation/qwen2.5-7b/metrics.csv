@@ -1,0 +1,3 @@
+model,variant,runs,pass_rate,schema_valid_rate,fail_closed_rate,unsafe_runs,provider_failures,p50_latency_ms,p95_latency_ms
+qwen2.5:7b,adaptive,30,0.4,0.238,1.0,0,0,13829.5,41104.9
+qwen2.5:7b,fixed,30,0.9,1.0,0.4,3,0,23853.6,29380.1
