@@ -152,13 +152,29 @@ def write_audit_artifacts(entries: Sequence[object], destination: Path) -> None:
         "listening_note": "copies are DC-centered and peak-normalized to 0.8 for safe comparison",
     }
     (destination / "summary.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+    total = report["recordings"]
+    if report["vibration_usable"] == total and report["audio_usable"] == total:
+        quality = f"All {total} vibration and {total} audio channels passed"
+    else:
+        quality = (
+            f"{report['vibration_usable']} of {total} vibration and {report['audio_usable']} "
+            f"of {total} audio channels passed"
+        )
+    primary = frame[frame["cohort"] == Cohort.PRIMARY.value]
+    quarantined = frame[frame["cohort"] == Cohort.QUARANTINED_LOAD.value]
+    ids = sorted(int(bearing) for bearing in quarantined["bearing_id"].unique())
+    if len(ids) > 1 and ids == list(range(ids[0], ids[-1] + 1)):
+        quarantined_label = f"{ids[0]}–{ids[-1]}"
+    else:
+        quarantined_label = ", ".join(map(str, ids)) or "none"
     (destination / "README.md").write_text(
         "# UORED-VAFCLS v5 data audit\n\n"
-        f"Audited {report['recordings']} recordings from {report['bearings']} bearings. "
-        f"All {report['vibration_usable']} vibration and {report['audio_usable']} audio channels "
-        "passed the frozen technical checks. The primary cohort contains 45 recordings from "
-        "15 bearings; 15 recordings from bearings 11–15 remain in the separate load-confound "
-        "audit. No recording was excluded for being difficult to classify.\n\n"
+        f"Audited {total} recordings from {report['bearings']} bearings. "
+        f"{quality} the frozen technical checks. The primary cohort contains "
+        f"{len(primary)} recordings from {primary['bearing_id'].nunique()} bearings; "
+        f"{len(quarantined)} recordings from bearings "
+        f"{quarantined_label} remain in the separate "
+        "load-confound audit. No recording was excluded for being difficult to classify.\n\n"
         "The release encodes RPM and load as a scalar in the first CSV row followed by zero "
         "padding. `recording_quality.csv` reports the recovered scalar values. "
         "`confound_table.csv` makes the ball-fault load shift explicit. Plots and normalized "

@@ -315,8 +315,8 @@ def _plot(scored: pd.DataFrame, path: Path) -> None:
         part = scored[
             (scored.test == test.name)
             & (scored.bearing == bearing)
-            & (scored.model_family == "isolation_forest")
-            & (scored.baseline_policy == "first_24h")
+            & (scored.model_family == "healthy_reference")
+            & (scored.baseline_policy == "first_72h")
         ]
         axis.plot(part.hours, part.anomaly_score, linewidth=0.6)
         axis.axhline(part.threshold.iloc[0], color="black", linestyle="--", linewidth=0.8)
