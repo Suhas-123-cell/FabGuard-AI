@@ -8,10 +8,12 @@ decisions.
 
 from __future__ import annotations
 
+import logging
 import math
 import re
 import time
 from collections.abc import Callable, Mapping, Sequence
+from contextlib import AbstractContextManager, nullcontext
 from dataclasses import dataclass
 from typing import Any, Literal, TypedDict
 from uuid import UUID
@@ -21,6 +23,8 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 
 from .llm import StructuredLLM
 from .retrieval import Passage, Retriever
+
+logger = logging.getLogger(__name__)
 
 _SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$")
 _WORD = re.compile(r"[a-z0-9]+")
@@ -544,6 +548,8 @@ class InvestigationGraph:
     deadline_seconds: float = 120.0
     max_retrievals: int = 2
     max_llm_calls: int = 2
+    # Log each node's latency, and open an OpenTelemetry span per node when the API is installed.
+    trace_nodes: bool = False
     monotonic: Any = time.monotonic
 
     def __post_init__(self) -> None:
@@ -696,6 +702,16 @@ class GraphRunContext:
     attempt_started: float | None = None
 
 
+def _node_span(name: str) -> AbstractContextManager[object]:
+    """An OpenTelemetry span when ``opentelemetry-api`` is installed, otherwise a no-op."""
+
+    try:
+        from opentelemetry import trace
+    except ImportError:
+        return nullcontext()
+    return trace.get_tracer("fabguard").start_as_current_span(f"fabguard.{name}")
+
+
 def build_langgraph(
     investigation: InvestigationGraph,
     *,
@@ -723,10 +739,18 @@ def build_langgraph(
             if guard:
                 guard()
             clock.append(runtime.context.attempt_started if runtime.context else None)
+            started = time.perf_counter()
             try:
-                update = node(state)
+                with _node_span(node.__name__) if investigation.trace_nodes else nullcontext():
+                    update = node(state)
             finally:
                 clock.pop()
+                if investigation.trace_nodes:
+                    logger.info(
+                        "node=%s latency_ms=%.1f",
+                        node.__name__,
+                        (time.perf_counter() - started) * 1_000,
+                    )
             if guard:
                 guard()
             return update
