@@ -4,9 +4,7 @@
 **For:** people prototyping predictive maintenance on recorded or live sensor data who need the LLM step to fail closed; everything runs locally.<br>
 **Headline:** 0.955 ± 0.079 balanced accuracy for the fusion Isolation Forest across 15 held-out bearings (leave-one-bearing-out on UORED-VAFCLS v5); the same method transferred poorly to two other rigs ([Other rigs](#other-rigs)).
 
-<!-- Demo placeholder: record a 60-second docs/demo.gif (monitor alarm -> investigation report -> human approval), then uncomment the next line.
 ![FabGuard alarm to approved ticket](docs/demo.gif)
--->
 
 ## Quickstart
 
