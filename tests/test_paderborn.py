@@ -74,7 +74,6 @@ def test_calibration_check_compares_fleet_and_machine_thresholds():
     assert result.machine_real_recall == 1.0
 
 
-
 def test_unreadable_recordings_are_excluded_and_reported(tmp_path, monkeypatch):
     from fabguard import paderborn
     from fabguard.config import ExperimentConfig

@@ -148,7 +148,7 @@ false alarms but cut its fold's recall from 0.88 to 0 for artificial damage and 
 real damage.
 
 A follow-up added after that result (`vibration_relative`: crest factor, kurtosis and each band's
-share of 0-10 kHz energy, so sensor gain cancels) did worse: balanced accuracy 0.50-0.53 and
+share of 0-10 kHz energy, so sensor gain cancels) did worse: balanced accuracy 0.49-0.53 and
 10-17% of damaged recordings caught. Sensor gain was not the reason for the poor transfer; a model
 fitted on other bearings does not carry over with these features. See
 `reports/paderborn-evaluation/`.
