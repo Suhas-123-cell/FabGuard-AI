@@ -3,7 +3,6 @@
 data
 runs
 notebooks
-reports
 tests
 **/__pycache__
 .env

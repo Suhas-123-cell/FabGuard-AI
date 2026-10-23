@@ -12,5 +12,6 @@ COPY configs ./configs
 COPY migrations ./migrations
 COPY references ./references
 COPY manifests ./manifests
+COPY reports ./reports
 RUN useradd --create-home fabguard && mkdir -p runs && chown fabguard runs
 USER fabguard
