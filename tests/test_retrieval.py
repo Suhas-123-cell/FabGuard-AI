@@ -2,15 +2,18 @@ from __future__ import annotations
 
 import pytest
 
+from fabguard.embeddings import hash_embedding
 from fabguard.retrieval import (
     InMemoryRetriever,
     Passage,
     PostgresRetriever,
     ReferenceDocument,
+    build_search_sql,
     chunk_document,
     contains_untrusted_directive,
     ingest_documents,
     load_reference_corpus,
+    postgres_retriever,
 )
 
 
@@ -141,3 +144,94 @@ def test_reference_document_requires_explicit_safe_applicability() -> None:
 )
 def test_detector_flags_the_malicious_evaluation_fixtures(text: str) -> None:
     assert contains_untrusted_directive(text)
+
+
+def test_hybrid_sql_fuses_ranks_not_raw_scores() -> None:
+    sql = build_search_sql("hybrid")
+
+    assert "FULL OUTER JOIN" in sql
+    assert "1.0 / (%(rrf_k)s + fts.rnk)" in sql
+    assert "1.0 / (%(rrf_k)s + vec.rnk)" in sql
+    assert "ts_rank_cd(search_vector, " in sql and "ORDER BY rnk" in sql
+    assert "1 - (embedding <=> " not in sql  # no raw cosine score added to a text rank
+
+
+def test_single_ranking_modes_use_only_their_branch() -> None:
+    assert "vec AS" not in build_search_sql("fts")
+    assert "fts AS" not in build_search_sql("vector")
+    assert "' | '" in build_search_sql("fts")
+    assert "' | '" not in build_search_sql("fts_and")
+
+
+def test_hybrid_passes_embedding_and_embedder_name_as_parameters() -> None:
+    calls: list[tuple[str, dict[str, object]]] = []
+
+    def execute(sql: str, params: dict[str, object]):
+        calls.append((sql, params))
+        return []
+
+    retriever = PostgresRetriever(execute=execute, embed=hash_embedding, embedder_name="hash")
+    retriever.search("outer race", limit=3, applicability=("general",))
+
+    _, params = calls[0]
+    assert len(params["embedding"]) == 384
+    assert params["embedder"] == "hash"
+    assert params["limit"] == 3
+    assert params["applicability"] == ["general"]
+
+
+def test_hybrid_without_an_embedder_falls_back_to_full_text_and_vector_refuses() -> None:
+    calls: list[tuple[str, dict[str, object]]] = []
+
+    def execute(sql: str, params: dict[str, object]):
+        calls.append((sql, params))
+        return []
+
+    PostgresRetriever(execute=execute).search("outer race")
+    assert "vec AS" not in calls[0][0]
+    assert "embedding" not in calls[0][1]
+    with pytest.raises(ValueError, match="needs an embedding"):
+        PostgresRetriever(execute=execute, mode="vector").search("outer race")
+
+
+def _ranks(retriever: PostgresRetriever, mode: str, query: str) -> dict[str, int]:
+    params = {
+        "query": query,
+        "applicability": [],
+        "limit": 100,
+        "candidates": 50,
+        "rrf_k": 60,
+        "embedding": hash_embedding(query),
+        "embedder": "hash",
+    }
+    rows = retriever.execute(build_search_sql(mode), params)
+    return {row["passage_id"]: rank for rank, row in enumerate(rows, start=1)}
+
+
+def test_postgres_rrf_score_is_the_sum_of_reciprocal_ranks(postgres_runtime) -> None:
+    settings, _ = postgres_runtime
+    retriever = postgres_retriever(settings.database_url, embedder="hash")
+    query = "inner race defect sidebands at shaft speed"
+
+    fts = _ranks(retriever, "fts", query)
+    vec = _ranks(retriever, "vector", query)
+    fused = retriever.search(query, limit=10)
+
+    assert fused and len(fused) == 10
+    assert [p.score for p in fused] == sorted((p.score for p in fused), reverse=True)
+    for passage in fused:
+        expected = sum(
+            1 / (60 + ranks[passage.passage_id])
+            for ranks in (fts, vec)
+            if passage.passage_id in ranks
+        )
+        assert passage.score == pytest.approx(expected)
+    assert fts["note-bpfi-formula:p1"] <= 5
+
+
+def test_postgres_vectors_from_another_embedder_are_ignored(postgres_runtime) -> None:
+    settings, _ = postgres_runtime
+    stale = postgres_retriever(settings.database_url, embedder="hash", mode="vector")
+    stale.embedder_name = "bge"
+
+    assert stale.search("inner race defect") == []

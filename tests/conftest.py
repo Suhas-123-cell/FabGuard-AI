@@ -20,6 +20,7 @@ from fabguard.api import Principal, create_app
 from fabguard.config import RuntimeSettings
 from fabguard.initialize import initialize_runtime
 from fabguard.replay import replay_recording
+from fabguard.retrieval import ingest_documents, load_reference_corpus
 from fabguard.storage import Database
 from fabguard.train import HealthyReferenceDetector
 
@@ -104,9 +105,10 @@ def postgres_runtime(tmp_path):
     )
     db = Database(settings.database_url, artifact_root=settings.artifact_root)
     try:
-        assert initialize_runtime(settings) == 4
+        expected = len(ingest_documents(load_reference_corpus("references/corpus.json")))
+        assert initialize_runtime(settings) == expected
         # Setup is safe to repeat on the same schema.
-        assert initialize_runtime(settings) == 4
+        assert initialize_runtime(settings) == expected
         yield settings, db
     finally:
         db.engine.dispose()

@@ -1,8 +1,8 @@
-"""Small, deterministic reference retrieval with explicit provenance.
+"""Reference retrieval with explicit provenance.
 
-The production application can persist these records in PostgreSQL, but the
-ranking contract deliberately has an in-memory implementation as well. That
-makes corpus review and workflow evaluation independent of infrastructure.
+Two implementations share one ``search`` contract. ``InMemoryRetriever`` is a lexical
+BM25 ranking for tests and offline use. ``PostgresRetriever`` fuses a PostgreSQL
+full-text ranking with a pgvector cosine ranking using Reciprocal Rank Fusion.
 Retrieved text is always data: callers must never concatenate it into a system
 message or execute directives found in it.
 """
@@ -10,7 +10,6 @@ message or execute directives found in it.
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import math
 import re
@@ -18,10 +17,12 @@ from collections import Counter
 from collections.abc import Callable, Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Protocol
+from typing import Literal, Protocol
 
 import numpy as np
 from pydantic import BaseModel, ConfigDict, Field, field_validator
+
+from .embeddings import Embedder, get_embedder, hash_embedding
 
 _SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$")
 _SAFE_TAG = re.compile(r"^[a-z0-9][a-z0-9_-]{0,63}$")
@@ -199,19 +200,6 @@ def _tokens(text: str) -> list[str]:
     return _TOKEN.findall(text.casefold())
 
 
-def hash_embedding(text: str, *, dimensions: int = 384) -> list[float]:
-    """Free deterministic embedding used identically for indexing and queries."""
-
-    values = [0.0] * dimensions
-    for token in _tokens(text):
-        digest = hashlib.blake2b(token.encode("utf-8"), digest_size=8).digest()
-        bucket = int.from_bytes(digest[:4], "big") % dimensions
-        sign = 1.0 if digest[4] & 1 else -1.0
-        values[bucket] += sign
-    norm = math.sqrt(sum(value * value for value in values)) or 1.0
-    return [value / norm for value in values]
-
-
 @dataclass(slots=True)
 class InMemoryRetriever:
     """Stable BM25-style lexical ranking for tests and local/offline use."""
@@ -277,12 +265,93 @@ class InMemoryRetriever:
         return [item[2].model_copy(update={"score": item[0]}) for item in ranked[:limit]]
 
 
+SearchMode = Literal["hybrid", "fts", "fts_and", "vector"]
+RRF_K = 60
+RRF_CANDIDATES = 50
+
+_ELIGIBLE = """
+    eligible AS (
+        SELECT * FROM reference_passages
+         WHERE reviewed = TRUE
+           AND (%(applicability)s::text[] = '{}' OR applicability && %(applicability)s::text[]
+                OR applicability @> ARRAY['general']::text[])
+    )"""
+# websearch_to_tsquery ANDs every term, so a natural-language question rarely matches.
+# Turning the ANDs into ORs keeps ts_rank_cd ordering while allowing partial matches.
+_TSQUERY_OR = "replace(websearch_to_tsquery('english', %(query)s)::text, ' & ', ' | ')::tsquery"
+_TSQUERY_AND = "websearch_to_tsquery('english', %(query)s)"
+_FTS_BRANCH = """
+    fts AS (
+        SELECT passage_id,
+               row_number() OVER (
+                   ORDER BY ts_rank_cd(search_vector, {tsquery}) DESC, passage_id
+               ) AS rnk
+          FROM eligible
+         WHERE search_vector @@ {tsquery}
+         ORDER BY rnk
+         LIMIT %(candidates)s
+    )"""
+_VECTOR_BRANCH = """
+    vec AS (
+        SELECT passage_id,
+               row_number() OVER (
+                   ORDER BY embedding <=> %(embedding)s::vector, passage_id
+               ) AS rnk
+          FROM eligible
+         WHERE embedding IS NOT NULL AND embedder = %(embedder)s
+         ORDER BY rnk
+         LIMIT %(candidates)s
+    )"""
+_COLUMNS = """p.source_id, p.passage_id, p.title, p.body AS text, p.section, p.page,
+           p.applicability, p.reviewed, p.untrusted_directive"""
+
+
+def build_search_sql(mode: SearchMode) -> str:
+    """Compose the ranking query from fixed fragments; user input is only ever a parameter."""
+
+    if mode == "hybrid":
+        ctes = [_ELIGIBLE, _FTS_BRANCH.format(tsquery=_TSQUERY_OR), _VECTOR_BRANCH]
+        # Reciprocal Rank Fusion: sum of 1 / (k + rank) over the rankings that contain the
+        # passage. Scores from the two rankings are never mixed, only their positions.
+        score = (
+            "COALESCE(1.0 / (%(rrf_k)s + fts.rnk), 0) + COALESCE(1.0 / (%(rrf_k)s + vec.rnk), 0)"
+        )
+        source = "fts FULL OUTER JOIN vec USING (passage_id)"
+    elif mode in ("fts", "fts_and"):
+        tsquery = _TSQUERY_OR if mode == "fts" else _TSQUERY_AND
+        ctes = [_ELIGIBLE, _FTS_BRANCH.format(tsquery=tsquery)]
+        score = "1.0 / (%(rrf_k)s + fts.rnk)"
+        source = "fts"
+    else:
+        ctes = [_ELIGIBLE, _VECTOR_BRANCH]
+        score = "1.0 / (%(rrf_k)s + vec.rnk)"
+        source = "vec"
+    return (
+        "WITH"
+        + ",".join(ctes)
+        + f"""
+    SELECT {_COLUMNS}, ({score})::float8 AS score
+      FROM {source}
+      JOIN reference_passages p USING (passage_id)
+     ORDER BY score DESC, p.passage_id ASC
+     LIMIT %(limit)s
+"""
+    )
+
+
 @dataclass(slots=True)
 class PostgresRetriever:
-    """Hybrid PostgreSQL search behind injected SQL/embedding boundaries."""
+    """PostgreSQL retrieval behind injected SQL/embedding boundaries.
+
+    ``hybrid`` (default) ranks by full-text and by vector similarity separately and fuses
+    the two rankings with Reciprocal Rank Fusion. Without an ``embed`` function it falls
+    back to full-text only. ``score`` is the fused RRF value, not a probability.
+    """
 
     execute: Callable[[str, Mapping[str, object]], Iterable[Mapping[str, object]]]
     embed: Callable[[str], Sequence[float]] | None = None
+    embedder_name: str = "hash"
+    mode: SearchMode = "hybrid"
 
     def search(
         self,
@@ -295,40 +364,51 @@ class PostgresRetriever:
             raise ValueError("query cannot be blank")
         if limit < 1 or limit > 20:
             raise ValueError("limit must be between 1 and 20")
-        embedding = list(self.embed(query)) if self.embed else None
-        sql = """
-            SELECT source_id, passage_id, title, body AS text, section, page,
-                   applicability, reviewed, untrusted_directive,
-                   ts_rank_cd(search_vector, websearch_to_tsquery('english', %(query)s))
-                   + CASE WHEN %(embedding)s IS NULL THEN 0
-                          ELSE 1 - (embedding <=> %(embedding)s::vector) END AS score
-              FROM reference_passages
-             WHERE reviewed = TRUE
-               AND (%(applicability)s::text[] = '{}' OR applicability && %(applicability)s::text[]
-                    OR applicability @> ARRAY['general']::text[])
-               AND (search_vector @@ websearch_to_tsquery('english', %(query)s)
-                    OR %(embedding)s IS NOT NULL)
-             ORDER BY score DESC, passage_id ASC
-             LIMIT %(limit)s
-        """
-        rows = self.execute(
-            sql,
-            {
-                "query": query,
-                "embedding": embedding,
-                "applicability": list(applicability),
-                "limit": limit,
-            },
-        )
+        mode: SearchMode = self.mode
+        if self.embed is None:
+            if mode == "vector":
+                raise ValueError("vector search needs an embedding function")
+            if mode == "hybrid":
+                mode = "fts"
+        embedding = list(self.embed(query)) if self.embed and mode in ("hybrid", "vector") else None
+        parameters: dict[str, object] = {
+            "query": query,
+            "applicability": list(applicability),
+            "limit": limit,
+            "candidates": RRF_CANDIDATES,
+            "rrf_k": RRF_K,
+        }
+        if embedding is not None:
+            parameters["embedding"] = embedding
+            parameters["embedder"] = self.embedder_name
+        rows = self.execute(build_search_sql(mode), parameters)
         return [Passage.model_validate(dict(row)) for row in rows]
+
+
+def _resolve_embedder(name: str | None) -> Embedder:
+    if name is None:
+        from .config import RuntimeSettings
+
+        name = RuntimeSettings().embedder
+    return get_embedder(name)
 
 
 def _psycopg_url(url: str) -> str:
     return url.replace("postgresql+psycopg://", "postgresql://", 1)
 
 
-def postgres_retriever(database_url: str) -> PostgresRetriever:
-    """Create a small connection-per-query PostgreSQL/pgvector retriever."""
+def postgres_retriever(
+    database_url: str,
+    *,
+    embedder: str | None = None,
+    mode: SearchMode = "hybrid",
+) -> PostgresRetriever:
+    """Create a small connection-per-query PostgreSQL/pgvector retriever.
+
+    ``embedder`` defaults to FABGUARD_EMBEDDER and must match the one used at index time.
+    """
+
+    backend = _resolve_embedder(embedder)
 
     def execute(sql: str, parameters: Mapping[str, object]) -> Iterable[Mapping[str, object]]:
         import psycopg
@@ -347,36 +427,49 @@ def postgres_retriever(database_url: str) -> PostgresRetriever:
                 cursor.execute(sql, adapted)
                 return list(cursor.fetchall())
 
-    return PostgresRetriever(execute=execute, embed=hash_embedding)
+    return PostgresRetriever(
+        execute=execute, embed=backend.embed_query, embedder_name=backend.name, mode=mode
+    )
 
 
-def index_reference_corpus(database_url: str, corpus_path: str | Path) -> int:
-    """Upsert the manually reviewed corpus and its local hash embeddings."""
+def index_reference_corpus(
+    database_url: str, corpus_path: str | Path, *, embedder: str | None = None
+) -> int:
+    """Upsert the reviewed corpus with embeddings from the chosen backend.
+
+    ``embedder`` defaults to FABGUARD_EMBEDDER. Re-run indexing after changing it.
+    """
 
     import psycopg
     from pgvector.psycopg import register_vector
 
+    backend = _resolve_embedder(embedder)
     documents = load_reference_corpus(corpus_path)
     passages = ingest_documents(documents)
+    vectors = backend.embed_documents(
+        [f"{passage.title} {passage.section} {passage.text}" for passage in passages]
+    )
     sql = """
         INSERT INTO reference_passages (
             passage_id, source_id, title, body, section, page, applicability,
-            reviewed, untrusted_directive, embedding
+            reviewed, untrusted_directive, embedding, embedder
         ) VALUES (
             %(passage_id)s, %(source_id)s, %(title)s, %(body)s, %(section)s,
-            %(page)s, %(applicability)s, %(reviewed)s, %(untrusted_directive)s, %(embedding)s
+            %(page)s, %(applicability)s, %(reviewed)s, %(untrusted_directive)s, %(embedding)s,
+            %(embedder)s
         )
         ON CONFLICT (passage_id) DO UPDATE SET
             source_id = EXCLUDED.source_id, title = EXCLUDED.title, body = EXCLUDED.body,
             section = EXCLUDED.section, page = EXCLUDED.page,
             applicability = EXCLUDED.applicability, reviewed = EXCLUDED.reviewed,
-            untrusted_directive = EXCLUDED.untrusted_directive, embedding = EXCLUDED.embedding
+            untrusted_directive = EXCLUDED.untrusted_directive, embedding = EXCLUDED.embedding,
+            embedder = EXCLUDED.embedder
     """
     with psycopg.connect(_psycopg_url(database_url), connect_timeout=5) as connection:
         register_vector(connection)
         with connection.cursor() as cursor:
             cursor.execute("SET LOCAL statement_timeout = 30000")
-            for passage in passages:
+            for passage, vector in zip(passages, vectors, strict=True):
                 cursor.execute(
                     sql,
                     {
@@ -389,10 +482,8 @@ def index_reference_corpus(database_url: str, corpus_path: str | Path) -> int:
                         "applicability": list(passage.applicability),
                         "reviewed": passage.reviewed,
                         "untrusted_directive": passage.untrusted_directive,
-                        "embedding": np.asarray(
-                            hash_embedding(f"{passage.title} {passage.section} {passage.text}"),
-                            dtype=np.float32,
-                        ),
+                        "embedding": np.asarray(vector, dtype=np.float32),
+                        "embedder": backend.name,
                     },
                 )
             passage_ids = [passage.passage_id for passage in passages]
@@ -408,8 +499,10 @@ def main() -> None:
 
     parser = argparse.ArgumentParser(description="Index reviewed FabGuard references")
     parser.add_argument("--corpus", default="references/corpus.json")
+    parser.add_argument("--embedder", choices=("hash", "bge"), help="default: FABGUARD_EMBEDDER")
     args = parser.parse_args()
-    count = index_reference_corpus(RuntimeSettings().database_url, args.corpus)
+    settings = RuntimeSettings()
+    count = index_reference_corpus(settings.database_url, args.corpus, embedder=args.embedder)
     print(f"indexed {count} reviewed passages")
 
 
@@ -417,8 +510,10 @@ __all__ = [
     "InMemoryRetriever",
     "Passage",
     "PostgresRetriever",
+    "RRF_K",
     "ReferenceDocument",
     "Retriever",
+    "build_search_sql",
     "chunk_document",
     "contains_untrusted_directive",
     "ingest_documents",
