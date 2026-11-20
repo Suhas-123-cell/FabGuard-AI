@@ -1,0 +1,4794 @@
+{
+  "generated_utc": "2026-11-20T06:34:20+00:00",
+  "postgres_version": "16.15 (Debian 16.15-1.pgdg12+2)",
+  "bge_model": "BAAI/bge-small-en-v1.5",
+  "passages": 58,
+  "queries": 43,
+  "style_counts": {
+    "descriptive": 30,
+    "terminology": 13
+  },
+  "recall_at": 5,
+  "ranking_depth": 20,
+  "results": [
+    {
+      "config": "fts_all_terms",
+      "embedder": "hash",
+      "mode": "fts_and",
+      "overall": {
+        "recall_at_5": 0.2791,
+        "mrr": 0.2907,
+        "hit_at_1": 0.2791
+      },
+      "by_style": {
+        "descriptive": {
+          "recall_at_5": 0.1667,
+          "mrr": 0.2,
+          "hit_at_1": 0.2
+        },
+        "terminology": {
+          "recall_at_5": 0.5385,
+          "mrr": 0.5,
+          "hit_at_1": 0.4615
+        }
+      },
+      "queries": [
+        {
+          "id": "q01",
+          "style": "terminology",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q02",
+          "style": "terminology",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q03",
+          "style": "terminology",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q04",
+          "style": "terminology",
+          "top5": [
+            "note-ftf-formula:p1",
+            "note-bsf-formula:p1",
+            "note-inner-race-sidebands:p1",
+            "note-defect-freq-example:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q05",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q06",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q07",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q08",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q09",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q10",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q11",
+          "style": "terminology",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q12",
+          "style": "terminology",
+          "top5": [
+            "note-hilbert-envelope:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q13",
+          "style": "terminology",
+          "top5": [
+            "note-sampling-for-envelope:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q14",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q15",
+          "style": "terminology",
+          "top5": [
+            "note-kurtosis-definition:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q16",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q17",
+          "style": "terminology",
+          "top5": [
+            "note-crest-factor:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q18",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q19",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q20",
+          "style": "terminology",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q21",
+          "style": "terminology",
+          "top5": [
+            "note-iso-zones:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q22",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q23",
+          "style": "terminology",
+          "top5": [
+            "skf-bearing-damage-guide:p1",
+            "note-measurement-quantities:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q24",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q25",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q26",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q27",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q28",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-signature:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q29",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q30",
+          "style": "terminology",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q31",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q32",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q33",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q34",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q35",
+          "style": "descriptive",
+          "top5": [
+            "note-signal-quality:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q36",
+          "style": "descriptive",
+          "top5": [
+            "note-acoustic-limits:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q37",
+          "style": "descriptive",
+          "top5": [
+            "note-proc-safety:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q38",
+          "style": "descriptive",
+          "top5": [
+            "note-proc-inspection-steps:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q39",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q40",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q41",
+          "style": "descriptive",
+          "top5": [
+            "note-report-guidance:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q42",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q43",
+          "style": "descriptive",
+          "top5": [],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        }
+      ]
+    },
+    {
+      "config": "fts_any_term",
+      "embedder": "hash",
+      "mode": "fts",
+      "overall": {
+        "recall_at_5": 0.907,
+        "mrr": 0.8425,
+        "hit_at_1": 0.7674
+      },
+      "by_style": {
+        "descriptive": {
+          "recall_at_5": 0.8667,
+          "mrr": 0.7908,
+          "hit_at_1": 0.7
+        },
+        "terminology": {
+          "recall_at_5": 1.0,
+          "mrr": 0.9615,
+          "hit_at_1": 0.9231
+        }
+      },
+      "queries": [
+        {
+          "id": "q01",
+          "style": "terminology",
+          "top5": [
+            "note-bpfo-formula:p1",
+            "note-defect-freq-example:p1",
+            "note-bsf-formula:p1",
+            "note-outer-race-load-zone:p1",
+            "note-bpfi-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q02",
+          "style": "terminology",
+          "top5": [
+            "note-bpfi-formula:p1",
+            "note-inner-race-sidebands:p1",
+            "note-bsf-formula:p1",
+            "note-order-tracking:p1",
+            "note-bpfo-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q03",
+          "style": "terminology",
+          "top5": [
+            "note-defect-freq-example:p1",
+            "note-defect-freq-slip:p1",
+            "note-ftf-formula:p1",
+            "note-bpfo-formula:p1",
+            "note-inner-race-sidebands:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q04",
+          "style": "terminology",
+          "top5": [
+            "note-ftf-formula:p1",
+            "note-bsf-formula:p1",
+            "note-defect-freq-example:p1",
+            "note-cage-damage:p1",
+            "note-defect-freq-slip:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q05",
+          "style": "descriptive",
+          "top5": [
+            "note-bsf-formula:p1",
+            "note-inner-race-sidebands:p1",
+            "note-bpfi-formula:p1",
+            "note-bpfo-formula:p1",
+            "note-outer-race-load-zone:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q06",
+          "style": "descriptive",
+          "top5": [
+            "note-rms-peak:p1",
+            "note-defect-freq-slip:p1",
+            "skf-vibration-diagnostic-guide:p1",
+            "note-crest-factor:p1",
+            "note-envelope-pitfalls:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q07",
+          "style": "descriptive",
+          "top5": [
+            "note-rms-peak:p1",
+            "note-electrical-fluting:p1",
+            "note-envelope-pitfalls:p1",
+            "timken-damage-guide-2023:p1",
+            "note-brinelling:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 0.3333333333333333,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q08",
+          "style": "descriptive",
+          "top5": [
+            "note-frequency-resolution:p1",
+            "uored-paper-2023:p1",
+            "note-iso-zones:p1",
+            "note-lube-mixing:p1",
+            "note-order-tracking:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q09",
+          "style": "descriptive",
+          "top5": [
+            "note-order-tracking:p1",
+            "note-rms-peak:p1",
+            "note-defect-freq-slip:p1",
+            "uored-paper-2023:p1",
+            "note-baseline-trending:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q10",
+          "style": "descriptive",
+          "top5": [
+            "note-envelope-overview:p1",
+            "note-unbalance-misalignment:p1",
+            "note-iso-overview:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-acoustic-limits:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q11",
+          "style": "terminology",
+          "top5": [
+            "note-envelope-band-selection:p1",
+            "note-band-energy:p1",
+            "note-hilbert-envelope:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-defect-freq-slip:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q12",
+          "style": "terminology",
+          "top5": [
+            "note-hilbert-envelope:p1",
+            "note-kurtosis-definition:p1",
+            "note-acoustic-limits:p1",
+            "note-envelope-band-selection:p1",
+            "note-envelope-overview:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q13",
+          "style": "terminology",
+          "top5": [
+            "note-sampling-for-envelope:p1",
+            "note-iso-limits-scope:p1",
+            "note-signal-quality:p1",
+            "uored-paper-2023:p1",
+            "note-baseline-trending:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q14",
+          "style": "descriptive",
+          "top5": [
+            "note-envelope-pitfalls:p1",
+            "note-envelope-overview:p1",
+            "note-hilbert-envelope:p1",
+            "note-bpfi-formula:p1",
+            "note-bpfo-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q15",
+          "style": "terminology",
+          "top5": [
+            "note-kurtosis-definition:p1",
+            "note-kurtosis-trend:p1",
+            "note-kurtosis-bandpass:p1",
+            "skf-bearing-damage-guide:p1",
+            "note-envelope-band-selection:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q16",
+          "style": "descriptive",
+          "top5": [
+            "note-iso-overview:p1",
+            "note-iso-zones:p1",
+            "skf-vibration-diagnostic-guide:p1",
+            "note-baseline-trending:p1",
+            "note-iso-limits-scope:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.058823529411764705,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q17",
+          "style": "terminology",
+          "top5": [
+            "note-rms-peak:p1",
+            "note-crest-factor:p1",
+            "note-envelope-pitfalls:p1",
+            "note-defect-freq-slip:p1",
+            "note-frequency-resolution:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q18",
+          "style": "descriptive",
+          "top5": [
+            "note-rms-peak:p1",
+            "note-bpfi-formula:p1",
+            "note-bpfo-formula:p1",
+            "note-fatigue-spalling:p1",
+            "note-inner-race-sidebands:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q19",
+          "style": "descriptive",
+          "top5": [
+            "note-window-statistics:p1",
+            "note-frequency-resolution:p1",
+            "note-order-tracking:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-kurtosis-definition:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q20",
+          "style": "terminology",
+          "top5": [
+            "note-iso-example-limits:p1",
+            "note-iso-overview:p1",
+            "note-iso-zones:p1",
+            "note-iso-limits-scope:p1",
+            "note-baseline-trending:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q21",
+          "style": "terminology",
+          "top5": [
+            "note-iso-zones:p1",
+            "note-inner-race-sidebands:p1",
+            "note-iso-example-limits:p1",
+            "note-lube-viscosity:p1",
+            "note-iso-limits-scope:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q22",
+          "style": "descriptive",
+          "top5": [
+            "note-iso-limits-scope:p1",
+            "note-iso-zones:p1",
+            "note-bpfo-formula:p1",
+            "note-iso-overview:p1",
+            "note-bpfi-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q23",
+          "style": "terminology",
+          "top5": [
+            "note-measurement-quantities:p1",
+            "note-iso-limits-scope:p1",
+            "note-fatigue-spalling:p1",
+            "note-defect-freq-slip:p1",
+            "note-envelope-pitfalls:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q24",
+          "style": "descriptive",
+          "top5": [
+            "note-baseline-trending:p1",
+            "note-outer-race-load-zone:p1",
+            "uored-paper-2023:p1",
+            "note-anomaly-vs-diagnosis:p1",
+            "note-envelope-pitfalls:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q25",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-overfill:p1",
+            "note-lube-mixing:p1",
+            "note-lube-interval:p1",
+            "note-temperature:p1",
+            "note-lube-contamination:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q26",
+          "style": "descriptive",
+          "top5": [
+            "note-defect-freq-identity:p1",
+            "note-fatigue-spalling:p1",
+            "note-lube-insufficient:p1",
+            "note-defect-freq-example:p1",
+            "note-bpfo-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q27",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-contamination:p1",
+            "note-lube-mixing:p1",
+            "note-lube-overfill:p1",
+            "note-brinelling:p1",
+            "note-lube-insufficient:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q28",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-signature:p1",
+            "note-rms-peak:p1",
+            "note-crest-factor:p1",
+            "note-temperature:p1",
+            "skf-bearing-damage-guide:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q29",
+          "style": "descriptive",
+          "top5": [
+            "note-fatigue-spalling:p1",
+            "note-lube-overfill:p1",
+            "note-defect-freq-example:p1",
+            "note-defect-freq-identity:p1",
+            "note-defect-freq-slip:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q30",
+          "style": "terminology",
+          "top5": [
+            "note-lube-viscosity:p1",
+            "note-order-tracking:p1",
+            "note-baseline-trending:p1",
+            "note-lube-contamination:p1",
+            "note-unbalance-misalignment:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q31",
+          "style": "descriptive",
+          "top5": [
+            "note-order-tracking:p1",
+            "note-unbalance-misalignment:p1",
+            "note-baseline-trending:p1",
+            "note-iso-overview:p1",
+            "note-iso-zones:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q32",
+          "style": "descriptive",
+          "top5": [
+            "note-electrical-fluting:p1",
+            "note-order-tracking:p1",
+            "note-bpfi-formula:p1",
+            "note-bpfo-formula:p1",
+            "note-brinelling:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q33",
+          "style": "descriptive",
+          "top5": [
+            "note-iso-overview:p1",
+            "note-iso-zones:p1",
+            "note-brinelling:p1",
+            "note-iso-limits-scope:p1",
+            "note-lab-vs-field:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q34",
+          "style": "descriptive",
+          "top5": [
+            "note-measurement-quantities:p1",
+            "note-sampling-for-envelope:p1",
+            "note-sensor-mounting:p1",
+            "uored-paper-2023:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q35",
+          "style": "descriptive",
+          "top5": [
+            "note-signal-quality:p1",
+            "note-sampling-for-envelope:p1",
+            "uored-paper-2023:p1",
+            "note-frequency-resolution:p1",
+            "note-acoustic-limits:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q36",
+          "style": "descriptive",
+          "top5": [
+            "note-acoustic-limits:p1",
+            "note-iso-overview:p1",
+            "note-iso-zones:p1",
+            "note-iso-limits-scope:p1",
+            "note-lab-vs-field:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q37",
+          "style": "descriptive",
+          "top5": [
+            "note-proc-safety:p1",
+            "note-iso-overview:p1",
+            "note-iso-zones:p1",
+            "note-iso-limits-scope:p1",
+            "note-lab-vs-field:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q38",
+          "style": "descriptive",
+          "top5": [
+            "note-proc-inspection-steps:p1",
+            "note-defect-freq-identity:p1",
+            "note-looseness:p1",
+            "note-order-tracking:p1",
+            "note-signal-quality:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q39",
+          "style": "descriptive",
+          "top5": [
+            "note-window-statistics:p1",
+            "note-frequency-resolution:p1",
+            "note-anomaly-vs-diagnosis:p1",
+            "note-iso-limits-scope:p1",
+            "note-proc-confirmation:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q40",
+          "style": "descriptive",
+          "top5": [
+            "note-maint-strategy:p1",
+            "note-unbalance-misalignment:p1",
+            "note-band-energy:p1",
+            "note-cage-damage:p1",
+            "skf-bearing-damage-guide:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q41",
+          "style": "descriptive",
+          "top5": [
+            "note-report-guidance:p1",
+            "note-kurtosis-definition:p1",
+            "skf-vibration-diagnostic-guide:p1",
+            "uored-paper-2023:p1",
+            "note-fatigue-spalling:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q42",
+          "style": "descriptive",
+          "top5": [
+            "note-lab-vs-field:p1",
+            "note-band-energy:p1",
+            "note-bsf-formula:p1",
+            "note-report-guidance:p1",
+            "uored-paper-2023:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q43",
+          "style": "descriptive",
+          "top5": [
+            "note-fatigue-spalling:p1",
+            "note-brinelling:p1",
+            "note-cage-damage:p1",
+            "note-electrical-fluting:p1",
+            "note-installation-fits:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        }
+      ]
+    },
+    {
+      "config": "hash_vector",
+      "embedder": "hash",
+      "mode": "vector",
+      "overall": {
+        "recall_at_5": 0.6512,
+        "mrr": 0.6274,
+        "hit_at_1": 0.5349
+      },
+      "by_style": {
+        "descriptive": {
+          "recall_at_5": 0.6,
+          "mrr": 0.5717,
+          "hit_at_1": 0.4667
+        },
+        "terminology": {
+          "recall_at_5": 0.7692,
+          "mrr": 0.7557,
+          "hit_at_1": 0.6923
+        }
+      },
+      "queries": [
+        {
+          "id": "q01",
+          "style": "terminology",
+          "top5": [
+            "note-inner-race-sidebands:p1",
+            "note-hilbert-envelope:p1",
+            "note-bpfi-formula:p1",
+            "note-outer-race-load-zone:p1",
+            "note-defect-freq-identity:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.14285714285714285,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q02",
+          "style": "terminology",
+          "top5": [
+            "note-bpfi-formula:p1",
+            "note-order-tracking:p1",
+            "note-frequency-resolution:p1",
+            "note-inner-race-sidebands:p1",
+            "note-defect-freq-example:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q03",
+          "style": "terminology",
+          "top5": [
+            "note-inner-race-sidebands:p1",
+            "note-ftf-formula:p1",
+            "note-bpfo-formula:p1",
+            "note-lube-signature:p1",
+            "note-lube-viscosity:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.09090909090909091,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q04",
+          "style": "terminology",
+          "top5": [
+            "note-ftf-formula:p1",
+            "note-lube-signature:p1",
+            "note-cage-damage:p1",
+            "note-inner-race-sidebands:p1",
+            "note-lube-insufficient:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q05",
+          "style": "descriptive",
+          "top5": [
+            "note-bsf-formula:p1",
+            "note-sampling-for-envelope:p1",
+            "note-bpfi-formula:p1",
+            "note-inner-race-sidebands:p1",
+            "note-defect-freq-identity:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q06",
+          "style": "descriptive",
+          "top5": [
+            "note-envelope-band-selection:p1",
+            "note-proc-confirmation:p1",
+            "note-sensor-mounting:p1",
+            "note-defect-freq-slip:p1",
+            "note-report-guidance:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.25,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q07",
+          "style": "descriptive",
+          "top5": [
+            "note-rms-peak:p1",
+            "note-hilbert-envelope:p1",
+            "note-outer-race-load-zone:p1",
+            "note-defect-freq-identity:p1",
+            "note-inner-race-sidebands:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 0.3333333333333333,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q08",
+          "style": "descriptive",
+          "top5": [
+            "note-envelope-pitfalls:p1",
+            "note-sensor-mounting:p1",
+            "note-iso-zones:p1",
+            "note-lube-signature:p1",
+            "note-iso-limits-scope:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q09",
+          "style": "descriptive",
+          "top5": [
+            "note-order-tracking:p1",
+            "note-hilbert-envelope:p1",
+            "note-defect-freq-identity:p1",
+            "note-envelope-band-selection:p1",
+            "note-envelope-overview:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q10",
+          "style": "descriptive",
+          "top5": [
+            "note-envelope-overview:p1",
+            "note-rms-peak:p1",
+            "skf-bearing-damage-guide:p1",
+            "note-lube-signature:p1",
+            "note-measurement-quantities:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q11",
+          "style": "terminology",
+          "top5": [
+            "note-envelope-band-selection:p1",
+            "note-sampling-for-envelope:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-hilbert-envelope:p1",
+            "note-frequency-resolution:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q12",
+          "style": "terminology",
+          "top5": [
+            "note-hilbert-envelope:p1",
+            "note-envelope-band-selection:p1",
+            "note-defect-freq-identity:p1",
+            "note-envelope-overview:p1",
+            "note-inner-race-sidebands:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q13",
+          "style": "terminology",
+          "top5": [
+            "note-sampling-for-envelope:p1",
+            "note-envelope-band-selection:p1",
+            "note-sensor-mounting:p1",
+            "note-envelope-pitfalls:p1",
+            "note-baseline-trending:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q14",
+          "style": "descriptive",
+          "top5": [
+            "note-bpfi-formula:p1",
+            "note-envelope-pitfalls:p1",
+            "note-inner-race-sidebands:p1",
+            "note-rms-peak:p1",
+            "note-bpfo-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q15",
+          "style": "terminology",
+          "top5": [
+            "note-kurtosis-definition:p1",
+            "note-kurtosis-trend:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-looseness:p1",
+            "timken-damage-guide-2023:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q16",
+          "style": "descriptive",
+          "top5": [
+            "note-hilbert-envelope:p1",
+            "note-defect-freq-identity:p1",
+            "note-envelope-band-selection:p1",
+            "note-band-energy:p1",
+            "note-inner-race-sidebands:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q17",
+          "style": "terminology",
+          "top5": [
+            "note-rms-peak:p1",
+            "note-crest-factor:p1",
+            "note-ftf-formula:p1",
+            "note-lube-signature:p1",
+            "note-envelope-pitfalls:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q18",
+          "style": "descriptive",
+          "top5": [
+            "note-rms-peak:p1",
+            "note-iso-limits-scope:p1",
+            "note-crest-factor:p1",
+            "note-envelope-pitfalls:p1",
+            "note-brinelling:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q19",
+          "style": "descriptive",
+          "top5": [
+            "note-window-statistics:p1",
+            "note-kurtosis-trend:p1",
+            "note-frequency-resolution:p1",
+            "note-order-tracking:p1",
+            "note-kurtosis-definition:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q20",
+          "style": "terminology",
+          "top5": [
+            "note-envelope-pitfalls:p1",
+            "note-iso-limits-scope:p1",
+            "skf-vibration-diagnostic-guide:p1",
+            "note-acoustic-limits:p1",
+            "note-window-statistics:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.09090909090909091,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q21",
+          "style": "terminology",
+          "top5": [
+            "note-iso-zones:p1",
+            "note-iso-example-limits:p1",
+            "note-lube-interval:p1",
+            "note-iso-limits-scope:p1",
+            "note-proc-inspection-steps:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q22",
+          "style": "descriptive",
+          "top5": [
+            "note-inner-race-sidebands:p1",
+            "note-defect-freq-identity:p1",
+            "note-hilbert-envelope:p1",
+            "note-envelope-band-selection:p1",
+            "note-bpfi-formula:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q23",
+          "style": "terminology",
+          "top5": [
+            "note-measurement-quantities:p1",
+            "note-iso-limits-scope:p1",
+            "note-cage-damage:p1",
+            "note-sensor-mounting:p1",
+            "note-envelope-pitfalls:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q24",
+          "style": "descriptive",
+          "top5": [
+            "note-baseline-trending:p1",
+            "note-envelope-band-selection:p1",
+            "note-hilbert-envelope:p1",
+            "note-bsf-formula:p1",
+            "note-inner-race-sidebands:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q25",
+          "style": "descriptive",
+          "top5": [
+            "note-brinelling:p1",
+            "note-lube-overfill:p1",
+            "note-lube-insufficient:p1",
+            "note-temperature:p1",
+            "note-lube-interval:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q26",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-insufficient:p1",
+            "note-acoustic-limits:p1",
+            "note-fatigue-spalling:p1",
+            "note-defect-freq-identity:p1",
+            "note-defect-freq-example:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q27",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-contamination:p1",
+            "note-band-energy:p1",
+            "note-hilbert-envelope:p1",
+            "note-looseness:p1",
+            "note-sensor-mounting:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q28",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-signature:p1",
+            "note-rms-peak:p1",
+            "skf-bearing-damage-guide:p1",
+            "note-measurement-quantities:p1",
+            "note-defect-freq-example:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q29",
+          "style": "descriptive",
+          "top5": [
+            "note-outer-race-load-zone:p1",
+            "note-envelope-overview:p1",
+            "note-defect-freq-identity:p1",
+            "note-sensor-mounting:p1",
+            "note-envelope-band-selection:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q30",
+          "style": "terminology",
+          "top5": [
+            "note-lube-viscosity:p1",
+            "note-rms-peak:p1",
+            "note-order-tracking:p1",
+            "note-defect-freq-identity:p1",
+            "note-inner-race-sidebands:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q31",
+          "style": "descriptive",
+          "top5": [
+            "note-unbalance-misalignment:p1",
+            "note-bpfi-formula:p1",
+            "note-order-tracking:p1",
+            "note-bpfo-formula:p1",
+            "note-bsf-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q32",
+          "style": "descriptive",
+          "top5": [
+            "note-electrical-fluting:p1",
+            "note-brinelling:p1",
+            "note-defect-freq-identity:p1",
+            "note-frequency-resolution:p1",
+            "note-hilbert-envelope:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q33",
+          "style": "descriptive",
+          "top5": [
+            "note-hilbert-envelope:p1",
+            "note-defect-freq-identity:p1",
+            "note-inner-race-sidebands:p1",
+            "note-envelope-band-selection:p1",
+            "note-band-energy:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.125,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q34",
+          "style": "descriptive",
+          "top5": [
+            "uored-paper-2023:p1",
+            "note-outer-race-load-zone:p1",
+            "note-hilbert-envelope:p1",
+            "note-lube-contamination:p1",
+            "note-envelope-overview:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.08333333333333333,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q35",
+          "style": "descriptive",
+          "top5": [
+            "note-acoustic-limits:p1",
+            "note-defect-freq-slip:p1",
+            "note-window-statistics:p1",
+            "note-lab-vs-field:p1",
+            "skf-bearing-damage-guide:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.1111111111111111,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q36",
+          "style": "descriptive",
+          "top5": [
+            "note-bpfo-formula:p1",
+            "note-order-tracking:p1",
+            "note-acoustic-limits:p1",
+            "note-inner-race-sidebands:p1",
+            "note-defect-freq-identity:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q37",
+          "style": "descriptive",
+          "top5": [
+            "note-proc-safety:p1",
+            "note-iso-zones:p1",
+            "note-iso-limits-scope:p1",
+            "note-lube-signature:p1",
+            "note-lube-insufficient:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q38",
+          "style": "descriptive",
+          "top5": [
+            "note-sensor-mounting:p1",
+            "note-defect-freq-identity:p1",
+            "note-envelope-band-selection:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-proc-confirmation:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.09090909090909091,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q39",
+          "style": "descriptive",
+          "top5": [
+            "note-hilbert-envelope:p1",
+            "note-looseness:p1",
+            "note-fatigue-spalling:p1",
+            "note-envelope-overview:p1",
+            "note-proc-confirmation:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 0.2,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q40",
+          "style": "descriptive",
+          "top5": [
+            "skf-bearing-damage-guide:p1",
+            "note-lube-contamination:p1",
+            "note-cage-damage:p1",
+            "note-acoustic-limits:p1",
+            "note-kurtosis-trend:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.125,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q41",
+          "style": "descriptive",
+          "top5": [
+            "note-report-guidance:p1",
+            "note-fatigue-spalling:p1",
+            "note-envelope-band-selection:p1",
+            "skf-vibration-diagnostic-guide:p1",
+            "note-inner-race-sidebands:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q42",
+          "style": "descriptive",
+          "top5": [
+            "note-envelope-pitfalls:p1",
+            "note-lab-vs-field:p1",
+            "note-window-statistics:p1",
+            "note-acoustic-limits:p1",
+            "note-iso-limits-scope:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q43",
+          "style": "descriptive",
+          "top5": [
+            "note-fatigue-spalling:p1",
+            "note-kurtosis-trend:p1",
+            "note-envelope-overview:p1",
+            "note-rms-peak:p1",
+            "note-frequency-resolution:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        }
+      ]
+    },
+    {
+      "config": "hash_score_sum",
+      "embedder": "hash",
+      "mode": "score_sum",
+      "overall": {
+        "recall_at_5": 0.6512,
+        "mrr": 0.6433,
+        "hit_at_1": 0.5581
+      },
+      "by_style": {
+        "descriptive": {
+          "recall_at_5": 0.6,
+          "mrr": 0.578,
+          "hit_at_1": 0.4667
+        },
+        "terminology": {
+          "recall_at_5": 0.7692,
+          "mrr": 0.7942,
+          "hit_at_1": 0.7692
+        }
+      },
+      "queries": [
+        {
+          "id": "q01",
+          "style": "terminology",
+          "top5": [
+            "note-inner-race-sidebands:p1",
+            "note-hilbert-envelope:p1",
+            "note-bpfi-formula:p1",
+            "note-outer-race-load-zone:p1",
+            "note-defect-freq-identity:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.14285714285714285,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q02",
+          "style": "terminology",
+          "top5": [
+            "note-bpfi-formula:p1",
+            "note-order-tracking:p1",
+            "note-frequency-resolution:p1",
+            "note-inner-race-sidebands:p1",
+            "note-defect-freq-example:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q03",
+          "style": "terminology",
+          "top5": [
+            "note-inner-race-sidebands:p1",
+            "note-ftf-formula:p1",
+            "note-bpfo-formula:p1",
+            "note-lube-signature:p1",
+            "note-lube-viscosity:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.09090909090909091,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q04",
+          "style": "terminology",
+          "top5": [
+            "note-ftf-formula:p1",
+            "note-lube-signature:p1",
+            "note-cage-damage:p1",
+            "note-bsf-formula:p1",
+            "note-inner-race-sidebands:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q05",
+          "style": "descriptive",
+          "top5": [
+            "note-bsf-formula:p1",
+            "note-sampling-for-envelope:p1",
+            "note-bpfi-formula:p1",
+            "note-inner-race-sidebands:p1",
+            "note-defect-freq-identity:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q06",
+          "style": "descriptive",
+          "top5": [
+            "note-envelope-band-selection:p1",
+            "note-proc-confirmation:p1",
+            "note-sensor-mounting:p1",
+            "note-defect-freq-slip:p1",
+            "note-report-guidance:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.25,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q07",
+          "style": "descriptive",
+          "top5": [
+            "note-rms-peak:p1",
+            "note-hilbert-envelope:p1",
+            "note-outer-race-load-zone:p1",
+            "note-defect-freq-identity:p1",
+            "note-inner-race-sidebands:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 0.3333333333333333,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q08",
+          "style": "descriptive",
+          "top5": [
+            "note-envelope-pitfalls:p1",
+            "note-sensor-mounting:p1",
+            "note-iso-zones:p1",
+            "note-lube-signature:p1",
+            "note-iso-limits-scope:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q09",
+          "style": "descriptive",
+          "top5": [
+            "note-order-tracking:p1",
+            "note-hilbert-envelope:p1",
+            "note-defect-freq-identity:p1",
+            "note-envelope-band-selection:p1",
+            "note-envelope-overview:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q10",
+          "style": "descriptive",
+          "top5": [
+            "note-envelope-overview:p1",
+            "note-rms-peak:p1",
+            "skf-bearing-damage-guide:p1",
+            "note-lube-signature:p1",
+            "note-measurement-quantities:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q11",
+          "style": "terminology",
+          "top5": [
+            "note-envelope-band-selection:p1",
+            "note-sampling-for-envelope:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-hilbert-envelope:p1",
+            "note-frequency-resolution:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q12",
+          "style": "terminology",
+          "top5": [
+            "note-hilbert-envelope:p1",
+            "note-envelope-band-selection:p1",
+            "note-defect-freq-identity:p1",
+            "note-envelope-overview:p1",
+            "note-inner-race-sidebands:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q13",
+          "style": "terminology",
+          "top5": [
+            "note-sampling-for-envelope:p1",
+            "note-envelope-band-selection:p1",
+            "note-sensor-mounting:p1",
+            "note-envelope-pitfalls:p1",
+            "note-baseline-trending:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q14",
+          "style": "descriptive",
+          "top5": [
+            "note-bpfi-formula:p1",
+            "note-envelope-pitfalls:p1",
+            "note-inner-race-sidebands:p1",
+            "note-rms-peak:p1",
+            "note-bpfo-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q15",
+          "style": "terminology",
+          "top5": [
+            "note-kurtosis-definition:p1",
+            "note-kurtosis-trend:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-looseness:p1",
+            "timken-damage-guide-2023:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q16",
+          "style": "descriptive",
+          "top5": [
+            "note-hilbert-envelope:p1",
+            "note-defect-freq-identity:p1",
+            "note-envelope-band-selection:p1",
+            "note-band-energy:p1",
+            "note-inner-race-sidebands:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q17",
+          "style": "terminology",
+          "top5": [
+            "note-crest-factor:p1",
+            "note-rms-peak:p1",
+            "note-ftf-formula:p1",
+            "note-lube-signature:p1",
+            "note-envelope-pitfalls:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q18",
+          "style": "descriptive",
+          "top5": [
+            "note-rms-peak:p1",
+            "note-iso-limits-scope:p1",
+            "note-crest-factor:p1",
+            "note-envelope-pitfalls:p1",
+            "note-brinelling:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q19",
+          "style": "descriptive",
+          "top5": [
+            "note-window-statistics:p1",
+            "note-kurtosis-trend:p1",
+            "note-frequency-resolution:p1",
+            "note-order-tracking:p1",
+            "note-kurtosis-definition:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q20",
+          "style": "terminology",
+          "top5": [
+            "note-envelope-pitfalls:p1",
+            "note-iso-limits-scope:p1",
+            "skf-vibration-diagnostic-guide:p1",
+            "note-acoustic-limits:p1",
+            "note-window-statistics:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.09090909090909091,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q21",
+          "style": "terminology",
+          "top5": [
+            "note-iso-zones:p1",
+            "note-iso-example-limits:p1",
+            "note-lube-interval:p1",
+            "note-iso-limits-scope:p1",
+            "note-proc-inspection-steps:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q22",
+          "style": "descriptive",
+          "top5": [
+            "note-inner-race-sidebands:p1",
+            "note-defect-freq-identity:p1",
+            "note-hilbert-envelope:p1",
+            "note-envelope-band-selection:p1",
+            "note-bpfi-formula:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q23",
+          "style": "terminology",
+          "top5": [
+            "note-measurement-quantities:p1",
+            "skf-bearing-damage-guide:p1",
+            "note-iso-limits-scope:p1",
+            "note-cage-damage:p1",
+            "note-sensor-mounting:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q24",
+          "style": "descriptive",
+          "top5": [
+            "note-baseline-trending:p1",
+            "note-envelope-band-selection:p1",
+            "note-hilbert-envelope:p1",
+            "note-bsf-formula:p1",
+            "note-inner-race-sidebands:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q25",
+          "style": "descriptive",
+          "top5": [
+            "note-brinelling:p1",
+            "note-lube-overfill:p1",
+            "note-lube-insufficient:p1",
+            "note-temperature:p1",
+            "note-lube-interval:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q26",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-insufficient:p1",
+            "note-acoustic-limits:p1",
+            "note-fatigue-spalling:p1",
+            "note-defect-freq-identity:p1",
+            "note-defect-freq-example:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q27",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-contamination:p1",
+            "note-band-energy:p1",
+            "note-hilbert-envelope:p1",
+            "note-looseness:p1",
+            "note-sensor-mounting:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q28",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-signature:p1",
+            "note-rms-peak:p1",
+            "skf-bearing-damage-guide:p1",
+            "note-measurement-quantities:p1",
+            "note-defect-freq-example:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q29",
+          "style": "descriptive",
+          "top5": [
+            "note-outer-race-load-zone:p1",
+            "note-envelope-overview:p1",
+            "note-defect-freq-identity:p1",
+            "note-sensor-mounting:p1",
+            "note-envelope-band-selection:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q30",
+          "style": "terminology",
+          "top5": [
+            "note-lube-viscosity:p1",
+            "note-rms-peak:p1",
+            "note-order-tracking:p1",
+            "note-defect-freq-identity:p1",
+            "note-inner-race-sidebands:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q31",
+          "style": "descriptive",
+          "top5": [
+            "note-unbalance-misalignment:p1",
+            "note-bpfi-formula:p1",
+            "note-order-tracking:p1",
+            "note-bpfo-formula:p1",
+            "note-bsf-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q32",
+          "style": "descriptive",
+          "top5": [
+            "note-electrical-fluting:p1",
+            "note-brinelling:p1",
+            "note-defect-freq-identity:p1",
+            "note-frequency-resolution:p1",
+            "note-hilbert-envelope:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q33",
+          "style": "descriptive",
+          "top5": [
+            "note-hilbert-envelope:p1",
+            "note-defect-freq-identity:p1",
+            "note-inner-race-sidebands:p1",
+            "note-envelope-band-selection:p1",
+            "note-band-energy:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.125,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q34",
+          "style": "descriptive",
+          "top5": [
+            "uored-paper-2023:p1",
+            "note-outer-race-load-zone:p1",
+            "note-hilbert-envelope:p1",
+            "note-lube-contamination:p1",
+            "note-envelope-overview:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.08333333333333333,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q35",
+          "style": "descriptive",
+          "top5": [
+            "note-acoustic-limits:p1",
+            "note-defect-freq-slip:p1",
+            "note-window-statistics:p1",
+            "note-lab-vs-field:p1",
+            "skf-bearing-damage-guide:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.1111111111111111,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q36",
+          "style": "descriptive",
+          "top5": [
+            "note-bpfo-formula:p1",
+            "note-acoustic-limits:p1",
+            "note-order-tracking:p1",
+            "note-inner-race-sidebands:p1",
+            "note-defect-freq-identity:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q37",
+          "style": "descriptive",
+          "top5": [
+            "note-proc-safety:p1",
+            "note-iso-zones:p1",
+            "note-iso-limits-scope:p1",
+            "note-lube-signature:p1",
+            "note-lube-insufficient:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q38",
+          "style": "descriptive",
+          "top5": [
+            "note-sensor-mounting:p1",
+            "note-defect-freq-identity:p1",
+            "note-envelope-band-selection:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-proc-confirmation:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.1111111111111111,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q39",
+          "style": "descriptive",
+          "top5": [
+            "note-hilbert-envelope:p1",
+            "note-looseness:p1",
+            "note-fatigue-spalling:p1",
+            "note-envelope-overview:p1",
+            "note-proc-confirmation:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 0.2,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q40",
+          "style": "descriptive",
+          "top5": [
+            "skf-bearing-damage-guide:p1",
+            "note-lube-contamination:p1",
+            "note-cage-damage:p1",
+            "note-acoustic-limits:p1",
+            "note-kurtosis-trend:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.125,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q41",
+          "style": "descriptive",
+          "top5": [
+            "note-report-guidance:p1",
+            "note-fatigue-spalling:p1",
+            "note-envelope-band-selection:p1",
+            "skf-vibration-diagnostic-guide:p1",
+            "note-inner-race-sidebands:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q42",
+          "style": "descriptive",
+          "top5": [
+            "note-envelope-pitfalls:p1",
+            "note-lab-vs-field:p1",
+            "note-window-statistics:p1",
+            "note-acoustic-limits:p1",
+            "note-iso-limits-scope:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q43",
+          "style": "descriptive",
+          "top5": [
+            "note-fatigue-spalling:p1",
+            "note-kurtosis-trend:p1",
+            "note-envelope-overview:p1",
+            "note-rms-peak:p1",
+            "note-frequency-resolution:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        }
+      ]
+    },
+    {
+      "config": "hash_rrf",
+      "embedder": "hash",
+      "mode": "hybrid",
+      "overall": {
+        "recall_at_5": 0.8488,
+        "mrr": 0.7822,
+        "hit_at_1": 0.6744
+      },
+      "by_style": {
+        "descriptive": {
+          "recall_at_5": 0.8,
+          "mrr": 0.7629,
+          "hit_at_1": 0.6667
+        },
+        "terminology": {
+          "recall_at_5": 0.9615,
+          "mrr": 0.8269,
+          "hit_at_1": 0.6923
+        }
+      },
+      "queries": [
+        {
+          "id": "q01",
+          "style": "terminology",
+          "top5": [
+            "note-inner-race-sidebands:p1",
+            "note-bpfo-formula:p1",
+            "note-bpfi-formula:p1",
+            "note-outer-race-load-zone:p1",
+            "note-bsf-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q02",
+          "style": "terminology",
+          "top5": [
+            "note-bpfi-formula:p1",
+            "note-inner-race-sidebands:p1",
+            "note-order-tracking:p1",
+            "note-bsf-formula:p1",
+            "note-frequency-resolution:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q03",
+          "style": "terminology",
+          "top5": [
+            "note-ftf-formula:p1",
+            "note-inner-race-sidebands:p1",
+            "note-bpfo-formula:p1",
+            "note-defect-freq-example:p1",
+            "note-bpfi-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.25,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q04",
+          "style": "terminology",
+          "top5": [
+            "note-ftf-formula:p1",
+            "note-cage-damage:p1",
+            "note-defect-freq-example:p1",
+            "note-inner-race-sidebands:p1",
+            "note-defect-freq-slip:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q05",
+          "style": "descriptive",
+          "top5": [
+            "note-bsf-formula:p1",
+            "note-inner-race-sidebands:p1",
+            "note-bpfi-formula:p1",
+            "note-sampling-for-envelope:p1",
+            "note-bpfo-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q06",
+          "style": "descriptive",
+          "top5": [
+            "note-defect-freq-slip:p1",
+            "note-proc-confirmation:p1",
+            "note-crest-factor:p1",
+            "note-sensor-mounting:p1",
+            "note-baseline-trending:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q07",
+          "style": "descriptive",
+          "top5": [
+            "note-rms-peak:p1",
+            "note-outer-race-load-zone:p1",
+            "note-ftf-formula:p1",
+            "note-brinelling:p1",
+            "note-defect-freq-identity:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q08",
+          "style": "descriptive",
+          "top5": [
+            "note-iso-zones:p1",
+            "note-sensor-mounting:p1",
+            "skf-vibration-diagnostic-guide:p1",
+            "note-lube-mixing:p1",
+            "note-anomaly-vs-diagnosis:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.07692307692307693,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q09",
+          "style": "descriptive",
+          "top5": [
+            "note-order-tracking:p1",
+            "uored-paper-2023:p1",
+            "skf-vibration-diagnostic-guide:p1",
+            "note-frequency-resolution:p1",
+            "note-hilbert-envelope:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q10",
+          "style": "descriptive",
+          "top5": [
+            "note-envelope-overview:p1",
+            "skf-bearing-damage-guide:p1",
+            "note-iso-zones:p1",
+            "note-iso-overview:p1",
+            "note-measurement-quantities:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q11",
+          "style": "terminology",
+          "top5": [
+            "note-envelope-band-selection:p1",
+            "note-hilbert-envelope:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-sampling-for-envelope:p1",
+            "note-band-energy:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q12",
+          "style": "terminology",
+          "top5": [
+            "note-hilbert-envelope:p1",
+            "note-envelope-band-selection:p1",
+            "note-envelope-overview:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-signal-quality:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q13",
+          "style": "terminology",
+          "top5": [
+            "note-sampling-for-envelope:p1",
+            "note-envelope-band-selection:p1",
+            "note-baseline-trending:p1",
+            "note-frequency-resolution:p1",
+            "note-signal-quality:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q14",
+          "style": "descriptive",
+          "top5": [
+            "note-envelope-pitfalls:p1",
+            "note-bpfi-formula:p1",
+            "note-hilbert-envelope:p1",
+            "note-bpfo-formula:p1",
+            "note-envelope-overview:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q15",
+          "style": "terminology",
+          "top5": [
+            "note-kurtosis-definition:p1",
+            "note-kurtosis-trend:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-acoustic-limits:p1",
+            "note-installation-fits:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q16",
+          "style": "descriptive",
+          "top5": [
+            "note-band-energy:p1",
+            "note-iso-overview:p1",
+            "note-sensor-mounting:p1",
+            "note-iso-zones:p1",
+            "note-brinelling:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q17",
+          "style": "terminology",
+          "top5": [
+            "note-rms-peak:p1",
+            "note-crest-factor:p1",
+            "note-envelope-pitfalls:p1",
+            "note-ftf-formula:p1",
+            "note-defect-freq-slip:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q18",
+          "style": "descriptive",
+          "top5": [
+            "note-rms-peak:p1",
+            "note-iso-limits-scope:p1",
+            "note-fatigue-spalling:p1",
+            "note-bpfo-formula:p1",
+            "note-defect-freq-slip:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q19",
+          "style": "descriptive",
+          "top5": [
+            "note-window-statistics:p1",
+            "note-frequency-resolution:p1",
+            "note-order-tracking:p1",
+            "note-kurtosis-trend:p1",
+            "note-kurtosis-definition:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q20",
+          "style": "terminology",
+          "top5": [
+            "note-iso-limits-scope:p1",
+            "note-iso-example-limits:p1",
+            "note-iso-zones:p1",
+            "skf-vibration-diagnostic-guide:p1",
+            "note-baseline-trending:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q21",
+          "style": "terminology",
+          "top5": [
+            "note-iso-zones:p1",
+            "note-iso-example-limits:p1",
+            "note-lube-interval:p1",
+            "note-iso-limits-scope:p1",
+            "note-inner-race-sidebands:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q22",
+          "style": "descriptive",
+          "top5": [
+            "note-bpfo-formula:p1",
+            "note-bpfi-formula:p1",
+            "note-defect-freq-identity:p1",
+            "note-inner-race-sidebands:p1",
+            "note-brinelling:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.14285714285714285,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q23",
+          "style": "terminology",
+          "top5": [
+            "note-measurement-quantities:p1",
+            "note-iso-limits-scope:p1",
+            "note-fatigue-spalling:p1",
+            "note-sensor-mounting:p1",
+            "note-envelope-pitfalls:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q24",
+          "style": "descriptive",
+          "top5": [
+            "note-baseline-trending:p1",
+            "note-inner-race-sidebands:p1",
+            "note-bpfi-formula:p1",
+            "note-bsf-formula:p1",
+            "note-lube-viscosity:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q25",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-overfill:p1",
+            "note-lube-mixing:p1",
+            "note-lube-interval:p1",
+            "note-temperature:p1",
+            "note-lube-insufficient:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q26",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-insufficient:p1",
+            "note-defect-freq-identity:p1",
+            "note-fatigue-spalling:p1",
+            "note-defect-freq-example:p1",
+            "note-acoustic-limits:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q27",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-contamination:p1",
+            "note-lube-overfill:p1",
+            "note-proc-inspection-steps:p1",
+            "note-installation-fits:p1",
+            "note-brinelling:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q28",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-signature:p1",
+            "note-rms-peak:p1",
+            "skf-bearing-damage-guide:p1",
+            "note-lube-insufficient:p1",
+            "note-crest-factor:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q29",
+          "style": "descriptive",
+          "top5": [
+            "note-defect-freq-identity:p1",
+            "note-fatigue-spalling:p1",
+            "note-lube-overfill:p1",
+            "note-band-energy:p1",
+            "note-envelope-overview:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q30",
+          "style": "terminology",
+          "top5": [
+            "note-lube-viscosity:p1",
+            "note-order-tracking:p1",
+            "note-bpfo-formula:p1",
+            "note-band-energy:p1",
+            "note-baseline-trending:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q31",
+          "style": "descriptive",
+          "top5": [
+            "note-unbalance-misalignment:p1",
+            "note-order-tracking:p1",
+            "note-baseline-trending:p1",
+            "note-iso-overview:p1",
+            "note-bpfo-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q32",
+          "style": "descriptive",
+          "top5": [
+            "note-electrical-fluting:p1",
+            "note-brinelling:p1",
+            "note-bpfi-formula:p1",
+            "note-frequency-resolution:p1",
+            "note-bpfo-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q33",
+          "style": "descriptive",
+          "top5": [
+            "note-brinelling:p1",
+            "note-band-energy:p1",
+            "note-inner-race-sidebands:p1",
+            "note-bpfi-formula:p1",
+            "note-iso-overview:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q34",
+          "style": "descriptive",
+          "top5": [
+            "uored-paper-2023:p1",
+            "note-sensor-mounting:p1",
+            "note-measurement-quantities:p1",
+            "note-sampling-for-envelope:p1",
+            "note-outer-race-load-zone:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q35",
+          "style": "descriptive",
+          "top5": [
+            "note-acoustic-limits:p1",
+            "note-signal-quality:p1",
+            "note-frequency-resolution:p1",
+            "note-order-tracking:p1",
+            "note-baseline-trending:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q36",
+          "style": "descriptive",
+          "top5": [
+            "note-acoustic-limits:p1",
+            "note-lab-vs-field:p1",
+            "note-brinelling:p1",
+            "note-iso-zones:p1",
+            "note-iso-overview:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q37",
+          "style": "descriptive",
+          "top5": [
+            "note-proc-safety:p1",
+            "note-iso-zones:p1",
+            "note-iso-limits-scope:p1",
+            "timken-damage-guide-2023:p1",
+            "note-temperature:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q38",
+          "style": "descriptive",
+          "top5": [
+            "note-defect-freq-identity:p1",
+            "note-order-tracking:p1",
+            "note-proc-inspection-steps:p1",
+            "note-signal-quality:p1",
+            "note-proc-confirmation:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q39",
+          "style": "descriptive",
+          "top5": [
+            "note-frequency-resolution:p1",
+            "note-proc-confirmation:p1",
+            "note-window-statistics:p1",
+            "note-anomaly-vs-diagnosis:p1",
+            "note-hilbert-envelope:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q40",
+          "style": "descriptive",
+          "top5": [
+            "skf-bearing-damage-guide:p1",
+            "note-cage-damage:p1",
+            "note-maint-strategy:p1",
+            "note-acoustic-limits:p1",
+            "note-window-statistics:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q41",
+          "style": "descriptive",
+          "top5": [
+            "note-report-guidance:p1",
+            "note-fatigue-spalling:p1",
+            "skf-vibration-diagnostic-guide:p1",
+            "note-proc-confirmation:p1",
+            "note-kurtosis-definition:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q42",
+          "style": "descriptive",
+          "top5": [
+            "note-lab-vs-field:p1",
+            "note-report-guidance:p1",
+            "note-band-energy:p1",
+            "note-bsf-formula:p1",
+            "note-envelope-pitfalls:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q43",
+          "style": "descriptive",
+          "top5": [
+            "note-fatigue-spalling:p1",
+            "note-kurtosis-trend:p1",
+            "note-lube-contamination:p1",
+            "note-brinelling:p1",
+            "note-report-guidance:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        }
+      ]
+    },
+    {
+      "config": "bge_vector",
+      "embedder": "bge",
+      "mode": "vector",
+      "overall": {
+        "recall_at_5": 0.9302,
+        "mrr": 0.857,
+        "hit_at_1": 0.7674
+      },
+      "by_style": {
+        "descriptive": {
+          "recall_at_5": 0.9,
+          "mrr": 0.8117,
+          "hit_at_1": 0.7
+        },
+        "terminology": {
+          "recall_at_5": 1.0,
+          "mrr": 0.9615,
+          "hit_at_1": 0.9231
+        }
+      },
+      "queries": [
+        {
+          "id": "q01",
+          "style": "terminology",
+          "top5": [
+            "note-bsf-formula:p1",
+            "note-bpfo-formula:p1",
+            "note-ftf-formula:p1",
+            "note-bpfi-formula:p1",
+            "note-defect-freq-example:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q02",
+          "style": "terminology",
+          "top5": [
+            "note-inner-race-sidebands:p1",
+            "note-bpfi-formula:p1",
+            "note-outer-race-load-zone:p1",
+            "note-bsf-formula:p1",
+            "note-bpfo-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q03",
+          "style": "terminology",
+          "top5": [
+            "note-defect-freq-example:p1",
+            "note-ftf-formula:p1",
+            "note-defect-freq-slip:p1",
+            "note-bsf-formula:p1",
+            "note-bpfo-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q04",
+          "style": "terminology",
+          "top5": [
+            "note-ftf-formula:p1",
+            "note-cage-damage:p1",
+            "note-bsf-formula:p1",
+            "note-order-tracking:p1",
+            "note-baseline-trending:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q05",
+          "style": "descriptive",
+          "top5": [
+            "note-bsf-formula:p1",
+            "note-defect-freq-example:p1",
+            "note-unbalance-misalignment:p1",
+            "note-outer-race-load-zone:p1",
+            "note-bpfi-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q06",
+          "style": "descriptive",
+          "top5": [
+            "note-envelope-pitfalls:p1",
+            "note-outer-race-load-zone:p1",
+            "note-iso-limits-scope:p1",
+            "skf-vibration-diagnostic-guide:p1",
+            "note-sensor-mounting:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.16666666666666666,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q07",
+          "style": "descriptive",
+          "top5": [
+            "note-installation-fits:p1",
+            "note-outer-race-load-zone:p1",
+            "note-defect-freq-slip:p1",
+            "note-bpfo-formula:p1",
+            "note-envelope-pitfalls:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q08",
+          "style": "descriptive",
+          "top5": [
+            "note-order-tracking:p1",
+            "note-frequency-resolution:p1",
+            "uored-paper-2023:p1",
+            "note-sampling-for-envelope:p1",
+            "note-signal-quality:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q09",
+          "style": "descriptive",
+          "top5": [
+            "note-order-tracking:p1",
+            "uored-paper-2023:p1",
+            "note-envelope-pitfalls:p1",
+            "note-outer-race-load-zone:p1",
+            "note-brinelling:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q10",
+          "style": "descriptive",
+          "top5": [
+            "uored-paper-2023:p1",
+            "note-envelope-overview:p1",
+            "skf-bearing-damage-guide:p1",
+            "note-envelope-band-selection:p1",
+            "note-measurement-quantities:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q11",
+          "style": "terminology",
+          "top5": [
+            "note-envelope-band-selection:p1",
+            "note-envelope-overview:p1",
+            "note-sampling-for-envelope:p1",
+            "note-frequency-resolution:p1",
+            "note-kurtosis-bandpass:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q12",
+          "style": "terminology",
+          "top5": [
+            "note-hilbert-envelope:p1",
+            "note-envelope-overview:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-envelope-pitfalls:p1",
+            "note-order-tracking:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q13",
+          "style": "terminology",
+          "top5": [
+            "note-sampling-for-envelope:p1",
+            "note-frequency-resolution:p1",
+            "note-envelope-band-selection:p1",
+            "note-iso-overview:p1",
+            "uored-paper-2023:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q14",
+          "style": "descriptive",
+          "top5": [
+            "note-envelope-pitfalls:p1",
+            "note-envelope-overview:p1",
+            "note-envelope-band-selection:p1",
+            "note-proc-confirmation:p1",
+            "note-sampling-for-envelope:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q15",
+          "style": "terminology",
+          "top5": [
+            "note-kurtosis-definition:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-kurtosis-trend:p1",
+            "note-window-statistics:p1",
+            "note-envelope-band-selection:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q16",
+          "style": "descriptive",
+          "top5": [
+            "note-kurtosis-trend:p1",
+            "skf-bearing-damage-guide:p1",
+            "note-baseline-trending:p1",
+            "note-window-statistics:p1",
+            "note-looseness:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q17",
+          "style": "terminology",
+          "top5": [
+            "note-crest-factor:p1",
+            "note-rms-peak:p1",
+            "note-iso-example-limits:p1",
+            "note-iso-overview:p1",
+            "note-envelope-pitfalls:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q18",
+          "style": "descriptive",
+          "top5": [
+            "note-defect-freq-slip:p1",
+            "note-bpfo-formula:p1",
+            "note-lube-signature:p1",
+            "note-looseness:p1",
+            "note-unbalance-misalignment:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.1,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q19",
+          "style": "descriptive",
+          "top5": [
+            "note-window-statistics:p1",
+            "note-kurtosis-trend:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-kurtosis-definition:p1",
+            "skf-bearing-damage-guide:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q20",
+          "style": "terminology",
+          "top5": [
+            "note-iso-overview:p1",
+            "note-iso-example-limits:p1",
+            "note-iso-zones:p1",
+            "note-iso-limits-scope:p1",
+            "note-ftf-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q21",
+          "style": "terminology",
+          "top5": [
+            "note-iso-zones:p1",
+            "note-iso-example-limits:p1",
+            "note-iso-limits-scope:p1",
+            "note-maint-strategy:p1",
+            "note-outer-race-load-zone:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q22",
+          "style": "descriptive",
+          "top5": [
+            "note-proc-inspection-steps:p1",
+            "note-iso-limits-scope:p1",
+            "timken-damage-guide-2023:p1",
+            "note-electrical-fluting:p1",
+            "note-looseness:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q23",
+          "style": "terminology",
+          "top5": [
+            "note-measurement-quantities:p1",
+            "note-iso-limits-scope:p1",
+            "skf-bearing-damage-guide:p1",
+            "note-sensor-mounting:p1",
+            "note-temperature:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q24",
+          "style": "descriptive",
+          "top5": [
+            "note-baseline-trending:p1",
+            "note-anomaly-vs-diagnosis:p1",
+            "note-window-statistics:p1",
+            "uored-paper-2023:p1",
+            "note-envelope-pitfalls:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q25",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-overfill:p1",
+            "note-lube-interval:p1",
+            "note-temperature:p1",
+            "note-lube-mixing:p1",
+            "note-lube-insufficient:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q26",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-insufficient:p1",
+            "note-lube-overfill:p1",
+            "note-brinelling:p1",
+            "note-bpfo-formula:p1",
+            "note-electrical-fluting:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q27",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-contamination:p1",
+            "note-electrical-fluting:p1",
+            "note-lube-insufficient:p1",
+            "note-lube-mixing:p1",
+            "note-looseness:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q28",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-signature:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-envelope-pitfalls:p1",
+            "note-kurtosis-trend:p1",
+            "note-frequency-resolution:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q29",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-overfill:p1",
+            "note-lube-interval:p1",
+            "note-temperature:p1",
+            "note-electrical-fluting:p1",
+            "note-iso-limits-scope:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q30",
+          "style": "terminology",
+          "top5": [
+            "note-lube-viscosity:p1",
+            "note-lube-signature:p1",
+            "note-lube-contamination:p1",
+            "note-lube-insufficient:p1",
+            "note-lube-mixing:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q31",
+          "style": "descriptive",
+          "top5": [
+            "note-unbalance-misalignment:p1",
+            "note-iso-overview:p1",
+            "note-ftf-formula:p1",
+            "note-measurement-quantities:p1",
+            "note-iso-example-limits:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q32",
+          "style": "descriptive",
+          "top5": [
+            "note-electrical-fluting:p1",
+            "note-looseness:p1",
+            "note-ftf-formula:p1",
+            "note-lube-insufficient:p1",
+            "uored-paper-2023:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q33",
+          "style": "descriptive",
+          "top5": [
+            "note-electrical-fluting:p1",
+            "note-lube-contamination:p1",
+            "note-brinelling:p1",
+            "note-looseness:p1",
+            "note-fatigue-spalling:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q34",
+          "style": "descriptive",
+          "top5": [
+            "note-sensor-mounting:p1",
+            "note-measurement-quantities:p1",
+            "skf-vibration-diagnostic-guide:p1",
+            "note-baseline-trending:p1",
+            "note-sampling-for-envelope:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q35",
+          "style": "descriptive",
+          "top5": [
+            "note-signal-quality:p1",
+            "uored-paper-2023:p1",
+            "note-order-tracking:p1",
+            "note-acoustic-limits:p1",
+            "note-frequency-resolution:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q36",
+          "style": "descriptive",
+          "top5": [
+            "note-acoustic-limits:p1",
+            "uored-paper-2023:p1",
+            "note-brinelling:p1",
+            "note-proc-safety:p1",
+            "note-inner-race-sidebands:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q37",
+          "style": "descriptive",
+          "top5": [
+            "note-proc-safety:p1",
+            "note-proc-inspection-steps:p1",
+            "note-proc-confirmation:p1",
+            "timken-damage-guide-2023:p1",
+            "note-report-guidance:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q38",
+          "style": "descriptive",
+          "top5": [
+            "note-proc-inspection-steps:p1",
+            "note-proc-safety:p1",
+            "note-electrical-fluting:p1",
+            "note-looseness:p1",
+            "timken-damage-guide-2023:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q39",
+          "style": "descriptive",
+          "top5": [
+            "note-anomaly-vs-diagnosis:p1",
+            "note-proc-confirmation:p1",
+            "note-window-statistics:p1",
+            "note-signal-quality:p1",
+            "note-report-guidance:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q40",
+          "style": "descriptive",
+          "top5": [
+            "note-anomaly-vs-diagnosis:p1",
+            "note-report-guidance:p1",
+            "note-proc-confirmation:p1",
+            "note-maint-strategy:p1",
+            "note-baseline-trending:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.25,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q41",
+          "style": "descriptive",
+          "top5": [
+            "note-report-guidance:p1",
+            "skf-vibration-diagnostic-guide:p1",
+            "skf-bearing-damage-guide:p1",
+            "note-maint-strategy:p1",
+            "uored-paper-2023:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q42",
+          "style": "descriptive",
+          "top5": [
+            "note-lab-vs-field:p1",
+            "note-report-guidance:p1",
+            "uored-paper-2023:p1",
+            "note-order-tracking:p1",
+            "skf-vibration-diagnostic-guide:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q43",
+          "style": "descriptive",
+          "top5": [
+            "note-fatigue-spalling:p1",
+            "note-lube-contamination:p1",
+            "note-electrical-fluting:p1",
+            "note-outer-race-load-zone:p1",
+            "note-lube-insufficient:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        }
+      ]
+    },
+    {
+      "config": "bge_score_sum",
+      "embedder": "bge",
+      "mode": "score_sum",
+      "overall": {
+        "recall_at_5": 0.9302,
+        "mrr": 0.8453,
+        "hit_at_1": 0.7442
+      },
+      "by_style": {
+        "descriptive": {
+          "recall_at_5": 0.9,
+          "mrr": 0.8117,
+          "hit_at_1": 0.7
+        },
+        "terminology": {
+          "recall_at_5": 1.0,
+          "mrr": 0.9231,
+          "hit_at_1": 0.8462
+        }
+      },
+      "queries": [
+        {
+          "id": "q01",
+          "style": "terminology",
+          "top5": [
+            "note-bsf-formula:p1",
+            "note-bpfo-formula:p1",
+            "note-ftf-formula:p1",
+            "note-bpfi-formula:p1",
+            "note-defect-freq-example:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q02",
+          "style": "terminology",
+          "top5": [
+            "note-inner-race-sidebands:p1",
+            "note-bpfi-formula:p1",
+            "note-outer-race-load-zone:p1",
+            "note-bsf-formula:p1",
+            "note-bpfo-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q03",
+          "style": "terminology",
+          "top5": [
+            "note-defect-freq-example:p1",
+            "note-ftf-formula:p1",
+            "note-defect-freq-slip:p1",
+            "note-bsf-formula:p1",
+            "note-bpfo-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q04",
+          "style": "terminology",
+          "top5": [
+            "note-ftf-formula:p1",
+            "note-bsf-formula:p1",
+            "note-cage-damage:p1",
+            "note-defect-freq-example:p1",
+            "note-order-tracking:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q05",
+          "style": "descriptive",
+          "top5": [
+            "note-bsf-formula:p1",
+            "note-defect-freq-example:p1",
+            "note-unbalance-misalignment:p1",
+            "note-outer-race-load-zone:p1",
+            "note-bpfi-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q06",
+          "style": "descriptive",
+          "top5": [
+            "note-envelope-pitfalls:p1",
+            "note-outer-race-load-zone:p1",
+            "note-iso-limits-scope:p1",
+            "skf-vibration-diagnostic-guide:p1",
+            "note-sensor-mounting:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.16666666666666666,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q07",
+          "style": "descriptive",
+          "top5": [
+            "note-installation-fits:p1",
+            "note-outer-race-load-zone:p1",
+            "note-defect-freq-slip:p1",
+            "note-bpfo-formula:p1",
+            "note-envelope-pitfalls:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q08",
+          "style": "descriptive",
+          "top5": [
+            "note-order-tracking:p1",
+            "note-frequency-resolution:p1",
+            "uored-paper-2023:p1",
+            "note-sampling-for-envelope:p1",
+            "note-signal-quality:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q09",
+          "style": "descriptive",
+          "top5": [
+            "note-order-tracking:p1",
+            "uored-paper-2023:p1",
+            "note-envelope-pitfalls:p1",
+            "note-outer-race-load-zone:p1",
+            "note-brinelling:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q10",
+          "style": "descriptive",
+          "top5": [
+            "uored-paper-2023:p1",
+            "note-envelope-overview:p1",
+            "skf-bearing-damage-guide:p1",
+            "note-envelope-band-selection:p1",
+            "note-measurement-quantities:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q11",
+          "style": "terminology",
+          "top5": [
+            "note-envelope-band-selection:p1",
+            "note-envelope-overview:p1",
+            "note-sampling-for-envelope:p1",
+            "note-frequency-resolution:p1",
+            "note-kurtosis-bandpass:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q12",
+          "style": "terminology",
+          "top5": [
+            "note-hilbert-envelope:p1",
+            "note-envelope-overview:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-envelope-pitfalls:p1",
+            "note-order-tracking:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q13",
+          "style": "terminology",
+          "top5": [
+            "note-sampling-for-envelope:p1",
+            "note-frequency-resolution:p1",
+            "note-envelope-band-selection:p1",
+            "note-iso-overview:p1",
+            "uored-paper-2023:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q14",
+          "style": "descriptive",
+          "top5": [
+            "note-envelope-pitfalls:p1",
+            "note-envelope-overview:p1",
+            "note-envelope-band-selection:p1",
+            "note-proc-confirmation:p1",
+            "note-sampling-for-envelope:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q15",
+          "style": "terminology",
+          "top5": [
+            "note-kurtosis-definition:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-kurtosis-trend:p1",
+            "note-window-statistics:p1",
+            "note-envelope-band-selection:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q16",
+          "style": "descriptive",
+          "top5": [
+            "note-kurtosis-trend:p1",
+            "skf-bearing-damage-guide:p1",
+            "note-baseline-trending:p1",
+            "note-window-statistics:p1",
+            "note-looseness:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q17",
+          "style": "terminology",
+          "top5": [
+            "note-crest-factor:p1",
+            "note-rms-peak:p1",
+            "note-iso-example-limits:p1",
+            "note-iso-overview:p1",
+            "note-envelope-pitfalls:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q18",
+          "style": "descriptive",
+          "top5": [
+            "note-defect-freq-slip:p1",
+            "note-bpfo-formula:p1",
+            "note-lube-signature:p1",
+            "note-looseness:p1",
+            "note-unbalance-misalignment:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.1,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q19",
+          "style": "descriptive",
+          "top5": [
+            "note-window-statistics:p1",
+            "note-kurtosis-trend:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-kurtosis-definition:p1",
+            "skf-bearing-damage-guide:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q20",
+          "style": "terminology",
+          "top5": [
+            "note-iso-overview:p1",
+            "note-iso-example-limits:p1",
+            "note-iso-zones:p1",
+            "note-iso-limits-scope:p1",
+            "note-ftf-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q21",
+          "style": "terminology",
+          "top5": [
+            "note-iso-zones:p1",
+            "note-iso-example-limits:p1",
+            "note-iso-limits-scope:p1",
+            "note-maint-strategy:p1",
+            "note-outer-race-load-zone:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q22",
+          "style": "descriptive",
+          "top5": [
+            "note-proc-inspection-steps:p1",
+            "note-iso-limits-scope:p1",
+            "timken-damage-guide-2023:p1",
+            "note-electrical-fluting:p1",
+            "note-looseness:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q23",
+          "style": "terminology",
+          "top5": [
+            "skf-bearing-damage-guide:p1",
+            "note-measurement-quantities:p1",
+            "note-iso-limits-scope:p1",
+            "note-sensor-mounting:p1",
+            "note-temperature:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q24",
+          "style": "descriptive",
+          "top5": [
+            "note-baseline-trending:p1",
+            "note-anomaly-vs-diagnosis:p1",
+            "note-window-statistics:p1",
+            "uored-paper-2023:p1",
+            "note-envelope-pitfalls:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q25",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-overfill:p1",
+            "note-lube-interval:p1",
+            "note-temperature:p1",
+            "note-lube-mixing:p1",
+            "note-lube-insufficient:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q26",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-insufficient:p1",
+            "note-lube-overfill:p1",
+            "note-brinelling:p1",
+            "note-bpfo-formula:p1",
+            "note-electrical-fluting:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q27",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-contamination:p1",
+            "note-electrical-fluting:p1",
+            "note-lube-insufficient:p1",
+            "note-lube-mixing:p1",
+            "note-looseness:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q28",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-signature:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-envelope-pitfalls:p1",
+            "note-kurtosis-trend:p1",
+            "note-frequency-resolution:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q29",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-overfill:p1",
+            "note-lube-interval:p1",
+            "note-temperature:p1",
+            "note-electrical-fluting:p1",
+            "note-iso-limits-scope:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q30",
+          "style": "terminology",
+          "top5": [
+            "note-lube-viscosity:p1",
+            "note-lube-signature:p1",
+            "note-lube-contamination:p1",
+            "note-lube-insufficient:p1",
+            "note-lube-mixing:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q31",
+          "style": "descriptive",
+          "top5": [
+            "note-unbalance-misalignment:p1",
+            "note-iso-overview:p1",
+            "note-ftf-formula:p1",
+            "note-measurement-quantities:p1",
+            "note-iso-example-limits:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q32",
+          "style": "descriptive",
+          "top5": [
+            "note-electrical-fluting:p1",
+            "note-looseness:p1",
+            "note-ftf-formula:p1",
+            "note-lube-insufficient:p1",
+            "uored-paper-2023:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q33",
+          "style": "descriptive",
+          "top5": [
+            "note-electrical-fluting:p1",
+            "note-lube-contamination:p1",
+            "note-brinelling:p1",
+            "note-looseness:p1",
+            "note-fatigue-spalling:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q34",
+          "style": "descriptive",
+          "top5": [
+            "note-sensor-mounting:p1",
+            "note-measurement-quantities:p1",
+            "skf-vibration-diagnostic-guide:p1",
+            "note-baseline-trending:p1",
+            "note-sampling-for-envelope:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q35",
+          "style": "descriptive",
+          "top5": [
+            "note-signal-quality:p1",
+            "uored-paper-2023:p1",
+            "note-order-tracking:p1",
+            "note-acoustic-limits:p1",
+            "note-frequency-resolution:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q36",
+          "style": "descriptive",
+          "top5": [
+            "note-acoustic-limits:p1",
+            "uored-paper-2023:p1",
+            "note-brinelling:p1",
+            "note-proc-safety:p1",
+            "note-inner-race-sidebands:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q37",
+          "style": "descriptive",
+          "top5": [
+            "note-proc-safety:p1",
+            "note-proc-inspection-steps:p1",
+            "note-proc-confirmation:p1",
+            "timken-damage-guide-2023:p1",
+            "note-report-guidance:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q38",
+          "style": "descriptive",
+          "top5": [
+            "note-proc-inspection-steps:p1",
+            "note-proc-safety:p1",
+            "note-electrical-fluting:p1",
+            "note-looseness:p1",
+            "timken-damage-guide-2023:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q39",
+          "style": "descriptive",
+          "top5": [
+            "note-anomaly-vs-diagnosis:p1",
+            "note-proc-confirmation:p1",
+            "note-window-statistics:p1",
+            "note-signal-quality:p1",
+            "note-report-guidance:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q40",
+          "style": "descriptive",
+          "top5": [
+            "note-anomaly-vs-diagnosis:p1",
+            "note-report-guidance:p1",
+            "note-proc-confirmation:p1",
+            "note-maint-strategy:p1",
+            "note-baseline-trending:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.25,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q41",
+          "style": "descriptive",
+          "top5": [
+            "note-report-guidance:p1",
+            "skf-vibration-diagnostic-guide:p1",
+            "skf-bearing-damage-guide:p1",
+            "note-maint-strategy:p1",
+            "uored-paper-2023:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q42",
+          "style": "descriptive",
+          "top5": [
+            "note-lab-vs-field:p1",
+            "note-report-guidance:p1",
+            "uored-paper-2023:p1",
+            "note-order-tracking:p1",
+            "skf-vibration-diagnostic-guide:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q43",
+          "style": "descriptive",
+          "top5": [
+            "note-fatigue-spalling:p1",
+            "note-lube-contamination:p1",
+            "note-electrical-fluting:p1",
+            "note-outer-race-load-zone:p1",
+            "note-lube-insufficient:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        }
+      ]
+    },
+    {
+      "config": "bge_rrf",
+      "embedder": "bge",
+      "mode": "hybrid",
+      "overall": {
+        "recall_at_5": 0.9419,
+        "mrr": 0.9203,
+        "hit_at_1": 0.8837
+      },
+      "by_style": {
+        "descriptive": {
+          "recall_at_5": 0.9167,
+          "mrr": 0.8857,
+          "hit_at_1": 0.8333
+        },
+        "terminology": {
+          "recall_at_5": 1.0,
+          "mrr": 1.0,
+          "hit_at_1": 1.0
+        }
+      },
+      "queries": [
+        {
+          "id": "q01",
+          "style": "terminology",
+          "top5": [
+            "note-bpfo-formula:p1",
+            "note-bsf-formula:p1",
+            "note-defect-freq-example:p1",
+            "note-bpfi-formula:p1",
+            "note-ftf-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q02",
+          "style": "terminology",
+          "top5": [
+            "note-bpfi-formula:p1",
+            "note-inner-race-sidebands:p1",
+            "note-bsf-formula:p1",
+            "note-bpfo-formula:p1",
+            "note-outer-race-load-zone:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q03",
+          "style": "terminology",
+          "top5": [
+            "note-defect-freq-example:p1",
+            "note-defect-freq-slip:p1",
+            "note-ftf-formula:p1",
+            "note-bpfo-formula:p1",
+            "note-bsf-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q04",
+          "style": "terminology",
+          "top5": [
+            "note-ftf-formula:p1",
+            "note-bsf-formula:p1",
+            "note-cage-damage:p1",
+            "note-defect-freq-example:p1",
+            "note-bpfi-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q05",
+          "style": "descriptive",
+          "top5": [
+            "note-bsf-formula:p1",
+            "note-defect-freq-example:p1",
+            "note-inner-race-sidebands:p1",
+            "note-bpfi-formula:p1",
+            "note-outer-race-load-zone:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q06",
+          "style": "descriptive",
+          "top5": [
+            "note-envelope-pitfalls:p1",
+            "skf-vibration-diagnostic-guide:p1",
+            "note-defect-freq-slip:p1",
+            "note-rms-peak:p1",
+            "note-iso-limits-scope:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q07",
+          "style": "descriptive",
+          "top5": [
+            "note-envelope-pitfalls:p1",
+            "note-defect-freq-slip:p1",
+            "note-installation-fits:p1",
+            "note-outer-race-load-zone:p1",
+            "note-brinelling:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q08",
+          "style": "descriptive",
+          "top5": [
+            "note-frequency-resolution:p1",
+            "uored-paper-2023:p1",
+            "note-order-tracking:p1",
+            "note-signal-quality:p1",
+            "note-iso-zones:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q09",
+          "style": "descriptive",
+          "top5": [
+            "note-order-tracking:p1",
+            "uored-paper-2023:p1",
+            "note-envelope-pitfalls:p1",
+            "note-window-statistics:p1",
+            "note-baseline-trending:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q10",
+          "style": "descriptive",
+          "top5": [
+            "note-envelope-overview:p1",
+            "note-envelope-band-selection:p1",
+            "note-kurtosis-bandpass:p1",
+            "skf-bearing-damage-guide:p1",
+            "note-iso-overview:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q11",
+          "style": "terminology",
+          "top5": [
+            "note-envelope-band-selection:p1",
+            "note-hilbert-envelope:p1",
+            "note-sampling-for-envelope:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-envelope-overview:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q12",
+          "style": "terminology",
+          "top5": [
+            "note-hilbert-envelope:p1",
+            "note-envelope-overview:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-envelope-band-selection:p1",
+            "note-order-tracking:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q13",
+          "style": "terminology",
+          "top5": [
+            "note-sampling-for-envelope:p1",
+            "note-frequency-resolution:p1",
+            "uored-paper-2023:p1",
+            "note-envelope-band-selection:p1",
+            "note-signal-quality:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q14",
+          "style": "descriptive",
+          "top5": [
+            "note-envelope-pitfalls:p1",
+            "note-envelope-overview:p1",
+            "note-hilbert-envelope:p1",
+            "note-bpfi-formula:p1",
+            "note-bpfo-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q15",
+          "style": "terminology",
+          "top5": [
+            "note-kurtosis-definition:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-kurtosis-trend:p1",
+            "note-envelope-band-selection:p1",
+            "skf-bearing-damage-guide:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q16",
+          "style": "descriptive",
+          "top5": [
+            "note-baseline-trending:p1",
+            "note-iso-overview:p1",
+            "note-kurtosis-trend:p1",
+            "note-lab-vs-field:p1",
+            "note-iso-limits-scope:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 0.3333333333333333,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q17",
+          "style": "terminology",
+          "top5": [
+            "note-crest-factor:p1",
+            "note-rms-peak:p1",
+            "note-envelope-pitfalls:p1",
+            "note-iso-example-limits:p1",
+            "note-frequency-resolution:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q18",
+          "style": "descriptive",
+          "top5": [
+            "note-bpfo-formula:p1",
+            "note-defect-freq-slip:p1",
+            "note-rms-peak:p1",
+            "note-bpfi-formula:p1",
+            "note-defect-freq-example:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 0.3333333333333333,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q19",
+          "style": "descriptive",
+          "top5": [
+            "note-window-statistics:p1",
+            "note-kurtosis-bandpass:p1",
+            "note-frequency-resolution:p1",
+            "note-kurtosis-trend:p1",
+            "note-kurtosis-definition:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q20",
+          "style": "terminology",
+          "top5": [
+            "note-iso-example-limits:p1",
+            "note-iso-overview:p1",
+            "note-iso-zones:p1",
+            "note-iso-limits-scope:p1",
+            "skf-bearing-damage-guide:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q21",
+          "style": "terminology",
+          "top5": [
+            "note-iso-zones:p1",
+            "note-iso-example-limits:p1",
+            "note-iso-limits-scope:p1",
+            "note-inner-race-sidebands:p1",
+            "note-outer-race-load-zone:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q22",
+          "style": "descriptive",
+          "top5": [
+            "note-iso-limits-scope:p1",
+            "note-electrical-fluting:p1",
+            "note-bpfo-formula:p1",
+            "note-iso-overview:p1",
+            "note-brinelling:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q23",
+          "style": "terminology",
+          "top5": [
+            "note-measurement-quantities:p1",
+            "note-iso-limits-scope:p1",
+            "note-defect-freq-slip:p1",
+            "note-sensor-mounting:p1",
+            "uored-paper-2023:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q24",
+          "style": "descriptive",
+          "top5": [
+            "note-baseline-trending:p1",
+            "note-anomaly-vs-diagnosis:p1",
+            "uored-paper-2023:p1",
+            "note-envelope-pitfalls:p1",
+            "note-outer-race-load-zone:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q25",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-overfill:p1",
+            "note-lube-interval:p1",
+            "note-lube-mixing:p1",
+            "note-temperature:p1",
+            "note-lube-insufficient:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q26",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-insufficient:p1",
+            "note-bpfo-formula:p1",
+            "note-fatigue-spalling:p1",
+            "note-electrical-fluting:p1",
+            "note-brinelling:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q27",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-contamination:p1",
+            "note-lube-mixing:p1",
+            "note-lube-insufficient:p1",
+            "note-electrical-fluting:p1",
+            "note-lube-overfill:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q28",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-signature:p1",
+            "note-envelope-pitfalls:p1",
+            "note-crest-factor:p1",
+            "note-kurtosis-trend:p1",
+            "note-rms-peak:p1"
+          ],
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q29",
+          "style": "descriptive",
+          "top5": [
+            "note-lube-overfill:p1",
+            "note-fatigue-spalling:p1",
+            "note-electrical-fluting:p1",
+            "note-iso-limits-scope:p1",
+            "note-temperature:p1"
+          ],
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.07142857142857142,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q30",
+          "style": "terminology",
+          "top5": [
+            "note-lube-viscosity:p1",
+            "note-lube-contamination:p1",
+            "note-window-statistics:p1",
+            "note-order-tracking:p1",
+            "note-bpfo-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q31",
+          "style": "descriptive",
+          "top5": [
+            "note-unbalance-misalignment:p1",
+            "note-iso-overview:p1",
+            "note-order-tracking:p1",
+            "uored-paper-2023:p1",
+            "skf-vibration-diagnostic-guide:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q32",
+          "style": "descriptive",
+          "top5": [
+            "note-electrical-fluting:p1",
+            "note-looseness:p1",
+            "note-bpfi-formula:p1",
+            "note-bpfo-formula:p1",
+            "note-brinelling:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q33",
+          "style": "descriptive",
+          "top5": [
+            "note-brinelling:p1",
+            "note-lube-contamination:p1",
+            "note-looseness:p1",
+            "note-iso-zones:p1",
+            "note-iso-limits-scope:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q34",
+          "style": "descriptive",
+          "top5": [
+            "note-measurement-quantities:p1",
+            "note-sensor-mounting:p1",
+            "note-sampling-for-envelope:p1",
+            "uored-paper-2023:p1",
+            "skf-vibration-diagnostic-guide:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "hit_at_1": 0.0
+        },
+        {
+          "id": "q35",
+          "style": "descriptive",
+          "top5": [
+            "note-signal-quality:p1",
+            "uored-paper-2023:p1",
+            "note-acoustic-limits:p1",
+            "note-frequency-resolution:p1",
+            "note-sampling-for-envelope:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q36",
+          "style": "descriptive",
+          "top5": [
+            "note-acoustic-limits:p1",
+            "note-iso-limits-scope:p1",
+            "note-proc-safety:p1",
+            "note-brinelling:p1",
+            "note-lab-vs-field:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q37",
+          "style": "descriptive",
+          "top5": [
+            "note-proc-safety:p1",
+            "note-proc-inspection-steps:p1",
+            "note-iso-limits-scope:p1",
+            "timken-damage-guide-2023:p1",
+            "note-iso-overview:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q38",
+          "style": "descriptive",
+          "top5": [
+            "note-proc-inspection-steps:p1",
+            "note-looseness:p1",
+            "note-electrical-fluting:p1",
+            "note-order-tracking:p1",
+            "note-defect-freq-identity:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q39",
+          "style": "descriptive",
+          "top5": [
+            "note-anomaly-vs-diagnosis:p1",
+            "note-window-statistics:p1",
+            "note-proc-confirmation:p1",
+            "note-frequency-resolution:p1",
+            "note-iso-limits-scope:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q40",
+          "style": "descriptive",
+          "top5": [
+            "note-maint-strategy:p1",
+            "skf-bearing-damage-guide:p1",
+            "note-anomaly-vs-diagnosis:p1",
+            "note-window-statistics:p1",
+            "note-baseline-trending:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q41",
+          "style": "descriptive",
+          "top5": [
+            "note-report-guidance:p1",
+            "skf-vibration-diagnostic-guide:p1",
+            "uored-paper-2023:p1",
+            "note-fatigue-spalling:p1",
+            "note-baseline-trending:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q42",
+          "style": "descriptive",
+          "top5": [
+            "note-lab-vs-field:p1",
+            "note-report-guidance:p1",
+            "uored-paper-2023:p1",
+            "note-band-energy:p1",
+            "note-bsf-formula:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        },
+        {
+          "id": "q43",
+          "style": "descriptive",
+          "top5": [
+            "note-fatigue-spalling:p1",
+            "note-electrical-fluting:p1",
+            "note-brinelling:p1",
+            "note-lube-contamination:p1",
+            "note-cage-damage:p1"
+          ],
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "hit_at_1": 1.0
+        }
+      ]
+    }
+  ]
+}
