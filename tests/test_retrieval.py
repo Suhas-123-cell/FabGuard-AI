@@ -232,6 +232,6 @@ def test_postgres_rrf_score_is_the_sum_of_reciprocal_ranks(postgres_runtime) -> 
 def test_postgres_vectors_from_another_embedder_are_ignored(postgres_runtime) -> None:
     settings, _ = postgres_runtime
     stale = postgres_retriever(settings.database_url, embedder="hash", mode="vector")
-    stale.embedder_name = "bge"
+    stale.embedder_name = "some-other-model"
 
     assert stale.search("inner race defect") == []
