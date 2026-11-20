@@ -138,7 +138,7 @@ Approval is an API transaction after graph completion. Bind the reviewer, incide
 
 ## 5. Retrieval and report contract
 
-Use three to five manually checked bearing references with page/section provenance. Ingest them into PostgreSQL full-text search and pgvector. Fix retrieval settings on development cases before held-out evaluation. Label general bearing guidance as general; access does not automatically grant redistribution rights.
+Use a small set of manually checked reference passages with section provenance (the shipped corpus has 4 linked-source summaries and 54 project-authored notes). Ingest them into PostgreSQL full-text search and pgvector. Fix retrieval settings on development cases before held-out evaluation. Label general bearing guidance as general; access does not automatically grant redistribution rights.
 
 Every report separates:
 

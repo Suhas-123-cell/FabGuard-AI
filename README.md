@@ -37,6 +37,9 @@ machine's own baseline. It is a local build with no cloud deployment or equipmen
   calls, strict schemas, deterministic verification, and fail-closed reports.
 - FastAPI, PostgreSQL/pgvector migrations, durable deliveries/checkpoints/revisions, a synchronous
   worker, idempotent approvals, and three Streamlit views.
+- Reference retrieval over 58 passages: PostgreSQL full-text and pgvector rankings fused with
+  Reciprocal Rank Fusion, a selectable `hash` or `bge` embedder, and a labelled retrieval
+  evaluation ([Reference retrieval](#reference-retrieval)).
 - A 15-case workflow suite with five development and ten frozen evaluation fixtures.
 - `fabguard-monitor`: live or recorded single-channel monitoring with per-machine commissioning,
   whose alarms feed the same investigation path as replays.
@@ -275,6 +278,7 @@ docker compose up -d postgres
 docker compose exec -T postgres psql -U fabguard -d fabguard < migrations/001_runtime.sql
 docker compose exec -T postgres psql -U fabguard -d fabguard < migrations/002_references.sql
 docker compose exec -T postgres psql -U fabguard -d fabguard < migrations/003_one_ticket_per_revision.sql
+docker compose exec -T postgres psql -U fabguard -d fabguard < migrations/004_reference_embedder.sql
 uv run fabguard-index-references    # reads FABGUARD_DATABASE_URL from .env
 
 uv run fabguard-api                     # terminal 1
@@ -286,6 +290,88 @@ uv run streamlit run app.py             # terminal 3
 setting `FABGUARD_API_URL` and the producer token in the environment to ingest it idempotently.
 Database credentials and bearer tokens are never accepted on the command line. The UI reads and
 approves incidents through the API; rerenders do not launch investigations.
+
+## Reference retrieval
+
+The agent retrieves from `references/corpus.json`: 58 passages, one chunk each. Four are short
+summaries that link to a dataset paper and publisher guides; 54 are original technical notes
+written for this project (bearing defect frequencies, envelope analysis, kurtosis and crest
+factor, ISO 10816/20816 severity zones, lubrication faults, damage mechanisms, measurement
+practice, inspection and maintenance procedure). The notes state their provenance in the file and
+are not copied from, and do not cite, a specific standard or vendor document; the ISO zone values
+are a paraphrase for orientation. See [references/README.md](references/README.md).
+
+How a query is ranked in `PostgresRetriever`:
+
+1. Full-text: `ts_rank_cd` over a generated `tsvector`, with the query's terms OR-ed (the default
+   `websearch_to_tsquery` ANDs every term, which rarely matches a natural-language question).
+2. Vector: cosine distance over a 384-dimension pgvector column.
+3. The two top-50 rankings are fused with Reciprocal Rank Fusion, `score = sum 1 / (60 + rank)`,
+   so the two incomparable score scales are never added. `score` on a returned passage is that
+   fused value, not a probability.
+
+Each stored vector records which embedder made it (`embedder` column, migration 004); a query is
+only compared with vectors from the same backend. Choose the backend with `FABGUARD_EMBEDDER`:
+
+| Value | What it is | Use |
+|---|---|---|
+| `hash` (default) | Signed hashing of tokens into 384 buckets. It only sees shared tokens, not meaning. | Tests, CI, offline |
+| `bge` | `BAAI/bge-small-en-v1.5` (384 dimensions) run locally through fastembed. Downloads the model on first use. | Real semantic search |
+
+```bash
+uv sync --extra bge
+FABGUARD_EMBEDDER=bge uv run fabguard-index-references    # re-run after changing the backend
+FABGUARD_EMBEDDER=bge uv run fabguard-worker
+```
+
+CI and the Docker image use `hash`; the image does not include the `bge` extra.
+
+### Retrieval evaluation
+
+43 queries written by reading the corpus, each labelled with the passage ids that answer it
+([evals/retrieval/queries.json](evals/retrieval/queries.json)). 13 are `terminology` queries that
+use the corpus's own terms and 30 are `descriptive` ones phrased as a symptom or a question. Each
+configuration runs the real SQL against PostgreSQL 16 with pgvector. Recall@5 is the share of a
+query's relevant passages found in the top 5 (macro-averaged); MRR is the mean reciprocal rank of
+the first relevant passage within the top 20; Hit@1 is the share of queries whose first result is
+relevant. Raw per-query rankings are in
+[evals/retrieval/results.json](evals/retrieval/results.json).
+
+| Configuration | Recall@5 | MRR | Hit@1 |
+|---|---:|---:|---:|
+| Full-text, all terms required (`websearch_to_tsquery`) | 0.279 | 0.291 | 0.279 |
+| Full-text, any term (the ranking used inside hybrid) | 0.907 | 0.843 | 0.767 |
+| `hash` vectors only | 0.651 | 0.627 | 0.535 |
+| `hash`, full-text + vector with raw scores added (the previous hybrid, rebuilt for this run) | 0.651 | 0.643 | 0.558 |
+| `hash`, full-text + vector with RRF | 0.849 | 0.782 | 0.674 |
+| `bge` vectors only | 0.930 | 0.857 | 0.767 |
+| `bge`, full-text + vector with raw scores added | 0.930 | 0.845 | 0.744 |
+| **`bge`, full-text + vector with RRF (default hybrid with `bge`)** | **0.942** | **0.920** | **0.884** |
+
+Read these with care. The queries and the passages have the same author, so vocabulary overlaps
+more than it would for a real user, which is why any-term full-text already scores 0.907. With 43
+queries, one relevant passage found or missed moves Recall@5 by about 0.01 to 0.02, so the 0.930 versus 0.942
+Recall@5 gap between `bge` vectors and `bge` RRF is not meaningful; the MRR and Hit@1 gaps
+(0.857 to 0.920, 0.767 to 0.884) are larger but still come from a small set. What the run does
+support: hashed vectors are clearly weaker than `bge` vectors, RRF closes much of that gap for
+`hash` (0.651 to 0.849, mostly because the full-text ranking supplies what hashed vectors miss)
+where adding raw scores did not move Recall@5, and strict AND full-text
+fails on natural-language questions. In the best configuration `q29` (regreasing interval at
+high temperature) finds nothing, and `q16`, `q18` and `q28` each find one of their two relevant
+passages.
+
+Reproduce (needs Docker for a pgvector database and a network connection to fetch the model):
+
+```bash
+docker run -d --name fg-eval -e POSTGRES_USER=fabguard -e POSTGRES_PASSWORD=fabguard \
+  -e POSTGRES_DB=fabguard_eval -p 5432:5432 pgvector/pgvector:pg16
+uv sync --extra bge
+uv run fabguard-eval-retrieval \
+  --database-url postgresql+psycopg://fabguard:fabguard@127.0.0.1:5432/fabguard_eval
+```
+
+The command applies the migrations to that database, reindexes it with each embedder in turn and
+overwrites `evals/retrieval/results.json` and `results.md`; use a scratch database.
 
 ## Limits
 
