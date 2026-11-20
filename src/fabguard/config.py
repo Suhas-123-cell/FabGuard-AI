@@ -79,6 +79,7 @@ class RuntimeSettings(BaseSettings):
     api_url: str = "http://127.0.0.1:8000"
     manifest: Path = Path("manifests/uored_vafcls_v5.json")
     model: Path = Path("runs/uored-v5-seed17/model.joblib")
+    embedder: Literal["hash", "bge"] = "hash"
     llm_provider: Literal["offline", "groq", "openai_compatible"] = "groq"
     llm_model: str = "openai/gpt-oss-20b"
     llm_base_url: str = "https://api.groq.com/openai/v1"

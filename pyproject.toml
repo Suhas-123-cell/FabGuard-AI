@@ -29,6 +29,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+bge = [
+    "fastembed>=0.5,<1",
+]
 dev = [
     "pytest>=8.3,<10",
     "pytest-cov>=6,<8",
@@ -45,6 +48,7 @@ fabguard-replay = "fabguard.replay:main"
 fabguard-worker = "fabguard.worker:main"
 fabguard-evaluate = "fabguard.evaluate:main"
 fabguard-index-references = "fabguard.retrieval:main"
+fabguard-eval-retrieval = "fabguard.retrieval_eval:main"
 fabguard-init = "fabguard.initialize:main"
 fabguard-paderborn = "fabguard.paderborn:main"
 fabguard-ims = "fabguard.ims:main"
