@@ -34,5 +34,491 @@
     "section": "Measurement and diagnostic workflow",
     "applicability": ["general"],
     "text": "Useful vibration interpretation depends on measurement location, sensor orientation, operating state, speed, load, and a comparable baseline. Spectral components may support a hypothesis only when the machine geometry and speed needed to calculate characteristic frequencies are known. Without those inputs, report the measured change and request the missing context rather than assigning a physical fault meaning to a peak."
+  },
+  {
+    "source_id": "note-bpfo-formula",
+    "title": "Outer-race defect frequency (BPFO)",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Bearing defect frequencies",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "BPFO is the rate at which rolling elements pass a defect on the stationary outer race. For a bearing with N rolling elements, element diameter d, pitch diameter D, contact angle phi and shaft rotation frequency fr in Hz: BPFO = (N/2) * fr * (1 - (d/D) * cos(phi)). Because the outer race does not rotate, the defect stays at a fixed position relative to the load zone, so the impacts have a fairly constant amplitude and the envelope spectrum shows BPFO and its harmonics with little modulation at shaft speed."
+  },
+  {
+    "source_id": "note-bpfi-formula",
+    "title": "Inner-race defect frequency (BPFI)",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Bearing defect frequencies",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "BPFI is the rate at which rolling elements pass a defect on the rotating inner race: BPFI = (N/2) * fr * (1 + (d/D) * cos(phi)), with the same symbols as for BPFO. Because the defect rotates with the shaft, it moves in and out of the load zone once per revolution, so impact amplitude is modulated at the shaft frequency. The envelope spectrum of an inner-race fault therefore shows BPFI with sidebands spaced at fr on both sides."
+  },
+  {
+    "source_id": "note-bsf-formula",
+    "title": "Ball or roller spin frequency (BSF)",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Bearing defect frequencies",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "BSF is the rotation rate of a rolling element about its own axis: BSF = (D / (2 * d)) * fr * (1 - ((d/D) * cos(phi))^2). A defect on a ball touches the inner race once and the outer race once per spin, so impacts usually appear at about 2 * BSF rather than at BSF. Because the cage carries the element in and out of the load zone, the envelope spectrum of a rolling-element fault often shows sidebands spaced at the cage frequency FTF. Rolling-element faults are generally harder to detect than race faults."
+  },
+  {
+    "source_id": "note-ftf-formula",
+    "title": "Cage frequency (FTF)",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Bearing defect frequencies",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "FTF, the fundamental train or cage frequency, is the rotation rate of the cage and the set of rolling elements around the bearing: FTF = (fr / 2) * (1 - (d/D) * cos(phi)). For typical ball bearings it is a little under 0.5 * fr, about 0.38 to 0.42 times shaft speed. A peak at FTF or its sub-harmonics points toward a damaged or loose cage, and FTF also appears as sidebands around ball-defect frequencies."
+  },
+  {
+    "source_id": "note-defect-freq-identity",
+    "title": "Consistency check between race frequencies",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Bearing defect frequencies",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "With the standard kinematic formulas, BPFO + BPFI = N * fr for any contact angle, because the contact-angle terms cancel, where N is the number of rolling elements. This gives a quick sanity check on bearing geometry data: if the calculated BPFO and BPFI do not add up to N times the shaft frequency, the geometry values or the formula inputs are wrong. Always take N, d, D and the contact angle from the manufacturer's data for the exact bearing designation."
+  },
+  {
+    "source_id": "note-defect-freq-example",
+    "title": "Worked defect-frequency example",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Bearing defect frequencies",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Illustrative deep-groove ball bearing with N = 9 balls, d = 7.94 mm, D = 39.04 mm and zero contact angle: the fault orders are BPFO = 3.585, BPFI = 5.415, 2 * BSF = 4.713 and FTF = 0.398 times shaft frequency. At 1800 rpm (fr = 30 Hz) this gives about 107.5 Hz (outer race), 162.5 Hz (inner race), 141.4 Hz (ball, 2 * BSF) and 11.9 Hz (cage). The same bearing at another speed scales every frequency linearly with fr."
+  },
+  {
+    "source_id": "note-defect-freq-slip",
+    "title": "Slip and tolerance on calculated frequencies",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Bearing defect frequencies",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "The kinematic formulas assume pure rolling with no sliding. Real bearings show slip, so measured defect frequencies typically differ from the calculated ones by a percent or two and drift with load and lubrication. Search a narrow band around each calculated frequency and its harmonics rather than a single bin, and treat a peak that sits exactly on a shaft harmonic with caution because shaft-speed components can mask or mimic bearing peaks."
+  },
+  {
+    "source_id": "note-inner-race-sidebands",
+    "title": "Sidebands as a fault-location clue",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Bearing defect frequencies",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "The spacing of sidebands identifies what modulates the impacts. Sidebands at shaft frequency fr around BPFI mean the defect rotates through the load zone, which is the inner-race signature. Sidebands at FTF around the ball-defect frequency or around BPFO mean the cage moves the damaged element or the load zone relative to the impact source. A clean BPFO series without shaft sidebands is typical for a stationary outer-race defect."
+  },
+  {
+    "source_id": "note-outer-race-load-zone",
+    "title": "Outer-race defects and the load zone",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Bearing defect frequencies",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Impact strength depends on where the defect sits relative to the load zone. An outer-race spall in the loaded region produces strong, regular impacts, while the same spall on the unloaded side can be weak and easy to miss. Radial load direction, housing stiffness and preload change how visible an outer-race fault is, so a missing BPFO peak does not prove the outer race is intact."
+  },
+  {
+    "source_id": "note-frequency-resolution",
+    "title": "Frequency resolution and window length",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Spectral analysis",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "The frequency resolution of an FFT is the sampling rate divided by the number of samples, which equals one over the window length in seconds. A one-second window resolves 1 Hz, a ten-second record 0.1 Hz. Separating a defect frequency from nearby shaft harmonics or resolving shaft-speed sidebands needs enough resolution, so short windows blur closely spaced peaks. Averaging spectra over overlapping windows lowers variance but does not improve resolution."
+  },
+  {
+    "source_id": "note-order-tracking",
+    "title": "Order analysis under varying speed",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Spectral analysis",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Defect frequencies scale with shaft speed. When the speed changes during a record, a fixed-frequency spectrum smears each peak across bins. Order tracking resamples the signal by shaft angle, using a tachometer or an estimated speed profile, so that BPFO, BPFI and FTF appear as constant orders (multiples of shaft speed). Speed estimates must be accurate, because small speed errors spread the orders again."
+  },
+  {
+    "source_id": "note-envelope-overview",
+    "title": "Envelope analysis procedure",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Envelope analysis",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Envelope analysis, also called demodulation, detects repetitive impacts that are too weak to appear in the raw spectrum. Steps: band-pass filter the vibration around a structural resonance that the impacts excite, take the amplitude envelope of the filtered signal, remove its mean, compute the spectrum of the envelope, and compare the peaks with BPFO, BPFI, 2 * BSF and FTF and their harmonics. The envelope spectrum shows how often impacts occur, not how severe they are."
+  },
+  {
+    "source_id": "note-envelope-band-selection",
+    "title": "Choosing the envelope band",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Envelope analysis",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "The demodulation band should sit where impact energy is strongest relative to background noise, usually a resonance in the kilohertz range far above shaft harmonics. Spectral kurtosis and the kurtogram search for the frequency band with the most impulsive content. A fixed band chosen without looking at the data can miss the resonance entirely, while a band that contains strong gear-mesh or electrical components will bury the bearing signal."
+  },
+  {
+    "source_id": "note-hilbert-envelope",
+    "title": "Computing the envelope with the Hilbert transform",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Envelope analysis",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "The usual envelope estimate is the magnitude of the analytic signal, built from the band-passed signal and its Hilbert transform. Subtract the mean before the FFT, otherwise the large zero-frequency term hides low-frequency peaks. The envelope contains only low frequencies, so it can be low-pass filtered and decimated before the FFT to reduce computation without losing the defect frequencies."
+  },
+  {
+    "source_id": "note-sampling-for-envelope",
+    "title": "Sampling rate requirements",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Envelope analysis",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "The sampling rate must exceed twice the highest frequency of interest, and an anti-aliasing filter must remove content above the Nyquist frequency before sampling. A 42 kHz sampling rate gives a 21 kHz Nyquist limit. The accelerometer's usable frequency range and its mounting resonance also limit which resonance bands can be used for envelope analysis, regardless of the sampling rate."
+  },
+  {
+    "source_id": "note-envelope-pitfalls",
+    "title": "Limits of envelope spectra",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Envelope analysis",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "A single envelope peak near a defect frequency is weak evidence. Stronger evidence is a series of harmonics, the expected sidebands, and a trend that grows over repeated measurements. Electrical interference, gear mesh, and belt or coupling impacts can produce envelope peaks that coincide with a bearing frequency. The absence of a peak does not show that a bearing is healthy, because slip, load zone position and a poorly chosen band can all hide a real defect."
+  },
+  {
+    "source_id": "note-rms-peak",
+    "title": "RMS, peak and peak-to-peak",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Time-domain indicators",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "RMS value reflects the overall energy of the signal, peak is the largest absolute amplitude and peak-to-peak is the span between extremes. RMS is dominated by the strongest low-frequency components, such as unbalance and misalignment, so it barely changes when a small bearing defect appears. RMS is useful for trending overall severity but is a late indicator for incipient rolling-element bearing faults."
+  },
+  {
+    "source_id": "note-kurtosis-definition",
+    "title": "Kurtosis definition and reference value",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Time-domain indicators",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Kurtosis is the fourth standardized moment of the amplitude distribution. A Gaussian signal has kurtosis 3. Many libraries, including scipy.stats.kurtosis by default, report excess kurtosis, which is kurtosis minus 3, so Gaussian noise gives about 0. Always state which definition is used. Kurtosis is high when the signal has rare, large spikes among small values, which is why it responds to impacts from a bearing defect."
+  },
+  {
+    "source_id": "note-kurtosis-trend",
+    "title": "Kurtosis through the life of a defect",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Time-domain indicators",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Kurtosis tends to rise when isolated impacts first appear in an otherwise smooth signal. As the damage spreads, impacts become more frequent and overlap and overall vibration grows, so the amplitude distribution looks more Gaussian again and kurtosis can fall back even though the bearing is worse. A lower kurtosis therefore does not mean recovery. Read kurtosis together with RMS and band energy trends."
+  },
+  {
+    "source_id": "note-crest-factor",
+    "title": "Crest factor",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Time-domain indicators",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Crest factor is the peak amplitude divided by the RMS value. A pure sine wave has a crest factor of about 1.414, and random noise typically gives values of around 3 to 4 in a finite record. Impacts raise the peak faster than the RMS, so crest factor increases early in a fault's development. When damage grows and the RMS rises, crest factor falls again, which makes it unreliable as a stand-alone late-stage indicator."
+  },
+  {
+    "source_id": "note-kurtosis-bandpass",
+    "title": "Kurtosis of a filtered signal",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Time-domain indicators",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Broadband kurtosis is diluted by large low-frequency components such as shaft-speed vibration. Computing kurtosis after band-pass filtering around the impact resonance, or using spectral kurtosis, makes early impulsive faults much easier to see. The result depends strongly on the chosen band, so document the filter and compare only values computed the same way."
+  },
+  {
+    "source_id": "note-window-statistics",
+    "title": "Window length and statistic stability",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Time-domain indicators",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Time-domain statistics are estimated from a finite window. A low-speed bearing may produce only a handful of impacts in a one-second window, which makes kurtosis and crest factor noisy. Compare windows of the same length, speed and load, and require persistence over several consecutive windows before alarming. A single abnormal window is more likely to be a transient than a developing fault."
+  },
+  {
+    "source_id": "note-band-energy",
+    "title": "Band energy features",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Time-domain indicators",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Splitting the spectrum into frequency bands and tracking the energy in each is a simple feature set for anomaly detection. For bearings the higher bands, where resonances excited by impacts live, often change before the low bands that carry unbalance and misalignment. The useful band edges depend on the machine and sensor, so ratios and trends against the machine's own baseline are more reliable than absolute values."
+  },
+  {
+    "source_id": "note-iso-overview",
+    "title": "ISO 10816 and 20816 vibration severity",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Vibration severity standards",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "The ISO 10816 series evaluates machine condition from broadband vibration measured on non-rotating parts, usually as RMS vibration velocity in mm/s over roughly 10 to 1000 Hz. It has been superseded by the ISO 20816 series, for example ISO 20816-1 for general guidelines and ISO 20816-3 for industrial machines above 15 kW. The limits depend on machine group, power and whether the foundation is rigid or flexible, so the correct edition and table must be used for each machine."
+  },
+  {
+    "source_id": "note-iso-zones",
+    "title": "Evaluation zones A to D",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Vibration severity standards",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "The standards group overall vibration into four zones. Zone A is typical of newly commissioned machines. Zone B is acceptable for unrestricted long-term operation. Zone C is normally unsatisfactory for long-term continuous operation and the machine may run for a limited period until a remedy is arranged. Zone D means vibration severe enough to cause damage. The zone boundaries are guidance for overall machine condition and need adapting to each machine."
+  },
+  {
+    "source_id": "note-iso-example-limits",
+    "title": "Example zone boundaries",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Vibration severity standards",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "As an illustration, the ISO 10816-3 boundaries for RMS velocity on machines of group 2 (15 to 300 kW) on rigid foundations are commonly quoted as 1.4 mm/s between zones A and B, 2.8 mm/s between B and C, and 4.5 mm/s between C and D. For group 1 (above 300 kW) on rigid foundations they are 2.3, 4.5 and 7.1 mm/s. Flexible foundations have higher limits. These values are a paraphrase for orientation only; check the current edition for the machine in question."
+  },
+  {
+    "source_id": "note-iso-limits-scope",
+    "title": "What zone limits do not cover",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Vibration severity standards",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Overall velocity limits describe machine health in general and are not a bearing-fault detector. Early rolling-element damage excites mainly high frequencies whose contribution to a 10 to 1000 Hz velocity reading is small, so a machine can sit in zone A or B while a bearing defect is developing. Use acceleration or envelope analysis for bearing faults, and use manufacturer limits and the machine's own baseline for alarm settings."
+  },
+  {
+    "source_id": "note-measurement-quantities",
+    "title": "Displacement, velocity and acceleration",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Vibration severity standards",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Displacement emphasizes low frequencies, velocity is most sensitive in the middle range where unbalance, misalignment and looseness show up, and acceleration emphasizes high frequencies. Integrating acceleration to velocity divides each component by its angular frequency, which suppresses the high-frequency content of bearing impacts. Accelerometer-based measurements and envelope spectra are therefore preferred for rolling-element bearing diagnostics."
+  },
+  {
+    "source_id": "note-baseline-trending",
+    "title": "Baselines and relative change",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Vibration severity standards",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Alarms based on change from a machine's own healthy baseline, measured at the same speed, load and sensor position, are usually more useful than a universal absolute limit. Typical practice sets alert levels as a multiple of the baseline and watches the rate of change. Changes in speed, load, temperature or mounting alter vibration without any fault, so record operating conditions alongside every measurement."
+  },
+  {
+    "source_id": "note-lube-insufficient",
+    "title": "Insufficient lubrication",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Lubrication faults",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Too little lubricant lets the rolling elements and raceways make metal-to-metal contact. Typical consequences are rising bearing temperature, increased high-frequency noise and vibration, wear, smearing and discoloured, blue or brown, metal surfaces. Check the relubrication history, grease quantity and whether the lubrication path is blocked before attributing a change to a mechanical defect."
+  },
+  {
+    "source_id": "note-lube-overfill",
+    "title": "Over-greasing",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Lubrication faults",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Overfilling a bearing or housing with grease causes churning, which generates heat and can raise operating temperature noticeably. Temperature often rises right after regreasing and then falls once the excess is purged through the seal or relief port. A temperature spike shortly after lubrication is therefore not by itself evidence of damage. Add grease slowly, with the machine running where the procedure permits it, and follow the quantity given by the manufacturer."
+  },
+  {
+    "source_id": "note-lube-contamination",
+    "title": "Contaminated lubricant",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Lubrication faults",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Hard particles in the lubricant are rolled into the raceways and leave dents that act as stress concentrators, producing vibration and starting early fatigue spalling. Water causes corrosion, emulsifies oil and weakens the lubricating film. Damaged or missing seals, dirty grease fittings and unclean handling are common entry paths. Inspection should include seal condition and a visual check of grease colour, texture and visible particles."
+  },
+  {
+    "source_id": "note-lube-viscosity",
+    "title": "Lubricant viscosity and film thickness",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Lubrication faults",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "The viscosity ratio kappa is the actual operating viscosity of the lubricant divided by the reference viscosity required for adequate film formation at the bearing's speed and size. A kappa below 1 means the surfaces are only partly separated and wear increases. Using too thin a grade, or a lubricant that thins at high temperature, lowers kappa. Operating temperature, speed and load must all be taken into account when selecting the grade."
+  },
+  {
+    "source_id": "note-lube-interval",
+    "title": "Relubrication interval",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Lubrication faults",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "The correct relubrication interval depends on bearing type and size, speed, load and operating temperature, and the manufacturer's guidance takes priority. A widely used rule of thumb is that grease life roughly halves for every 15 K increase in operating temperature above about 70 degrees Celsius. Dusty, wet or vibrating environments shorten intervals."
+  },
+  {
+    "source_id": "note-lube-signature",
+    "title": "How lubrication problems appear in data",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Lubrication faults",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Poor lubrication often shows first as a broadband rise in high-frequency vibration or ultrasonic noise and as increased temperature, before discrete defect frequencies appear. Discrete peaks at BPFO or BPFI show up later, after the surfaces have been damaged. A broadband increase without clear defect frequencies is therefore a reason to inspect lubrication, not necessarily to replace the bearing."
+  },
+  {
+    "source_id": "note-lube-mixing",
+    "title": "Mixing greases",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Lubrication faults",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Greases made with incompatible thickeners can soften, harden or separate when mixed, and may lose their lubricating properties. When changing the grease type, follow a purge procedure and check compatibility with the manufacturer. Record the grease type, quantity and date at each relubrication so that later changes in condition can be traced."
+  },
+  {
+    "source_id": "note-unbalance-misalignment",
+    "title": "Unbalance and misalignment",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Other machine faults",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Unbalance produces mainly radial vibration at 1 times shaft speed. Angular misalignment shows strong axial vibration at 1 times, often with 2 times, while parallel misalignment gives radial vibration at 2 times shaft speed. These faults overload bearings and shorten their life, and they can dominate the RMS level, so check for them first when vibration rises at low orders before concluding that a bearing is damaged."
+  },
+  {
+    "source_id": "note-looseness",
+    "title": "Mechanical looseness",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Other machine faults",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Looseness of the bearing housing, baseplate or mounting bolts produces many harmonics of shaft speed and often sub-harmonics at one half or one third of it. The time waveform appears clipped or truncated. A loose bearing fit on the shaft or in the housing causes fretting and creep that damage the surfaces. Check mounting torque and fits as part of any inspection."
+  },
+  {
+    "source_id": "note-fatigue-spalling",
+    "title": "Rolling-contact fatigue and spalling",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Bearing damage mechanisms",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Even a well-lubricated, correctly loaded bearing eventually fails by rolling-contact fatigue. Cracks start below the surface, grow to the raceway and release flakes of material, which is called spalling. The nominal L10 life is the life that 90 percent of a group of identical bearings reach or exceed, so individual bearings can fail much earlier or later. A spall creates repetitive impacts at the defect frequency of the affected component."
+  },
+  {
+    "source_id": "note-electrical-fluting",
+    "title": "Electrical damage and fluting",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Bearing damage mechanisms",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Current passing through a bearing, such as shaft currents from variable-frequency drives, produces small craters and later a regular washboard pattern called fluting on the raceways. The damaged lubricant darkens and breaks down. Typical countermeasures are insulated bearings, shaft grounding rings and correct cabling and grounding. Vibration from fluting appears at the rolling-element pass rates and can resemble a race defect."
+  },
+  {
+    "source_id": "note-brinelling",
+    "title": "Brinelling and false brinelling",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Bearing damage mechanisms",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Static overload or shock loading presses indentations into the raceways at the spacing of the rolling elements, which is called brinelling. False brinelling arises from small oscillating movements, for example vibration transmitted to a stationary machine or transport, which wear away the lubricant film and leave similar marks. A bearing damaged this way can show defect frequencies soon after commissioning. Handle and transport machines with the shaft supported."
+  },
+  {
+    "source_id": "note-installation-fits",
+    "title": "Mounting errors, fits and preload",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Bearing damage mechanisms",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Hammering a bearing on, using the wrong tool, cocking it in its housing or choosing an unsuitable interference fit damage the raceways and cause early failure. Too loose a fit allows the ring to creep and fret on its seat. Excessive preload raises friction, heat and load, while too little preload allows skidding. Follow the manufacturer's mounting procedure and fit tolerances, and verify shaft and housing dimensions."
+  },
+  {
+    "source_id": "note-cage-damage",
+    "title": "Cage wear and fracture",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Bearing damage mechanisms",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Cages can wear or crack from vibration, high acceleration, poor lubrication or contamination. A damaged cage lets the rolling elements bunch up or skew, causing erratic noise and sometimes rapid failure. In the spectrum it may appear at FTF and its sub-harmonics or as random impacts. Cage failure is often a late-stage condition and should be treated as urgent."
+  },
+  {
+    "source_id": "note-sensor-mounting",
+    "title": "Sensor mounting and placement",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Measurement practice",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Stud-mounted accelerometers have the best high-frequency response. A magnet lowers the usable range to a few kilohertz, and a hand-held probe is unreliable above about one to two kilohertz and not repeatable. Mount on the bearing housing as close to the load zone as possible, in the radial direction, and return to the same position for every measurement. A different sensor location or mounting method changes the measured amplitudes."
+  },
+  {
+    "source_id": "note-signal-quality",
+    "title": "Signal quality checks",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Measurement practice",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Clipping, dropouts, flat lines, large DC offsets, saturation and damaged sensor cables can mimic a fault or hide one. Validate each record before analysis: check for flat segments, values at the converter limits, missing samples, impossible sampling rates and channel sync. If the quality checks fail, the correct result is to report the data as unusable instead of scoring it."
+  },
+  {
+    "source_id": "note-acoustic-limits",
+    "title": "Airborne sound monitoring",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Measurement practice",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "A microphone is easy to install and responds to lubrication problems and loud impacts, but it also picks up room noise, neighbouring machines and reflections, and it depends strongly on position and direction. Acoustic features are a supporting signal. A change seen only in the audio channel, with a flat vibration channel, is weak evidence of a bearing fault and should be confirmed with a contact sensor."
+  },
+  {
+    "source_id": "note-temperature",
+    "title": "Bearing temperature",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Measurement practice",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Temperature rise is typically a late indicator of bearing damage but a good safety check for lubrication faults, overload and preload errors. Compare readings against ambient temperature and the machine's own history, and watch the rate of rise as well as the absolute value. A sudden steep rise calls for prompt inspection, while a slow rise after regreasing may be benign."
+  },
+  {
+    "source_id": "note-anomaly-vs-diagnosis",
+    "title": "Anomaly detection versus diagnosis",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Interpretation",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "A detector trained on healthy data flags departures from the normal behaviour it learned. It says that something changed, not what changed. Speed, load, temperature or sensor changes outside the training conditions can trigger it, and different fault types can produce similar departures. Treat an alarm as a prompt to examine spectral evidence and inspect, not as a diagnosis of the fault type or its severity."
+  },
+  {
+    "source_id": "note-lab-vs-field",
+    "title": "Laboratory datasets versus field machines",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Interpretation",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Laboratory bearing datasets usually run at constant speed and load, often with seeded or artificially accelerated faults, on a rig with known geometry. Field machines have variable operation, other vibration sources and gradual wear. Alarm thresholds, feature distributions and accuracy figures learned on a laboratory set do not transfer directly to a particular plant and need validating on data from the target machine."
+  },
+  {
+    "source_id": "note-proc-safety",
+    "title": "Safety before physical inspection",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Inspection procedure",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Before touching a machine for inspection, follow the site lockout and tagout procedure, bring the machine to a stop and wait for stored energy to dissipate. Use the manufacturer's manual for access and handling. Never reach into rotating equipment. Reports and automated systems must not authorize work on a machine; the decision rests with a qualified person on site."
+  },
+  {
+    "source_id": "note-proc-inspection-steps",
+    "title": "Physical bearing inspection checklist",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Inspection procedure",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "With the machine locked out, turn the shaft by hand and feel for roughness, notchiness or binding. Listen for grinding. Look at the seals for damage and leakage, check the grease for discolouration, hardening, metallic particles or water, and look for housing discolouration from heat. Verify mounting bolt torque, shaft and coupling alignment and the condition of the foundation. Record findings with photographs and the date."
+  },
+  {
+    "source_id": "note-proc-confirmation",
+    "title": "Confirming an alarm before intervention",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Inspection procedure",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "A sensible sequence is: check that the data are valid, check whether speed, load or ambient temperature changed, repeat the measurement, compare the spectrum and envelope spectrum with the calculated defect frequencies, review lubrication history and then inspect in person. If the evidence is conflicting or incomplete, state that it is insufficient instead of choosing a fault type. Escalate suspected severe damage to a qualified engineer."
+  },
+  {
+    "source_id": "note-maint-strategy",
+    "title": "Condition-based maintenance and the P-F interval",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Maintenance strategy",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "Condition-based maintenance acts on measured condition instead of a fixed calendar. The P-F interval is the time between the point where a developing fault can first be detected (P) and functional failure (F). The monitoring interval must be shorter than the P-F interval, and a common guideline is half of it or less. Faster-developing faults, such as lubrication loss, need more frequent monitoring."
+  },
+  {
+    "source_id": "note-report-guidance",
+    "title": "Writing an investigation report",
+    "license": "Project-authored note, same MIT licence as this repository",
+    "section": "Maintenance strategy",
+    "applicability": ["general"],
+    "provenance": "Original technical note written for this project from general engineering knowledge. It is not copied from, and does not cite, a specific standard or vendor document.",
+    "text": "A useful report keeps measured observations, model outputs and hypotheses separate and states the uncertainty of each. Cite the reference passage for each piece of guidance. Recommend inspection steps rather than repairs, and do not give a remaining-useful-life figure or a precise fault severity unless the method has been validated on comparable machines. Say clearly when the evidence is not enough to name a cause."
   }
 ]
